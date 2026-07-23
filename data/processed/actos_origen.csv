@@ -1,0 +1,8 @@
+acto_id,caso_id,tipo_acto,clave_acto,autoridad_emisora,fecha_acto,url_acto,ruta_local,descripcion
+ACT-REAL-001,REAL-FED-001,dictamen/resolucion,INE/CG1928/2024 e INE/CG1929/2024,INE,2024-07-22,https://www.ine.mx/,,"Revision de informes de ingresos y gastos de campana federal 2023-2024"
+ACT-REAL-002,REAL-FED-002,dictamen/resolucion,INE/CG1929/2024 e INE/CG1930/2024,INE,2024-07-22,https://www.ine.mx/,,"Revision de informes de ingresos y gastos de campana federal 2023-2024"
+ACT-REAL-003,REAL-FED-003,resolucion,INE/CG1955/2024,INE,2024-07-22,https://www.ine.mx/,,"Fiscalizacion de campana federal y concurrente 2023-2024"
+ACT-REAL-004,REAL-FED-004,dictamen/resolucion,INE/CG1928/2024 e INE/CG1929/2024,INE,2024-07-22,https://www.ine.mx/,,"Revision de informes de ingresos y gastos de campana federal 2023-2024"
+ACT-REAL-005,REAL-FED-005,resolucion de queja,INE/CG1501/2024,INE,2024-07-22,https://www.ine.mx/,,"Queja INE/Q-COF-UTF/2028/2024 por presuntos eventos no reportados y aportaciones prohibidas"
+ACT-REAL-006,REAL-FED-006,resolucion de queja,INE/CG1098/2024,INE,2024-07-22,https://www.ine.mx/,,"Queja INE/Q-COF-UTF/1351/2024 por presunta omision de reportar gastos y subvaluacion"
+

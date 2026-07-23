@@ -1,0 +1,7 @@
+sujeto_id,tipo_sujeto,nombre_oficial,nombre_normalizado,partido_id,coalicion_id,candidatura,entidad,distrito_alcaldia
+SUJ-DEMO-001,partido,Partido Alfa,Partido Alfa,PA,,Nacional,,
+SUJ-DEMO-002,partido,Partido Beta,Partido Beta,PB,,Nacional,,
+SUJ-DEMO-003,partido,Partido Gamma,Partido Gamma,PG,,Nacional,,
+SUJ-DEMO-004,partido,Partido Delta,Partido Delta,PD,,Nacional,,
+SUJ-DEMO-005,persona,Candidatura Demo Local 5,Candidatura Demo Local 5,PA,,Alcaldia Demo,CDMX,Alcaldia Demo
+

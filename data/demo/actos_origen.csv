@@ -1,0 +1,5 @@
+acto_id,caso_id,tipo_acto,clave_acto,autoridad_emisora,fecha_acto,url_acto,ruta_local,descripcion
+ACT-DEMO-001,DEMO-FED-001,resolucion,INE-DEMO-001,INE,2024-05-30,https://example.invalid/acto-001,documents/federal/acto-001.pdf,Acto administrativo ficticio para prueba
+ACT-DEMO-002,DEMO-FED-002,resolucion,INE-DEMO-002,INE,2024-05-31,https://example.invalid/acto-002,documents/federal/acto-002.pdf,Acto administrativo ficticio para prueba
+ACT-DEMO-003,DEMO-CDMX-001,procedimiento,IECM-DEMO-001,IECM,2024-06-10,https://example.invalid/acto-cdmx-001,documents/cdmx/acto-cdmx-001.pdf,Acto local ficticio para prueba
+

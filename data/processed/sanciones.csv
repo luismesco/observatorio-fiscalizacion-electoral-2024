@@ -1,0 +1,20 @@
+sancion_id,caso_id,sujeto_nombre,conducta,monto_original,monto_controvertido,monto_confirmado,monto_revocado,monto_modificado,monto_final,monto_final_estado,consecuencia_no_economica,gravedad_textual,dolo,reincidencia
+SAN-REAL-001,REAL-FED-001,Movimiento Ciudadano,omision de reportar inserciones en medios impresos,496922.72,496922.72,0,0,496922.72,0,pendiente,,Sin dato,no determinado,no determinado
+SAN-REAL-002,REAL-FED-001,Movimiento Ciudadano,omision de reportar propaganda en internet,549721.82,549721.82,0,0,549721.82,0,pendiente,,Sin dato,no determinado,no determinado
+SAN-REAL-003,REAL-FED-001,Movimiento Ciudadano,omision de presentar XML,6257109.61,6257109.61,6257109.61,0,0,6257109.61,firme,,Sin dato,no determinado,no determinado
+SAN-REAL-004,REAL-FED-002,Partido Accion Nacional,documentacion soporte faltante,1421848.14,1421848.14,1421848.14,0,0,1421848.14,firme,,Grave ordinaria,no determinado,no determinado
+SAN-REAL-005,REAL-FED-002,Partido Accion Nacional,comprobantes fiscales XML faltantes,1342894.09,1342894.09,1342894.09,0,0,1342894.09,firme,,Grave ordinaria,no determinado,no determinado
+SAN-REAL-006,REAL-FED-002,Partido Accion Nacional,spot de radio no reportado,17400.00,17400.00,17400.00,0,0,17400.00,firme,,Grave ordinaria,no determinado,no determinado
+SAN-REAL-007,REAL-FED-002,Partido Accion Nacional,propaganda en internet no reportada,9973.00,9973.00,9973.00,0,0,9973.00,firme,,Grave ordinaria,no determinado,no determinado
+SAN-REAL-008,REAL-FED-002,Partido Accion Nacional,rebase pago efectivo representantes de casilla,7520355.35,7520355.35,7520355.35,0,0,7520355.35,firme,,Grave ordinaria,no determinado,no determinado
+SAN-REAL-009,REAL-FED-003,Partido del Trabajo,propaganda internet federal no reportada,1280190.31,1280190.31,1280190.31,0,0,1280190.31,firme,,Sin dato,no determinado,no determinado
+SAN-REAL-010,REAL-FED-003,Partido del Trabajo,CEP oneroso no firmado,512835.00,512835.00,512835.00,0,0,512835.00,firme,,Sin dato,no determinado,no determinado
+SAN-REAL-011,REAL-FED-003,Partido del Trabajo,factura con complemento INE faltante,845862.25,845862.25,845862.25,0,0,845862.25,firme,,Sin dato,no determinado,no determinado
+SAN-REAL-012,REAL-FED-004,Morena,omision de reportar bardas lonas espectaculares y pantallas,43598.28,43598.28,43598.28,0,0,43598.28,firme,,Grave ordinaria,no determinado,no determinado
+SAN-REAL-013,REAL-FED-004,Morena,omision de reportar espectaculares lonas bardas puentes y vallas,140480.69,140480.69,140480.69,0,0,140480.69,firme,,Grave ordinaria,no determinado,no determinado
+SAN-REAL-014,REAL-FED-004,Morena,aportacion de persona impedida,43349.02,43349.02,43349.02,0,0,43349.02,firme,,Grave ordinaria,no determinado,no determinado
+SAN-REAL-015,REAL-FED-004,Morena,propaganda en via publica no reportada,217933.31,217933.31,217933.31,0,0,217933.31,firme,,Grave ordinaria,no determinado,no determinado
+SAN-REAL-016,REAL-FED-005,Coalicion Sigamos Haciendo Historia,eventos presuntamente no reportados,0,0,0,0,0,0,pendiente,,Sin dato,no determinado,no determinado
+SAN-REAL-017,REAL-FED-006,Coalicion Fuerza y Corazon por Mexico,omision de reportar gastos y subvaluacion denunciada,0,0,0,0,0,0,no aplica,,Sin estudio de fondo,no determinado,no determinado
+SAN-REAL-018,REAL-FED-007,Morena,omision de reportar gasto por lona/espectacular en precampana,0,0,0,0,0,0,pendiente,,Gasto no reportado,no determinado,no determinado
+SAN-REAL-019,REAL-FED-007,Morena,deslinde insuficiente frente a propaganda que beneficio precandidatura,0,0,0,0,0,0,pendiente,,Responsabilidad no deslindada,no determinado,no determinado

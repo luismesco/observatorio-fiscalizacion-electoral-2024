@@ -1,0 +1,5 @@
+voto_id,caso_id,tipo_voto,magistratura,sentido,argumentos,criterios
+VOT-REAL-001,REAL-FED-001,razonado,Janine M. Otalora Malassis,Acompana sentido con precision metodologica,Voto razonado sobre acuerdo de competencia y resolucion de fondo,Competencia y certeza
+VOT-REAL-002,REAL-FED-002,razonado,Janine M. Otalora Malassis,Acompana confirmacion,Voto razonado sobre metodologia de competencia,Competencia y certeza
+VOT-REAL-003,REAL-FED-004,particular parcial,Janine M. Otalora Malassis,Disenso parcial sobre efectos de revocacion,Considera que algunas conclusiones debian revocarse para efectos y no lisa y llanamente,Efectos de revocacion
+

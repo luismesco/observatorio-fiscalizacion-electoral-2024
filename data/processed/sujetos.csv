@@ -1,0 +1,11 @@
+sujeto_id,tipo_sujeto,nombre_oficial,nombre_normalizado,partido_id,coalicion_id,candidatura,entidad,distrito_alcaldia
+SUJ-REAL-001,partido,Movimiento Ciudadano,Movimiento Ciudadano,MC,,Diputaciones federales,Varias,Varias
+SUJ-REAL-002,partido,Partido Accion Nacional,Partido Accion Nacional,PAN,,Diputaciones federales,Varias,Varias
+SUJ-REAL-003,partido,Partido del Trabajo,Partido del Trabajo,PT,,Diputaciones federales,Varias,Varias
+SUJ-REAL-004,partido,Morena,Morena,MORENA,,Diputaciones federales,Varias,Varias
+SUJ-REAL-005,coalicion,Sigamos Haciendo Historia,Sigamos Haciendo Historia,SHH,SHH,Diputacion Federal MR,Ciudad de Mexico,Distrito 7
+SUJ-REAL-006,persona,Juan Guillermo Rendon Gomez,Juan Guillermo Rendon Gomez,,SHH,Diputacion Federal MR,Ciudad de Mexico,Distrito 7
+SUJ-REAL-007,coalicion,Fuerza y Corazon por Mexico,Fuerza y Corazon por Mexico,FCXM,FCXM,Diputacion Federal MR,Michoacan,Distrito 10 Morelia
+SUJ-REAL-008,persona,David Alejandro Cortes Mendoza,David Alejandro Cortes Mendoza,,FCXM,Diputacion Federal MR,Michoacan,Distrito 10 Morelia
+SUJ-REAL-009,partido,Morena,Morena,MORENA,,Diputacion Federal MR,Michoacan,Distrito 06
+SUJ-REAL-010,persona,Alejandro Correa Gomez,Alejandro Correa Gomez,,MORENA,Diputacion Federal MR,Michoacan,Distrito 06

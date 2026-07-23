@@ -1,0 +1,3 @@
+voto_id,caso_id,tipo_voto,magistratura,sentido,argumentos,criterios
+VOT-DEMO-001,DEMO-FED-003,concurrente,Magistratura Demo,Comparte sentido con razones adicionales,Argumento ficticio para validar visualizacion,Criterio demo
+

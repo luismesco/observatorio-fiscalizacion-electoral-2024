@@ -1,0 +1,11 @@
+sancion_id,caso_id,sujeto_nombre,conducta,monto_original,monto_controvertido,monto_confirmado,monto_revocado,monto_modificado,monto_final,monto_final_estado,consecuencia_no_economica,gravedad_textual,dolo,reincidencia
+SAN-DEMO-001,DEMO-FED-001,Partido Alfa,egreso no reportado,125000,125000,125000,0,0,125000,firme,,No calificada expresamente,no determinado,no determinado
+SAN-DEMO-002,DEMO-FED-002,Partido Beta,eventos no reportados,88000,88000,0,0,88000,0,pendiente,,No calificada expresamente,no determinado,no determinado
+SAN-DEMO-003,DEMO-FED-003,Partido Gamma,aportacion prohibida,210000,210000,0,0,210000,0,pendiente,Aviso a autoridad competente,Grave ordinaria textual demo,no determinado,no determinado
+SAN-DEMO-004,DEMO-FED-005,Partido Delta,propaganda no reportada,46000,46000,23000,0,23000,23000,firme,,No calificada expresamente,no determinado,no determinado
+SAN-DEMO-005,DEMO-FED-006,Partido Beta,falta de documentacion,31000,31000,0,31000,0,0,desconocido,,No calificada expresamente,no determinado,no determinado
+SAN-DEMO-006,DEMO-CDMX-001,Partido Alfa,gasto no comprobado,42000,42000,42000,0,0,42000,firme,,No calificada expresamente,no determinado,no determinado
+SAN-DEMO-007,DEMO-CDMX-002,Partido Gamma,ingreso no reportado,67000,67000,0,0,67000,0,pendiente,,No calificada expresamente,no determinado,no determinado
+SAN-DEMO-008,DEMO-CDMX-003,Partido Delta,omision de deslinde,25000,25000,0,25000,0,0,desconocido,Amonestacion sin efectos,No calificada expresamente,no determinado,no determinado
+SAN-DEMO-009,DEMO-CDMX-005,Partido Alfa,rebase de tope,175000,175000,0,0,175000,0,pendiente,Revision de efectos sobre registro,Grave especial textual demo,no determinado,no determinado
+

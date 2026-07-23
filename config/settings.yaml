@@ -1,0 +1,9 @@
+app:
+  title: "Observatorio de Fiscalizacion y Justicia Electoral 2023-2024"
+  default_data_dir: "data/processed"
+  mvp_label: "MVP - diputaciones federales 2024"
+  offline_mode: true
+
+quality:
+  require_human_review_for_real_data: true
+  allow_fictional_demo_data: true

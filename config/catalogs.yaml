@@ -1,0 +1,28 @@
+sentidos:
+  - confirma
+  - modifica
+  - revoca
+  - revoca para efectos
+  - desecha
+  - sobresee
+  - otro
+
+calificaciones_agravio:
+  - fundado
+  - parcialmente fundado
+  - infundado
+  - inoperante
+  - no estudiado
+  - otro
+
+conductas:
+  - ingreso no reportado
+  - egreso no reportado
+  - evento no reportado
+  - registro extemporaneo
+  - falta de documentacion
+  - aportacion prohibida
+  - propaganda no reportada
+  - rebase de tope
+  - otra
+

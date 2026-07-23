@@ -1,0 +1,12 @@
+origen,expediente,url_oficial,archivo_local,archivo_existe,bytes_locales,captcha_local,descarga_local_ok
+casos,SUP-RAP-342/2024 y acumulado,https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SUP-RAP-0342-2024,documents/federal/tepjf_html/SUP-RAP-0342-2024.html,True,490955,False,True
+casos,SUP-RAP-352/2024 y acumulado,https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SUP-RAP-0352-2024-,documents/federal/tepjf_html/SUP-RAP-0352-2024.html,True,256040,False,True
+casos,SUP-RAP-357/2024,https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SUP-RAP-0357-2024-,documents/federal/tepjf_html/SUP-RAP-0357-2024.html,True,549940,False,True
+casos,SUP-RAP-413/2024,https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SUP-RAP-0413-2024-,documents/federal/tepjf_html/SUP-RAP-0413-2024.html,True,1737428,False,True
+casos,SCM-RAP-47/2024,https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SCM-RAP-0047-2024-,documents/federal/tepjf_html/SCM-RAP-0047-2024.html,True,1359702,False,True
+casos,ST-RAP-74/2024 y acumulado,https://www.te.gob.mx/sentenciasHTML/convertir/expediente/ST-RAP-0074-2024-,documents/federal/tepjf_html/ST-RAP-0074-2024.html,True,802641,False,True
+casos,ST-RAP-50/2024,https://www.te.gob.mx/sentenciasHTML/convertir/expediente/ST-RAP-0050-2024-,documents/federal/tepjf_html/ST-RAP-0050-2024.html,True,689427,False,True
+hallazgos,SUP-RAP-415/2024 y SUP-RAP-417/2024 acumulados,https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SUP-RAP-0415-2024-Acuerdo1,documents/federal/tepjf_html/SUP-RAP-0415-2024-Acuerdo1.html,True,140569,False,True
+hallazgos,SRE-PSD-85/2024,https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SRE-PSD-0085-2024-,documents/federal/tepjf_html/SRE-PSD-0085-2024.html,True,6056920,False,True
+hallazgos,SUP-RAP-102/2024,https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SUP-RAP-0102-2024-,documents/federal/tepjf_html/SUP-RAP-0102-2024.html,True,612608,False,True
+hallazgos,SG-JIN-114/2024,https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SG-JIN-0114-2024-,documents/federal/tepjf_html/SG-JIN-0114-2024.html,True,1158509,False,True

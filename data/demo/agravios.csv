@@ -1,0 +1,11 @@
+agravio_id,caso_id,numero_agravio,texto_resumen,categoria,subcategoria_fiscalizacion,calificacion,efecto,pagina_fuente,fragmento_fuente
+AGR-DEMO-001,DEMO-FED-001,1,Indebida valoracion de evidencia demo,valoracion probatoria,egreso no reportado,infundado,Sin cambio,10,Fragmento ficticio para prueba de interfaz
+AGR-DEMO-002,DEMO-FED-002,1,Falta de motivacion en individualizacion demo,motivacion,individualizacion,parcialmente fundado,Recalculo,14,Fragmento ficticio para prueba de interfaz
+AGR-DEMO-003,DEMO-FED-003,1,Exhaustividad sobre deslinde demo,exhaustividad,aportacion prohibida,fundado,Nueva resolucion,18,Fragmento ficticio para prueba de interfaz
+AGR-DEMO-004,DEMO-FED-004,1,Procedencia del medio demo,procedencia,requisito procesal,inoperante,Desechamiento,6,Fragmento ficticio para prueba de interfaz
+AGR-DEMO-005,DEMO-FED-005,1,Proporcionalidad de sancion demo,proporcionalidad,monto,parcialmente fundado,Modificacion,21,Fragmento ficticio para prueba de interfaz
+AGR-DEMO-006,DEMO-CDMX-001,1,Competencia de autoridad local demo,competencia,procedimiento local,infundado,Sin cambio,9,Fragmento ficticio para prueba de interfaz
+AGR-DEMO-007,DEMO-CDMX-002,1,Error en monto base demo,motivacion,monto,fundado,Recalculo,12,Fragmento ficticio para prueba de interfaz
+AGR-DEMO-008,DEMO-CDMX-003,1,Falta de acreditacion de conducta demo,valoracion probatoria,omision de deslinde,fundado,Revocacion,17,Fragmento ficticio para prueba de interfaz
+AGR-DEMO-009,DEMO-CDMX-005,1,Efectos sobre candidatura demo,efectos,rebase de tope,parcialmente fundado,Nueva determinacion,25,Fragmento ficticio para prueba de interfaz
+

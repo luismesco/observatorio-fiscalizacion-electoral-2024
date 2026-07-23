@@ -1,0 +1,81 @@
+{
+  "generated_at": "2026-07-23T17:09:05.647Z",
+  "source": "https://www.te.gob.mx/buscador/",
+  "browser": "Chrome via Codex browser control",
+  "runs": [
+    {
+      "query": "proceso electoral federal 2023-2024 diputaciones",
+      "count": 23,
+      "rows": [
+        "SG-JIN-0171-2024 2024 SG Tipo Corto Mediano Largo",
+        "SG-JIN-0152-2024 2024 SG Tipo Corto Mediano Largo",
+        "SG-JIN-0149-2024 2024 SG Tipo Corto Mediano Largo",
+        "SG-JIN-0147-2024 2024 SG Tipo Corto Mediano Largo",
+        "SG-JIN-0125-2024 2024 SG Tipo Corto Mediano Largo",
+        "SG-JIN-0106-2024 2024 SG Tipo Corto Mediano Largo",
+        "SG-JIN-0095-2024 2024 SG Tipo Corto Mediano Largo",
+        "SG-JIN-0091-2024 2024 SG Tipo Corto Mediano Largo",
+        "SG-JIN-0072-2024 2024 SG Tipo Corto Mediano Largo",
+        "SG-JIN-0064-2024 2024 SG Tipo Corto Mediano Largo",
+        "SG-JIN-0057-2024 2024 SG Tipo Corto Mediano Largo",
+        "SG-JIN-0050-2024 2024 SG Tipo Corto Mediano Largo",
+        "SG-JIN-0043-2024 2024 SG Tipo Corto Mediano Largo",
+        "SG-JIN-0038-2024 2024 SG Tipo Corto Mediano Largo",
+        "SG-JIN-0036-2024 2024 SG Tipo Corto Mediano Largo",
+        "SG-JIN-0014-2024 2024 SG Tipo Corto Mediano Largo",
+        "SG-JIN-0012-2024 2024 SG Tipo Corto Mediano Largo",
+        "SG-JIN-0009-2024 2024 SG Tipo Corto Mediano Largo",
+        "SG-JIN-0005-2024 2024 SG Tipo Corto Mediano Largo",
+        "SG-JIN-0004-2024 2024 SG Tipo Corto Mediano Largo",
+        "SG-JIN-0002-2024 2024 SG Tipo Corto Mediano Largo",
+        "SUP-REC-1089-2024 2024 SUP Tipo Corto Mediano Largo",
+        "SUP-REC-0794-2024 2024 SUP Tipo Corto Mediano Largo"
+      ],
+      "url": "https://www.te.gob.mx/buscador/"
+    },
+    {
+      "query": "diputaciones federales fiscalizacion",
+      "count": 0,
+      "rows": [],
+      "url": "https://www.te.gob.mx/buscador/"
+    },
+    {
+      "query": "fiscalizacion diputaciones federales",
+      "count": 1,
+      "rows": [
+        "SCM-JDC-0530-2021 2021 SCM Tipo Corto Mediano Largo"
+      ],
+      "url": "https://www.te.gob.mx/buscador/"
+    },
+    {
+      "query": "dictamen consolidado diputaciones",
+      "count": 0,
+      "rows": [],
+      "url": "https://www.te.gob.mx/buscador/"
+    },
+    {
+      "query": "ingresos gastos campaña diputaciones federales",
+      "count": 0,
+      "rows": [],
+      "url": "https://www.te.gob.mx/buscador/"
+    },
+    {
+      "query": "constancia mayoría diputaciones federales",
+      "count": 0,
+      "rows": [],
+      "url": "https://www.te.gob.mx/buscador/"
+    },
+    {
+      "query": "asignación diputaciones representación proporcional 2024",
+      "count": 0,
+      "rows": [],
+      "url": "https://www.te.gob.mx/buscador/"
+    },
+    {
+      "query": "diputaciones federales rebase tope gastos",
+      "count": 0,
+      "rows": [],
+      "url": "https://www.te.gob.mx/buscador/"
+    }
+  ]
+}

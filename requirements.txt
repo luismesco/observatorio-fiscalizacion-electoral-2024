@@ -1,0 +1,10 @@
+streamlit
+pandas
+duckdb
+plotly
+openpyxl
+pydantic
+pyyaml
+python-dateutil
+pytest
+

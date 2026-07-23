@@ -1,0 +1,55 @@
+<html><head>
+    <meta charset="utf-8">
+    <title>403 Forbidden</title>
+    <style>body{
+        background-color:#f4f9ff;
+        color:#2e2e2e; height:100%; font-family:'Microsoft YaHei','微软雅黑',Helvetica,Sans-serif,'Segoe UI';}
+        .error{width:740px; margin:0 auto; padding-top:10px; text-align:left;}
+        .error h1{font-size:150px; font-weight:500; margin-top:0; margin-bottom:0px; color:#1772dd; text-align:center;}
+        .error h3{color:#757676; font-size:48px; margin-bottom:0; text-align:center;}
+        .desc{margin:10px auto; padding-top:10px; text-align:center; word-wrap:break-word; white-space:normal;}
+        .l{color:#757676; font-size:16px; margin-bottom:0;}
+        .w{color:#757676; font-size:20px; margin-bottom:0;}
+        .lw{color:#0f0f0f; font-size:16px; font-weight:400; margin-bottom:0;}
+        .button a{border-radius:5px; font-size:inherit; display:inline-block;
+            width:100px; height:30px; line-height:30px; background-color:#1772dd; border-color:#1772dd;
+            color:#fff; cursor:pointer; font-size:14px; text-decoration:none; text-align:center;}
+        .button a:hover{background-color:#3687e3;}
+        .button{margin-top:26px auto; padding-top:10px; display:flex; justify-content:center;}
+        table{border-collapse:collapse; margin-top:20px; margin-bottom:20px;}
+        td{border:0px solid black; padding:10px;}
+        td:first-child{width:150px;}
+        td:nth-child(2){width:550px;}
+        td{word-break:break-word;}
+    </style>
+</head>
+<div class="error">
+<h3>Forbidden</h3>
+<div class="desc">HTTP Proxy</div>
+<h1>403</h1>
+<table border="0" width="740px" bordercolor="#ECECEC" cellpadding="10" cellspacing="0" align="center">
+<tbody><tr><td>
+<span class="w">The request contains some unreasonable content and has been blocked by the site administrator settings.</span>
+</td></tr>
+<tr><td>
+<span class="w">If you still need to visit this page, please contact the webmaster.</span>
+</td></tr>
+</tbody></table>
+<table border="0" bordercolor="#ECECEC" cellpadding="10" cellspacing="0" align="center">
+<tbody><tr><td><span class="lw">Access Time: </span></td>
+<td><span class="l">2026-07-22 22:49:23</span></td><tr>
+
+<tr><td><span class="lw">Domain Name: </span></td>
+<td><span class="l">sitl.diputados.gob.mx</span></td></tr>
+
+<tr><td><span class="lw">URL: </span></td>
+<td><span class="l">/LXVI_leg/fotos_lxviconfondo/021_foto_chica.jpg</span></td></tr>
+
+<tr><td valign="top"><span class="lw">Block Event ID: </span></td>
+<td><span class="l">0100000002260000045a46f069f5b0036a590f2afaf49030c</span></td></tr>
+</tbody></table>
+<div class="button"><a href="/">return</a></div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,53 @@
+expediente,year,tema_inventario,medio,status,texto_chars,sentido_probable,constancia_mayoria,fiscalizacion,rebase_tope,nulidad,rp,inelegibilidad,propaganda
+SUP-JDC-427/2023,2023,reeleccion legislativa,JDC,descargado_chrome,13920,no detectado,0,0,0,0,0,0,0
+SUP-JDC-550/2023,2023,reeleccion legislativa,JDC,descargado_chrome,34346,desecha,0,0,0,0,0,0,0
+SUP-RAP-385/2023,2023,asignacion rp,RAP,descargado_chrome,24603,confirma,0,0,0,0,1,0,0
+SUP-OP-4/2023,2023,opinion constitucional,OP,descargado_chrome,10275,no detectado,0,1,0,0,0,0,1
+SUP-JDC-296/2024,2024,seleccion interna rp,JDC,descargado_chrome,10452,no detectado,0,0,0,0,1,0,0
+SUP-JDC-414/2024,2024,seleccion interna rp,JDC,descargado_chrome,21198,revoca,0,0,0,0,1,0,0
+SUP-JDC-559/2024,2024,seleccion interna rp,JDC,descargado_chrome,24433,no detectado,0,0,0,0,1,0,0
+SUP-JDC-606/2024,2024,seleccion interna rp,JDC,descargado_chrome,24483,desecha,0,0,0,0,1,0,0
+SUP-JDC-798/2024,2024,seleccion interna rp,JDC,descargado_chrome,29428,confirma,0,0,0,0,1,0,0
+SUP-JDC-858/2024,2024,seleccion interna,JDC,descargado_chrome,22204,no detectado,0,0,0,0,1,0,0
+SUP-AG-182/2024,2024,asignacion rp irreparable,AG,descargado_chrome,12456,desecha,0,0,0,0,1,0,0
+SUP-AG-184/2024,2024,integracion camara,AG,descargado_chrome,18724,desecha,0,0,0,0,1,0,0
+SUP-AG-193/2024,2024,asignacion rp irreparable,AG,descargado_chrome,16970,desecha,1,0,0,0,1,0,0
+SUP-RAP-103/2024,2024,registro y rp,RAP,descargado_chrome,38210,confirma,0,0,0,0,1,0,0
+SUP-RAP-342/2024,2024,fiscalizacion federal,RAP,descargado_chrome,91749,revoca / confirma,0,1,0,0,1,0,1
+SUP-RAP-352/2024,2024,fiscalizacion federal,RAP,descargado_chrome,76662,confirma,0,1,1,0,0,0,1
+SUP-RAP-357/2024,2024,fiscalizacion federal,RAP,descargado_chrome,122771,revoca / confirma,0,1,1,0,1,0,1
+SUP-RAP-413/2024,2024,fiscalizacion federal,RAP,descargado_chrome,192799,revoca,0,1,1,0,0,0,1
+SUP-RAP-414/2024,2024,competencia fiscalizacion candidato,RAP,descargado_chrome,14641,no detectado,0,1,1,0,1,0,1
+SUP-RAP-415/2024,2024,competencia fiscalizacion candidato,RAP,descargado_chrome,17016,no detectado,0,1,0,0,1,0,1
+SUP-REC-761/2024,2024,reconsideracion jin,REC,descargado_chrome,5814,no detectado,1,0,0,0,0,0,0
+SUP-REC-763/2024,2024,reconsideracion jin,REC,descargado_chrome,26821,no detectado,1,0,0,1,1,0,0
+SUP-REC-764/2024,2024,reconsideracion jin,REC,descargado_chrome,32561,confirma,1,0,0,1,0,0,0
+SUP-REC-1142/2024,2024,reconsideracion jin,REC,descargado_chrome,7686,desecha,1,0,0,0,0,0,0
+SUP-REC-4505/2024,2024,asignacion rp,REC,descargado_chrome,29656,confirma,0,0,0,0,1,0,0
+SUP-REC-6450/2024,2024,asignacion rp,REC,descargado_chrome,9492,desecha,0,0,0,0,1,0,0
+SCM-JIN-27/2024,2024,jin computo distrital,JIN,descargado_chrome,15412,confirma / modifica,1,1,1,1,1,0,0
+SCM-JIN-30/2024,2024,jin computo distrital,JIN,descargado_chrome,25475,no detectado,1,0,0,1,1,1,0
+SCM-JIN-56/2024,2024,jin computo distrital,JIN,descargado_chrome,38026,confirma / modifica,1,0,0,1,1,0,1
+SCM-JIN-103/2024,2024,jin computo distrital,JIN,descargado_chrome,31511,confirma / modifica,1,0,0,1,1,0,1
+SCM-RAP-47/2024,2024,fiscalizacion candidato,RAP,descargado_chrome,30511,revoca,0,1,0,0,0,0,1
+SG-JDC-111/2024,2024,registro candidatura,JDC,descargado_chrome,21570,desecha / sobresee,0,0,0,0,0,0,0
+SG-JIN-10/2024,2024,jin computo distrital,JIN,descargado_chrome,9342,no detectado,1,0,0,0,0,1,0
+SG-JIN-143/2024,2024,jin computo distrital,JIN,descargado_chrome,23662,desecha,1,0,0,1,1,0,0
+SG-JIN-147/2024,2024,jin computo distrital,JIN,descargado_chrome,5937,modifica,1,0,0,1,1,0,0
+SG-JRC-221/2024,2024,diputaciones locales sonora,JRC,descargado_chrome,7166,no detectado,0,0,0,0,1,0,0
+SM-AG-39/2024,2024,encauzamiento computo distrital,AG,descargado_chrome,18416,no detectado,1,0,0,0,1,0,0
+SM-JDC-132/2024,2024,sustitucion candidatura,JDC,descargado_chrome,51464,confirma,0,0,0,0,1,1,0
+SM-JIN-11/2024,2024,jin computo distrital,JIN,descargado_chrome,16156,confirma,1,0,0,0,1,0,0
+SM-JIN-58/2024,2024,jin computo distrital,JIN,descargado_chrome,14265,confirma / modifica,1,0,0,1,1,0,0
+SM-JIN-82/2024,2024,jin computo distrital,JIN,descargado_chrome,13280,confirma / modifica,1,0,0,1,1,0,0
+SM-JIN-109/2024,2024,jin computo distrital,JIN,descargado_chrome,15892,confirma,1,0,0,1,0,0,0
+SM-JIN-146/2024,2024,jin computo distrital,JIN,descargado_chrome,19902,desecha,1,0,0,1,1,0,0
+ST-JDC-69/2024,2024,registro precandidatura,JDC,descargado_chrome,77584,no detectado,0,0,0,0,0,1,0
+ST-JIN-85/2024,2024,jin computo distrital,JIN,descargado_chrome,21436,confirma,1,0,0,1,0,0,0
+ST-RAP-50/2024,2024,fiscalizacion precandidatura,RAP,descargado_chrome,23815,no detectado,0,1,0,0,0,0,1
+ST-RAP-74/2024,2024,fiscalizacion candidato,RAP,descargado_chrome,6914,sobresee,0,1,0,0,0,0,0
+SRE-PSC-565/2024,2024,diputada federal,PSC,descargado_chrome,20975,desecha,0,0,0,0,0,0,1
+SRE-PSD-36/2024,2024,propaganda candidata diputada federal,PSD,descargado_chrome,24981,no detectado,0,0,0,0,0,0,1
+SRE-PSD-80/2024,2024,propaganda candidato diputado federal,PSD,descargado_chrome,18524,no detectado,0,0,0,0,0,0,1
+SRE-PSD-85/2024,2024,propaganda candidato diputado federal,PSD,descargado_chrome,17349,no detectado,0,0,0,0,0,0,1
+SRE-PSD-87/2024,2024,propaganda candidato diputado federal,PSD,descargado_chrome,10288,no detectado,0,0,0,0,0,0,1
