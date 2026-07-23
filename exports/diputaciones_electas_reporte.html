@@ -27,6 +27,32 @@ body {
 h1 { margin: 0 0 12px; font-size: 51px; line-height: .92; text-transform: uppercase; letter-spacing: 0; max-width: 7.3in; }
 h2 { margin: 0 0 13px; border-top: 6px solid #14100d; padding-top: 10px; font-size: 23px; line-height: 1; text-transform: uppercase; }
 p { margin: 0; color: #665a52; font-size: 13px; line-height: 1.45; font-weight: 600; }
+.cover-page { background: #fffdf8; padding: .46in .52in; }
+.cover-rule { height: 9px; background: linear-gradient(90deg, #6B1531 0 44%, #C59A3D 44% 54%, #1E5B4F 54% 68%, #14100d 68%); margin-bottom: 34px; }
+.cover-layout { display: grid; grid-template-columns: 1.08fr .92fr; gap: 38px; min-height: 6.35in; align-items: end; }
+.cover-kicker { color: #6B1531; font-size: 12px; font-weight: 900; text-transform: uppercase; margin-bottom: 18px; }
+.cover-title { color: #14100d; font-size: 58px; line-height: .88; font-weight: 900; text-transform: uppercase; max-width: 6.4in; }
+.cover-subtitle { margin-top: 22px; max-width: 5.2in; color: #665a52; font-size: 15px; line-height: 1.42; font-weight: 700; }
+.cover-meta { border-top: 5px solid #14100d; padding-top: 14px; }
+.cover-meta strong { display: block; color: #3b0718; font-size: 14px; line-height: 1.1; text-transform: uppercase; }
+.cover-meta p { margin-top: 8px; font-size: 10.5px; line-height: 1.36; }
+.cover-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 28px; }
+.cover-stat { border-top: 4px solid #C59A3D; padding-top: 10px; min-height: 74px; }
+.cover-stat:nth-child(2), .cover-stat:nth-child(4) { border-color: #6B1531; }
+.cover-stat b { display: block; color: #3b0718; font-size: 29px; line-height: .9; }
+.cover-stat span { display: block; margin-top: 8px; color: #665a52; font-size: 8.8px; font-weight: 900; line-height: 1.16; text-transform: uppercase; }
+.toc-layout { display: grid; grid-template-columns: .82fr 1.18fr; gap: 32px; align-items: start; }
+.toc-title { color: #14100d; font-size: 49px; font-weight: 900; line-height: .9; text-transform: uppercase; margin-top: 6px; }
+.toc-copy { margin-top: 16px; font-size: 12px; line-height: 1.42; }
+.toc-list { border-top: 6px solid #14100d; }
+.toc-item { display: grid; grid-template-columns: 54px 1fr 60px; gap: 14px; align-items: start; border-bottom: 1px solid rgba(20,16,13,.24); padding: 14px 0; }
+.toc-item b { color: #6B1531; font-size: 18px; line-height: 1; }
+.toc-item strong { display: block; color: #3b0718; font-size: 15px; line-height: 1.08; text-transform: uppercase; }
+.toc-item span { display: block; margin-top: 4px; color: #665a52; font-size: 9.5px; font-weight: 700; line-height: 1.26; }
+.toc-page { color: #14100d; font-size: 17px; font-weight: 900; text-align: right; }
+.reading-note { margin-top: 28px; border-top: 4px solid #C59A3D; padding-top: 11px; }
+.reading-note strong { display: block; color: #3b0718; font-size: 12px; text-transform: uppercase; }
+.reading-note p { margin-top: 7px; font-size: 10.2px; line-height: 1.34; }
 .hero-grid { display: grid; grid-template-columns: 1.18fr .82fr; gap: 32px; align-items: end; }
 .hero-copy { max-width: 3.3in; font-size: 17px; }
 .metric-board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 28px; border-top: 6px solid #14100d; padding-top: 16px; }
@@ -106,12 +132,59 @@ a { color: #6B1531; font-weight: 900; text-decoration: none; }
 </style>
 </head>
 <body>
+  <section class="page cover-page">
+    <div class="cover-rule"></div>
+    <div class="cover-layout">
+      <div>
+        <div class="cover-kicker">Observatorio de Fiscalización Electoral · Proceso federal 2023-2024</div>
+        <div class="cover-title">Fiscalización de diputaciones federales 2024</div>
+        <p class="cover-subtitle">Criterios, expedientes y modelo de datos para presentar el corte documental de fiscalización ante mesa de trabajo.</p>
+      </div>
+      <div>
+        <div class="cover-meta">
+          <strong>Reporte ejecutivo para reunión</strong>
+          <p>Corte documental al 23 de julio de 2026. El reporte separa casos consultables de montos positivos: la sumatoria cuenta pesos observados por el INE, no número de expedientes.</p>
+        </div>
+        <div class="cover-stats">
+          <div class="cover-stat"><b>52</b><span>sentencias revisadas en el corpus local</span></div>
+          <div class="cover-stat"><b>7</b><span>expedientes base con sentencia TEPJF</span></div>
+          <div class="cover-stat"><b>19</b><span>registros de sanción INE</span></div>
+          <div class="cover-stat"><b>$20.7 M</b><span>sumatoria de montos positivos observados</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><span>Observatorio de Fiscalización Electoral - Proceso Federal 2023-2024 · Corte: 23 de julio de 2026</span><span>Página 1 de 9</span></div>
+  </section>
+
+  <section class="page">
+    <div class="top-rule"></div>
+    <div class="toc-layout">
+      <div>
+        <div class="section-kicker">Guía de lectura</div>
+        <div class="toc-title">Índice del reporte</div>
+        <p class="toc-copy">La primera mitad presenta los hallazgos ejecutivos y la ubicación territorial. La segunda conserva los expedientes consultables, el método y el modelo de organización para actualizar la información desde fuentes oficiales.</p>
+        <div class="reading-note">
+          <strong>Clave metodológica</strong>
+          <p>Los registros en $0.00 o “No integrado” aparecen porque ubican una controversia, pero no se suman cuando no existe una cantidad económica positiva fijada, confirmada o modificada para agregar al cálculo.</p>
+        </div>
+      </div>
+      <div class="toc-list">
+        <div class="toc-item"><b>01</b><div><strong>Síntesis ejecutiva</strong><span>Causas por monto observado, contexto legislativo y lectura de la sumatoria.</span></div><div class="toc-page">3</div></div>
+        <div class="toc-item"><b>02</b><div><strong>Mapa de incidencias</strong><span>Entidades y distritos con controversias ubicables en el corte.</span></div><div class="toc-page">4</div></div>
+        <div class="toc-item"><b>03</b><div><strong>Expedientes consultables</strong><span>Tabla con expediente, sala, entidad, conducta, monto y URL oficial TEPJF.</span></div><div class="toc-page">5-7</div></div>
+        <div class="toc-item"><b>04</b><div><strong>Modelo de trabajo</strong><span>Organización propuesta para compilar criterios y alimentar la app en tiempo real.</span></div><div class="toc-page">8</div></div>
+        <div class="toc-item"><b>05</b><div><strong>Fuentes y método</strong><span>Corpus, delimitación, referencias oficiales y alcance del corte.</span></div><div class="toc-page">9</div></div>
+      </div>
+    </div>
+    <div class="footer"><span>Observatorio de Fiscalización Electoral - Proceso Federal 2023-2024 · Corte: 23 de julio de 2026</span><span>Página 2 de 9</span></div>
+  </section>
+
   <section class="page">
     <div class="top-rule"></div>
     <div class="hero-grid">
       <div>
         <div class="kicker">Observatorio de Fiscalización Electoral · Proceso federal 2023-2024</div>
-        <h1>Qué se sancionó en diputaciones federales 2024</h1>
+        <h1>Síntesis ejecutiva de diputaciones federales 2024</h1>
       </div>
       <p class="hero-copy">Reporte ejecutivo construido desde expedientes, registros de sanción del INE y hallazgos oficiales. Los $20.7 M corresponden a la suma de montos originales observados por el INE en 15 registros cuantificados relacionados con los expedientes base.</p>
     </div>
@@ -216,7 +289,7 @@ a { color: #6B1531; font-weight: 900; text-decoration: none; }
             </div>
       </div>
     </div>
-    <div class="footer"><span>Observatorio de Fiscalización Electoral - Proceso Federal 2023-2024 · Corte: 23 de julio de 2026</span><span>Página 1 de 7</span></div>
+    <div class="footer"><span>Observatorio de Fiscalización Electoral - Proceso Federal 2023-2024 · Corte: 23 de julio de 2026</span><span>Página 3 de 9</span></div>
   </section>
 
   <section class="page">
@@ -277,7 +350,7 @@ a { color: #6B1531; font-weight: 900; text-decoration: none; }
                 
             </div>
             </div>
-    <div class="footer"><span>Observatorio de Fiscalización Electoral - Proceso Federal 2023-2024 · Corte: 23 de julio de 2026</span><span>Página 2 de 7</span></div>
+    <div class="footer"><span>Observatorio de Fiscalización Electoral - Proceso Federal 2023-2024 · Corte: 23 de julio de 2026</span><span>Página 4 de 9</span></div>
   </section>
 
   
@@ -325,7 +398,7 @@ a { color: #6B1531; font-weight: 900; text-decoration: none; }
             </tbody>
     </table>
     
-    <div class="footer"><span>Observatorio de Fiscalización Electoral - Proceso Federal 2023-2024 · Corte: 23 de julio de 2026</span><span>Página 3 de 6</span></div>
+    <div class="footer"><span>Observatorio de Fiscalización Electoral - Proceso Federal 2023-2024 · Corte: 23 de julio de 2026</span><span>Página 5 de 9</span></div>
   </section>
             
   <section class="page">
@@ -372,7 +445,7 @@ a { color: #6B1531; font-weight: 900; text-decoration: none; }
             </tbody>
     </table>
     
-    <div class="footer"><span>Observatorio de Fiscalización Electoral - Proceso Federal 2023-2024 · Corte: 23 de julio de 2026</span><span>Página 4 de 6</span></div>
+    <div class="footer"><span>Observatorio de Fiscalización Electoral - Proceso Federal 2023-2024 · Corte: 23 de julio de 2026</span><span>Página 6 de 9</span></div>
   </section>
             
   <section class="page">
@@ -421,7 +494,7 @@ a { color: #6B1531; font-weight: 900; text-decoration: none; }
       </div>
     </div>
             
-    <div class="footer"><span>Observatorio de Fiscalización Electoral - Proceso Federal 2023-2024 · Corte: 23 de julio de 2026</span><span>Página 5 de 6</span></div>
+    <div class="footer"><span>Observatorio de Fiscalización Electoral - Proceso Federal 2023-2024 · Corte: 23 de julio de 2026</span><span>Página 7 de 9</span></div>
   </section>
             
 
@@ -449,7 +522,7 @@ a { color: #6B1531; font-weight: 900; text-decoration: none; }
       <div><b>5</b><span>incidencias ubicables por entidad o distrito</span></div>
       <div><b>$20,700,473.59</b><span>sumatoria exacta de montos positivos observados</span></div>
     </div>
-    <div class="footer"><span>Observatorio de Fiscalización Electoral - Proceso Federal 2023-2024 · Corte: 23 de julio de 2026</span><span>Página 6 de 7</span></div>
+    <div class="footer"><span>Observatorio de Fiscalización Electoral - Proceso Federal 2023-2024 · Corte: 23 de julio de 2026</span><span>Página 8 de 9</span></div>
   </section>
 
   <section class="page">
@@ -470,7 +543,7 @@ a { color: #6B1531; font-weight: 900; text-decoration: none; }
         </div>
       </div>
     </div>
-    <div class="footer"><span>Observatorio de Fiscalización Electoral - Proceso Federal 2023-2024 · Corte: 23 de julio de 2026</span><span>Página 7 de 7</span></div>
+    <div class="footer"><span>Observatorio de Fiscalización Electoral - Proceso Federal 2023-2024 · Corte: 23 de julio de 2026</span><span>Página 9 de 9</span></div>
   </section>
 </body>
 </html>

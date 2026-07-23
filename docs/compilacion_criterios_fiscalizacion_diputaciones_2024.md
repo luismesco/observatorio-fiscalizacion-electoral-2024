@@ -20,6 +20,28 @@ El documento no sustituye una revisión jurídica exhaustiva de cada sentencia. 
 - 12 agravios sistematizados en materia de fiscalización.
 - 19 registros de sanción del INE, de los cuales 15 tienen monto positivo y 4 se conservan como casos consultables sin sumarse al total.
 
+## Referente metodológico localizado en el equipo
+
+Archivo de referencia revisado: `/Users/amluis/Downloads/rpe_compilacion_v7.html`.
+
+Ese material de responsabilidad patrimonial del Estado funciona como referencia de organización, no como fuente jurídica para fiscalización electoral. La estructura que conviene trasladar al Observatorio es:
+
+- Un universo documental claramente delimitado por periodo, materia, órgano y fuente.
+- Una taxonomía temática estable para poder filtrar criterios.
+- Fichas individuales con rubro, fuente, órgano, tema, criterio jurídico, carga argumentativa o probatoria, efecto y cita.
+- Un índice ejecutivo que permita exponer el material sin leer cada sentencia completa.
+- Campos normalizados para que el mismo insumo alimente documento, app y PDF.
+
+Adaptación para fiscalización electoral:
+
+| Elemento del modelo RPE | Adaptación al Observatorio |
+|---|---|
+| Fuente jurisdiccional | Sala Superior, Sala Regional Ciudad de México y salas regionales auxiliares del corpus |
+| Tipo de criterio | Fiscalización, queja, rebase, propaganda, competencia, procedencia o efectos |
+| Criterio jurídico | Regla extraída de dictamen, resolución administrativa y sentencia |
+| Implicación jurídica | Consecuencia práctica para defensa, autoridad fiscalizadora o validez de elección |
+| Cita y localización | Expediente TEPJF, acto INE de origen y URL oficial |
+
 ## Actos administrativos de origen
 
 | Acto | Tipo | Relación con diputaciones federales | Expedientes TEPJF vinculados |
@@ -48,6 +70,145 @@ El documento no sustituye una revisión jurídica exhaustiva de cada sentencia. 
 | Competencia entre Sala Superior y Salas Regionales | La competencia se define por tipo de elección, principio, cargo, ámbito territorial y vínculo con la candidatura o elección impugnada. Las diputaciones de mayoría relativa tienden a Sala Regional; asuntos de RP o criterios generales pueden ir a Sala Superior. | Identificar cargo, principio, entidad, distrito y acto reclamado. | Acuerdos de competencia o remisión a Sala Regional. | SUP-RAP-414/2024; SUP-RAP-415/2024 |
 | Procedencia y firma | La falta de firma autógrafa o autenticidad procesal puede impedir el estudio de fondo incluso cuando el asunto de fondo sea fiscalización. | Verificar firma, personería, oportunidad y presentación válida. | Sobreseimiento. | ST-RAP-74/2024 y acumulado |
 | Efectos de la revocación | La revocación puede ser lisa y llana, parcial o para efectos. La diferencia importa porque define si la autoridad debe emitir nueva resolución, recalcular montos o simplemente dejar sin efectos una conclusión. | Precisar conclusión afectada, alcance del agravio fundado y consecuencia administrativa posterior. | Revoca para efectos, revoca parcialmente, confirma el resto. | SUP-RAP-342/2024; SUP-RAP-357/2024; SUP-RAP-413/2024; SCM-RAP-47/2024; ST-RAP-50/2024 |
+
+## Índice ejecutivo de criterios
+
+| Clave | Criterio | Tema | Órgano principal | Utilidad para la reunión |
+|---|---|---|---|---|
+| FIS-01 | Exhaustividad del dictamen, anexos y conclusiones | Dictamen y resolución | Sala Superior / SCM | Permite explicar cuándo una resolución debe reconstruir mejor el nexo entre hallazgo, conclusión y sanción |
+| FIS-02 | Fallas del SIF y necesidad de prueba específica | Sistema Integral de Fiscalización | Sala Superior | Ordena defensas sobre fallas técnicas sin convertirlas en argumentos genéricos |
+| FIS-03 | Documentación soporte y comprobación fiscal | Comprobación de gasto | Sala Superior | Distingue omisiones documentales que sostienen sanción de errores subsanables |
+| FIS-04 | Comprobantes electrónicos de pago | CEP / XML / soporte de operación | Sala Superior | Sirve para revisar defensa por comprobante, operación y consecuencia |
+| FIS-05 | Registro oportuno y duplicidad de consecuencias | Registro en tiempo real | Sala Superior | Ayuda a detectar errores de individualización o duplicidad |
+| FIS-06 | Prorrateo y candidaturas beneficiadas | Beneficio electoral | Sala Superior | Exige vincular gasto, candidatura, distrito, ámbito y regla de distribución |
+| FIS-07 | Omisión de reportar propaganda, eventos o gastos | Propaganda y gasto no reportado | Sala Superior / SCM / ST | Permite ordenar hechos, soporte, beneficio y deslinde |
+| FIS-08 | Aportaciones prohibidas | Quejas de fiscalización | SCM | Foco en aportante, bien o servicio, valor, beneficiario y nexo de campaña |
+| FIS-09 | Deslinde eficaz | Responsabilidad frente a terceros | ST | Útil para evaluar oportunidad, idoneidad y eficacia del deslinde |
+| FIS-10 | Rebase de tope y nulidad | Validez de elección | Sala Superior / Salas regionales | Separa sanción administrativa de determinancia electoral |
+| FIS-11 | Competencia por cargo, principio y territorio | Competencia | Sala Superior | Evita mezclar MR, RP, entidad, distrito y órgano competente |
+| FIS-12 | Efectos de revocación | Efectos | Sala Superior / SCM / ST | Define si hay nueva resolución, recálculo o simple eliminación de conclusión |
+
+## Fichas de criterio
+
+### FIS-01. Exhaustividad del dictamen, anexos y conclusiones
+
+**Rubro:** La autoridad debe permitir reconstruir la relación entre hallazgo, anexo, conclusión y sanción.  
+**Fuente:** SUP-RAP-342/2024; SCM-RAP-47/2024.  
+**Tipo:** Criterio de control sobre motivación y exhaustividad.  
+**Criterio jurídico:** Cuando la resolución administrativa no explica de manera suficiente cómo llega del hallazgo a la conclusión sancionatoria, procede revisar el acto para verificar si la motivación es completa y congruente.  
+**Carga argumentativa:** La parte inconforme debe señalar conclusión, anexo, conducta y omisión concreta de valoración; una inconformidad general no basta.  
+**Efecto observado:** Revocación para efectos, revocación parcial o confirmación, según el alcance del defecto.  
+**Uso en app:** Campo `criterio=exhaustividad`, ligado a conclusión sancionatoria, acto INE y URL oficial TEPJF.
+
+### FIS-02. Fallas del Sistema Integral de Fiscalización
+
+**Rubro:** Las fallas del SIF requieren evidencia específica de afectación.  
+**Fuente:** SUP-RAP-342/2024; SUP-RAP-357/2024; SUP-RAP-413/2024.  
+**Tipo:** Criterio probatorio y operativo.  
+**Criterio jurídico:** La sola referencia a fallas del sistema no desvirtúa una infracción si no se acredita cómo afectaron una obligación concreta de reporte, carga o comprobación.  
+**Carga argumentativa:** Identificar fecha, módulo, operación, evidencia técnica, obligación afectada y oportunidad de la actuación.  
+**Efecto observado:** Confirmación cuando el agravio es genérico; posible revocación parcial si la falla incide en una conclusión específica.  
+**Uso en app:** Campo `incidencia_sif`, con evidencia y estado de validación.
+
+### FIS-03. Documentación soporte y comprobación fiscal
+
+**Rubro:** La falta de soporte idóneo puede sostener la sanción.  
+**Fuente:** SUP-RAP-352/2024; SUP-RAP-357/2024.  
+**Tipo:** Criterio de comprobación de gasto.  
+**Criterio jurídico:** La autoridad puede confirmar observaciones cuando el sujeto obligado no presenta documentación fiscal, contractual o contable que corresponda con el gasto observado.  
+**Carga argumentativa:** Aportar soporte completo, explicar correspondencia con la operación y controvertir la valoración de la autoridad.  
+**Efecto observado:** Confirmación de conclusiones o sanciones si no se desvirtúa la observación.  
+**Uso en app:** Campos `documentacion_soporte`, `monto_observado`, `monto_final` y `efecto`.
+
+### FIS-04. Comprobantes electrónicos de pago
+
+**Rubro:** La defensa debe individualizar cada comprobante controvertido.  
+**Fuente:** SUP-RAP-352/2024; SUP-RAP-357/2024; SUP-RAP-413/2024.  
+**Tipo:** Criterio sobre CEP, XML y soporte de operación.  
+**Criterio jurídico:** Los planteamientos sobre comprobantes electrónicos requieren explicación individualizada; no basta afirmar que el comprobante era gratuito, no firmado o modificado.  
+**Carga argumentativa:** Precisar operación, comprobante, modificación, imposibilidad de firma o razón por la que no actualiza infracción.  
+**Efecto observado:** Confirmación cuando falta explicación específica.  
+**Uso en app:** Campo `soporte_cep`, con vínculo a conclusión y monto.
+
+### FIS-05. Registro oportuno y duplicidad de consecuencias
+
+**Rubro:** La temporalidad del registro debe valorarse sin duplicar consecuencias.  
+**Fuente:** SUP-RAP-357/2024.  
+**Tipo:** Criterio de individualización.  
+**Criterio jurídico:** La autoridad debe explicar si el registro fue inexistente, extemporáneo o duplicado, y ajustar la consecuencia a esa diferencia.  
+**Carga argumentativa:** Acreditar fecha de registro, soporte cargado, conducta atribuida y posible duplicidad.  
+**Efecto observado:** Revocación parcial cuando se advierte error de individualización; confirmación cuando la observación permanece acreditada.  
+**Uso en app:** Campos `fecha_operacion`, `fecha_registro`, `conducta` y `efecto`.
+
+### FIS-06. Prorrateo y candidaturas beneficiadas
+
+**Rubro:** El prorrateo debe corresponder al beneficio real.  
+**Fuente:** SUP-RAP-413/2024.  
+**Tipo:** Criterio de distribución de gasto.  
+**Criterio jurídico:** Para sostener el prorrateo, debe identificarse gasto, propaganda, candidatura beneficiada, ámbito territorial y regla de distribución aplicable.  
+**Carga argumentativa:** Vincular pieza propagandística, sujeto obligado, candidatura, distrito, entidad y beneficio.  
+**Efecto observado:** Revocación parcial o confirmación según la precisión del análisis.  
+**Uso en app:** Campos `candidatura_beneficiada`, `entidad`, `distrito`, `regla_prorrateo` y `monto_observado`.
+
+### FIS-07. Omisión de reportar propaganda, eventos o gastos
+
+**Rubro:** El gasto no reportado exige acreditar existencia, beneficio y obligación de reporte.  
+**Fuente:** SUP-RAP-342/2024; SUP-RAP-357/2024; SUP-RAP-413/2024; SCM-RAP-47/2024; ST-RAP-50/2024.  
+**Tipo:** Criterio de fiscalización de propaganda y eventos.  
+**Criterio jurídico:** La omisión se sostiene cuando existen elementos suficientes para vincular gasto o propaganda con campaña, sujeto obligado y deber de reporte.  
+**Carga argumentativa:** Identificar material, evento, proveedor, valor, candidatura beneficiada, temporalidad y, en su caso, deslinde.  
+**Efecto observado:** Confirmación, revocación para efectos o revocación parcial.  
+**Uso en app:** Tema central para mapa y tabla de expedientes consultables.
+
+### FIS-08. Aportaciones prohibidas
+
+**Rubro:** La autoridad debe estudiar aportante, beneficio y nexo con campaña.  
+**Fuente:** SCM-RAP-47/2024.  
+**Tipo:** Criterio de queja de fiscalización.  
+**Criterio jurídico:** Si se denuncia una posible aportación de ente impedido, la resolución debe valorar hechos, fuente de aportación, bien o servicio, beneficiario y relación con campaña.  
+**Carga argumentativa:** Precisar aportante, valor, conducta, candidatura, evento o propaganda y soporte probatorio.  
+**Efecto observado:** Revocación para nueva resolución si el estudio administrativo fue insuficiente.  
+**Uso en app:** Campo `aportacion_prohibida`, con estado de validación.
+
+### FIS-09. Deslinde eficaz
+
+**Rubro:** El deslinde debe ser oportuno, idóneo, eficaz y razonable.  
+**Fuente:** ST-RAP-50/2024.  
+**Tipo:** Criterio auxiliar para gastos de terceros.  
+**Criterio jurídico:** La existencia de propaganda o gasto de terceros no se neutraliza con un deslinde genérico; debe acreditarse una actuación real para rechazar o cesar el beneficio.  
+**Carga argumentativa:** Probar fecha, medio, solicitud de retiro, comunicación a autoridad y eficacia material.  
+**Efecto observado:** Confirmación o revocación según valoración probatoria.  
+**Uso en app:** Campo `deslinde`, útil para fichas de propaganda.
+
+### FIS-10. Rebase de tope y nulidad
+
+**Rubro:** La sanción administrativa no equivale por sí misma a nulidad electoral.  
+**Fuente:** SCM-JIN-27/2024; SG-JIN-114/2024; SUP-REC-764/2024; SUP-RAP-352/2024; SUP-RAP-357/2024; SUP-RAP-413/2024.  
+**Tipo:** Criterio puente entre fiscalización y validez de elección.  
+**Criterio jurídico:** Para que una irregularidad fiscalizable incida en la validez de la elección se requiere acreditar monto, acumulación al tope, determinancia y vínculo con la elección impugnada.  
+**Carga argumentativa:** Probar impacto cuantitativo o cualitativo y conexión con resultado electoral.  
+**Efecto observado:** En el corpus de nulidad, infracciones administrativas aisladas no bastan por sí solas para anular.  
+**Uso en app:** Campo `rebase_tope`, separado de `monto_observado` para no confundir sumatoria con nulidad.
+
+### FIS-11. Competencia por cargo, principio y territorio
+
+**Rubro:** La competencia depende de elección, principio, cargo y ámbito territorial.  
+**Fuente:** SUP-RAP-414/2024; SUP-RAP-415/2024.  
+**Tipo:** Criterio procesal.  
+**Criterio jurídico:** La distribución competencial exige identificar si se trata de mayoría relativa, representación proporcional, distrito, entidad, cargo o criterio general.  
+**Carga argumentativa:** Precisar acto reclamado, candidatura, cargo, principio y territorio.  
+**Efecto observado:** Acuerdos de competencia o remisión a sala regional.  
+**Uso en app:** Campos `organo_competente`, `principio`, `cargo`, `entidad` y `distrito`.
+
+### FIS-12. Efectos de revocación
+
+**Rubro:** Los efectos deben distinguir confirmación, revocación parcial, modificación y nueva resolución.  
+**Fuente:** SUP-RAP-342/2024; SUP-RAP-357/2024; SUP-RAP-413/2024; SCM-RAP-47/2024; ST-RAP-50/2024.  
+**Tipo:** Criterio de seguimiento.  
+**Criterio jurídico:** El sentido de una sentencia no siempre elimina toda la resolución administrativa; puede confirmar una parte, revocar otra o exigir un nuevo pronunciamiento.  
+**Carga argumentativa:** Identificar conclusión afectada, agravio fundado, alcance de la revocación y obligación posterior de la autoridad.  
+**Efecto observado:** Confirmación parcial, revocación para efectos, recálculo o nueva resolución.  
+**Uso en app:** Campo `efecto`, indispensable para reportes actualizables y para distinguir montos observados de montos firmes.
 
 ## Criterios por órgano jurisdiccional
 
@@ -124,8 +285,7 @@ Flujo operativo:
 
 ## Pendientes para robustecer la versión 1.0
 
-- Incorporar el documento de referencia de responsabilidad patrimonial del Estado para homologar estilo, profundidad y orden de fichas.
-- Cotejar contra el texto íntegro oficial de cada sentencia antes de presentar como criterio definitivo.
+- Cotejar las fichas contra el texto íntegro oficial de cada sentencia antes de presentarlas como criterio definitivo.
 - Separar criterios estrictamente de fiscalización de criterios auxiliares de propaganda, nulidad, competencia y procedencia.
 - Completar descarga o revisión de expedientes candidatos 2023-2025 antes de ampliar el universo.
 - Preparar una tabla ejecutiva con solo Sala Superior y Sala Regional Ciudad de México si la reunión requiere máxima brevedad.
