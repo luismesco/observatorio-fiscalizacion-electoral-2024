@@ -28,12 +28,12 @@ left, right = st.columns(2)
 with left:
     st.subheader("Frecuencia por conducta")
     chart_df = count_by(casos, "conducta_principal")
-    st.plotly_chart(px.bar(chart_df, x="casos", y="conducta_principal", orientation="h", color_discrete_sequence=["#6B1531"]), use_container_width=True)
+    st.plotly_chart(px.bar(chart_df, x="casos", y="conducta_principal", orientation="h", color_discrete_sequence=["#6B1531"]), width="stretch")
 
 with right:
     st.subheader("Monto original por conducta")
     chart_df = money_by(sanciones, "conducta", "monto_original")
-    st.plotly_chart(px.bar(chart_df, x="monto_original", y="conducta", orientation="h", color_discrete_sequence=["#1E5B4F"]), use_container_width=True)
+    st.plotly_chart(px.bar(chart_df, x="monto_original", y="conducta", orientation="h", color_discrete_sequence=["#1E5B4F"]), width="stretch")
 
 st.subheader("Detalle de sanciones")
-st.dataframe(sanciones, use_container_width=True, hide_index=True)
+st.dataframe(sanciones, width="stretch", hide_index=True)

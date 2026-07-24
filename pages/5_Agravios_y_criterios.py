@@ -28,15 +28,15 @@ left, right = st.columns(2)
 with left:
     st.subheader("Categoria de agravio")
     chart_df = count_by(agravios, "categoria", "agravios")
-    st.plotly_chart(px.bar(chart_df, x="agravios", y="categoria", orientation="h", color_discrete_sequence=["#1E5B4F"]), use_container_width=True)
+    st.plotly_chart(px.bar(chart_df, x="agravios", y="categoria", orientation="h", color_discrete_sequence=["#1E5B4F"]), width="stretch")
 
 with right:
     st.subheader("Calificacion")
     chart_df = count_by(agravios, "calificacion", "agravios")
-    st.plotly_chart(px.bar(chart_df, x="agravios", y="calificacion", orientation="h", color_discrete_sequence=["#6B1531"]), use_container_width=True)
+    st.plotly_chart(px.bar(chart_df, x="agravios", y="calificacion", orientation="h", color_discrete_sequence=["#6B1531"]), width="stretch")
 
 st.subheader("Votos separados")
 if votos.empty:
     st.info("Vista preparada para fase exhaustiva. La muestra actual no permite una inferencia general.")
 else:
-    st.dataframe(votos, use_container_width=True, hide_index=True)
+    st.dataframe(votos, width="stretch", hide_index=True)

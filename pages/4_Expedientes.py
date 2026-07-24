@@ -51,8 +51,8 @@ st.code(
 )
 
 st.subheader("Sanciones vinculadas")
-st.dataframe(sanciones[sanciones["caso_id"].astype(str) == caso_id], use_container_width=True, hide_index=True)
+st.dataframe(sanciones[sanciones["caso_id"].astype(str) == caso_id], width="stretch", hide_index=True)
 
 st.subheader("Agravios")
-st.dataframe(agravios[agravios["caso_id"].astype(str) == caso_id], use_container_width=True, hide_index=True)
+st.dataframe(agravios[agravios["caso_id"].astype(str) == caso_id], width="stretch", hide_index=True)
 

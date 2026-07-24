@@ -13,7 +13,7 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-from observatorio.ui import page_setup
+from observatorio.ui import page_setup, responsive_kpi_grid
 
 
 page_setup("Infografia editorial")
@@ -53,14 +53,17 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-cols = st.columns(7)
-cols[0].metric("Sentencias", len(resumen))
-cols[1].metric("Constancia", int(resumen["constancia_mayoria"].sum()))
-cols[2].metric("Fiscalizacion", int(resumen["fiscalizacion"].sum()))
-cols[3].metric("Rebase/tope", int(resumen["rebase_tope"].sum()))
-cols[4].metric("Propaganda", int(resumen["propaganda"].sum()))
-cols[5].metric("Nombres verificados", len(tfja))
-cols[6].metric("Diputaciones LXVI", len(diputados))
+responsive_kpi_grid(
+    [
+        ("Sentencias", len(resumen)),
+        ("Constancia", int(resumen["constancia_mayoria"].sum())),
+        ("Fiscalizacion", int(resumen["fiscalizacion"].sum())),
+        ("Rebase/tope", int(resumen["rebase_tope"].sum())),
+        ("Propaganda", int(resumen["propaganda"].sum())),
+        ("Nombres verificados", len(tfja)),
+        ("Diputaciones LXVI", len(diputados)),
+    ]
+)
 
 st.subheader("Ganadores confirmados con foto oficial")
 ganadores_confirmados = ganadores[ganadores["clasificacion"].eq("ganador_confirmado")]
@@ -97,7 +100,7 @@ with left:
     fig = px.bar(topic_df, x="sentencias", y="tema", orientation="h")
     fig.update_traces(marker_color=["#1E5B4F" if t != "fiscalizacion" else "#6B1531" for t in topic_df["tema"]])
     fig.update_layout(showlegend=False, margin=dict(l=0, r=0, t=8, b=0), paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
 with right:
     st.subheader("Control nominal")
@@ -124,7 +127,7 @@ party = diputados.groupby("partido_estimado", as_index=False).size().rename(colu
 fig = px.bar(party, x="diputaciones", y="partido_estimado", orientation="h", text="diputaciones")
 fig.update_traces(marker_color=["#6B1531" if x == "MORENA" else "#1E5B4F" if x == "PVEM" else "#B88A2A" if x == "PT" else "#2B5C8A" if x == "PAN" else "#FF6600" if x == "MC" else "#8A1F2D" for x in party["partido_estimado"]], textposition="outside")
 fig.update_layout(showlegend=False, margin=dict(l=0, r=24, t=8, b=0), paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
-st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(fig, width="stretch")
 
 st.subheader("Universo oficial de diputaciones")
 st.dataframe(
@@ -139,7 +142,7 @@ st.dataframe(
             "foto_png_bn",
         ]
     ],
-    use_container_width=True,
+    width="stretch",
     hide_index=True,
 )
 
@@ -154,14 +157,14 @@ st.dataframe(
             "estado_verificacion",
         ]
     ],
-    use_container_width=True,
+    width="stretch",
     hide_index=True,
 )
 
 st.subheader("Menciones nominales detectadas en expedientes")
 st.dataframe(
     personas[["expediente", "persona_detectada", "contexto"]],
-    use_container_width=True,
+    width="stretch",
     hide_index=True,
 )
 
@@ -179,7 +182,7 @@ st.dataframe(
             "estado_verificacion",
         ]
     ],
-    use_container_width=True,
+    width="stretch",
     hide_index=True,
 )
 
@@ -188,6 +191,6 @@ st.dataframe(
     resumen[resumen["constancia_mayoria"].eq(1)][
         ["expediente", "year", "tema_inventario", "medio", "sentido_probable", "nulidad", "rebase_tope"]
     ],
-    use_container_width=True,
+    width="stretch",
     hide_index=True,
 )

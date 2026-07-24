@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import html
 import sys
 from pathlib import Path
 
@@ -108,7 +109,7 @@ def page_setup(title: str) -> None:
           line-height: 1.35;
           margin: -6px 0 16px;
         }
-        h1, h2, h3 { color: var(--ink); letter-spacing: 0; font-family: "Montserrat", sans-serif; }
+        h1, h2, h3 { color: var(--ink); letter-spacing: 0; font-family: "Montserrat", sans-serif; overflow-wrap: normal; word-break: normal; hyphens: none; }
         h1 { font-size: clamp(2.2rem, 4vw, 4.6rem); font-weight: 900; line-height: .92; border-bottom: 4px solid var(--guinda); padding-bottom: .55rem; text-transform: uppercase; }
         h2 { font-size: 1.42rem; font-weight: 900; border-top: 6px solid var(--black); padding-top: .55rem; text-transform: uppercase; }
         h3 { font-size: 1rem; font-weight: 900; text-transform: uppercase; }
@@ -120,15 +121,80 @@ def page_setup(title: str) -> None:
           border-radius: 0;
           padding: 16px 16px;
           box-shadow: 0 10px 24px rgba(70,45,25,.08);
-        }
-        [data-testid="stMetricLabel"] p { font-size: .66rem; font-weight: 800; text-transform: uppercase; color: var(--muted); white-space: normal; }
-        [data-testid="stMetricValue"] { color: var(--guinda-dark); font-weight: 900; }
-        [data-testid="stMetricValue"] div {
-          font-size: clamp(1.85rem, 2.25vw, 2.55rem) !important;
-          line-height: .95 !important;
-          white-space: nowrap;
+          min-width: 0;
           overflow: visible;
+        }
+        [data-testid="stMetricLabel"] p {
+          font-size: .66rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          color: var(--muted);
+          white-space: normal;
+          overflow-wrap: anywhere;
+          line-height: 1.12;
+        }
+        [data-testid="stMetricValue"] {
+          color: var(--guinda-dark);
+          font-weight: 900;
+          min-width: 0;
+          overflow: visible;
+        }
+        [data-testid="stMetricValue"] div {
+          font-size: clamp(1.45rem, 2vw, 2.2rem) !important;
+          line-height: 1 !important;
+          white-space: normal;
+          overflow: visible !important;
           text-overflow: clip;
+          overflow-wrap: normal;
+          word-break: keep-all;
+          hyphens: none;
+        }
+        .responsive-kpi-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+          gap: clamp(10px, 1.8vw, 18px);
+          margin: 22px 0 30px;
+        }
+        .responsive-kpi {
+          min-width: 0;
+          background: linear-gradient(180deg, #fffdf8, #f5eadb);
+          border: 1px solid var(--line);
+          border-top: 5px solid var(--guinda);
+          padding: clamp(13px, 1.8vw, 18px);
+          box-shadow: 0 10px 24px rgba(70,45,25,.08);
+          container-type: inline-size;
+        }
+        .responsive-kpi .kpi-label {
+          color: var(--muted);
+          font-size: clamp(.64rem, 1.4vw, .72rem);
+          font-weight: 900;
+          line-height: 1.12;
+          text-transform: uppercase;
+          overflow-wrap: anywhere;
+          min-height: 1.5em;
+        }
+        .responsive-kpi .kpi-value {
+          color: var(--guinda-dark);
+          display: block;
+          font-size: clamp(1.85rem, 4.2vw, 3.05rem);
+          font-weight: 900;
+          line-height: .92;
+          margin-top: 12px;
+          white-space: normal;
+          overflow: visible;
+          overflow-wrap: normal;
+          word-break: keep-all;
+          hyphens: none;
+        }
+        .responsive-kpi .kpi-value.money {
+          font-size: clamp(1.55rem, 3.2vw, 2.55rem);
+          line-height: .98;
+          overflow-wrap: anywhere;
+          word-break: normal;
+        }
+        @container (max-width: 170px) {
+          .responsive-kpi .kpi-value { font-size: 1.75rem; }
+          .responsive-kpi .kpi-value.money { font-size: 1.32rem; }
         }
         .notice { background: var(--paper); border-left: 8px solid var(--guinda); padding: 14px 16px; margin: 8px 0 18px; box-shadow: inset 0 1px 0 var(--dorado-soft); }
         .small-muted { color: var(--muted); font-size: 0.92rem; }
@@ -1027,6 +1093,11 @@ def page_setup(title: str) -> None:
           .home-hero { min-height: 0; padding-top: 24px; }
           .home-title { font-size: clamp(2.72rem, 13vw, 4.5rem); }
           .home-title span { white-space: normal; }
+          .responsive-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+          .responsive-kpi { padding: 12px 10px; }
+          .responsive-kpi .kpi-label { font-size: .58rem; }
+          .responsive-kpi .kpi-value { font-size: clamp(1.7rem, 11vw, 2.55rem); }
+          .responsive-kpi .kpi-value.money { font-size: clamp(1.02rem, 6vw, 1.62rem); }
           .criterion-detail summary { grid-template-columns: 48px 1fr; gap: 10px; }
           .criterion-detail summary span { grid-column: 1 / -1; text-align: left; }
           .criterion-body { padding-left: 0; }
@@ -1073,6 +1144,21 @@ def format_money(value: float | int | str) -> str:
         return f"${float(value):,.2f}"
     except (TypeError, ValueError):
         return "$0.00"
+
+
+def responsive_kpi_grid(items: list[tuple[str, str | int | float]], *, money_labels: set[str] | None = None) -> None:
+    money_labels = money_labels or set()
+    cards = ['<div class="responsive-kpi-grid">']
+    for label, value in items:
+        value_class = "kpi-value money" if label in money_labels else "kpi-value"
+        cards.append(
+            '<div class="responsive-kpi">'
+            f'<div class="kpi-label">{html.escape(str(label))}</div>'
+            f'<div class="{value_class}">{html.escape(str(value))}</div>'
+            "</div>"
+        )
+    cards.append("</div>")
+    st.markdown("".join(cards), unsafe_allow_html=True)
 
 
 def add_global_filters(casos: pd.DataFrame) -> dict[str, list[str]]:

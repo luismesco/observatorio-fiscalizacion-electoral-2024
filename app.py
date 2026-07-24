@@ -14,7 +14,7 @@ import streamlit as st
 
 from observatorio.data_loader import filtered_cases, load_all
 from observatorio.metrics import count_by, kpis
-from observatorio.ui import add_global_filters, format_money, page_setup
+from observatorio.ui import add_global_filters, format_money, page_setup, responsive_kpi_grid
 
 
 page_setup("Observatorio de Fiscalización")
@@ -198,30 +198,55 @@ sanciones_filtradas = sanciones[sanciones["caso_id"].astype(str).isin(ids)] if i
 agravios_filtrados = agravios[agravios["caso_id"].astype(str).isin(ids)] if ids and not agravios.empty else agravios.head(0)
 
 stats = kpis(casos_filtrados, sanciones_filtradas, agravios_filtrados)
-cols = st.columns(6)
-cols[0].metric("Casos", stats["casos"])
-cols[1].metric("Sujetos", stats["sujetos"])
-cols[2].metric("Sanciones", stats["sanciones"])
-cols[3].metric("Monto original", format_money(stats["monto_original"]))
-cols[4].metric("Monto final conocido", format_money(stats["monto_final"]))
-cols[5].metric("Agravios", stats["agravios"])
+responsive_kpi_grid(
+    [
+        ("Casos", stats["casos"]),
+        ("Sujetos", stats["sujetos"]),
+        ("Sanciones", stats["sanciones"]),
+        ("Monto original", format_money(stats["monto_original"])),
+        ("Monto final conocido", format_money(stats["monto_final"])),
+        ("Agravios", stats["agravios"]),
+    ],
+    money_labels={"Monto original", "Monto final conocido"},
+)
 
-left, right = st.columns([1, 1])
-with left:
-    st.subheader("Casos por partido")
-    chart_df = count_by(casos_filtrados, "partido_principal")
-    if not chart_df.empty:
-        st.plotly_chart(px.bar(chart_df, x="casos", y="partido_principal", orientation="h", color_discrete_sequence=["#6B1531"]), use_container_width=True)
-    else:
-        st.info("Sin datos para los filtros seleccionados.")
+st.subheader("Casos por partido")
+chart_df = count_by(casos_filtrados, "partido_principal")
+if not chart_df.empty:
+    fig = px.bar(chart_df, x="casos", y="partido_principal", orientation="h", color_discrete_sequence=["#6B1531"])
+    fig.update_layout(
+        height=max(360, 54 * len(chart_df) + 120),
+        margin=dict(l=160, r=36, t=12, b=44),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        showlegend=False,
+        font=dict(family="Montserrat", size=13),
+        xaxis=dict(automargin=True),
+        yaxis=dict(automargin=True),
+    )
+    fig.update_traces(cliponaxis=False)
+    st.plotly_chart(fig, width="stretch")
+else:
+    st.info("Sin datos para los filtros seleccionados.")
 
-with right:
-    st.subheader("Sentido de resolucion")
-    chart_df = count_by(casos_filtrados, "sentido")
-    if not chart_df.empty:
-        st.plotly_chart(px.bar(chart_df, x="casos", y="sentido", orientation="h", color_discrete_sequence=["#1E5B4F"]), use_container_width=True)
-    else:
-        st.info("Sin datos para los filtros seleccionados.")
+st.subheader("Sentido de resolucion")
+chart_df = count_by(casos_filtrados, "sentido")
+if not chart_df.empty:
+    fig = px.bar(chart_df, x="casos", y="sentido", orientation="h", color_discrete_sequence=["#1E5B4F"])
+    fig.update_layout(
+        height=max(320, 54 * len(chart_df) + 120),
+        margin=dict(l=160, r=36, t=12, b=44),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        showlegend=False,
+        font=dict(family="Montserrat", size=13),
+        xaxis=dict(automargin=True),
+        yaxis=dict(automargin=True),
+    )
+    fig.update_traces(cliponaxis=False)
+    st.plotly_chart(fig, width="stretch")
+else:
+    st.info("Sin datos para los filtros seleccionados.")
 
 st.subheader("Tabla de expedientes")
 visible_cols = [
@@ -234,7 +259,7 @@ visible_cols = [
     "efectos_resumen",
     "revision_humana",
 ]
-st.dataframe(casos_filtrados[[c for c in visible_cols if c in casos_filtrados.columns]], use_container_width=True, hide_index=True)
+st.dataframe(casos_filtrados[[c for c in visible_cols if c in casos_filtrados.columns]], width="stretch", hide_index=True)
 st.download_button("Descargar CSV filtrado", casos_filtrados.to_csv(index=False).encode("utf-8"), "casos_filtrados.csv", "text/csv")
 
 st.subheader("Lectura ejecutiva")

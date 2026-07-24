@@ -14,7 +14,7 @@ import streamlit.components.v1 as components
 
 from observatorio.data_loader import load_all
 from observatorio.metrics import count_by, kpis, money_by
-from observatorio.ui import format_money, page_setup
+from observatorio.ui import format_money, page_setup, responsive_kpi_grid
 
 
 page_setup("Reporte imprimible")
@@ -35,19 +35,23 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-cols = st.columns(5)
-cols[0].metric("Sentencias", stats["casos"])
-cols[1].metric("Partidos/coaliciones", stats["sujetos"])
-cols[2].metric("Conclusiones/sanciones", stats["sanciones"])
-cols[3].metric("Monto original", format_money(stats["monto_original"]))
-cols[4].metric("Agravios", stats["agravios"])
+responsive_kpi_grid(
+    [
+        ("Sentencias", stats["casos"]),
+        ("Partidos/coaliciones", stats["sujetos"]),
+        ("Conclusiones/sanciones", stats["sanciones"]),
+        ("Monto original", format_money(stats["monto_original"])),
+        ("Agravios", stats["agravios"]),
+    ],
+    money_labels={"Monto original"},
+)
 
 left, right = st.columns([1, 1])
 with left:
     st.subheader("Sentido jurisdiccional")
     sentido = count_by(casos, "sentido")
     if not sentido.empty:
-        st.plotly_chart(px.bar(sentido, x="casos", y="sentido", orientation="h", color_discrete_sequence=["#6B1531"]), use_container_width=True)
+        st.plotly_chart(px.bar(sentido, x="casos", y="sentido", orientation="h", color_discrete_sequence=["#6B1531"]), width="stretch")
 
 with right:
     st.subheader("Monto por sujeto")
@@ -56,11 +60,11 @@ with right:
         colors = ["#FF6600" if x == "Movimiento Ciudadano" else "#6B1531" if x == "Morena" else "#2B5C8A" if x == "Partido Accion Nacional" else "#1E5B4F" for x in montos["sujeto_nombre"]]
         fig = px.bar(montos, x="monto_original", y="sujeto_nombre", orientation="h")
         fig.update_traces(marker_color=colors)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
 st.subheader("Expedientes reales incorporados")
 cols = ["expediente", "fecha_sentencia", "parte_actora", "sala", "sentido", "efectos_resumen"]
-st.dataframe(casos[cols], use_container_width=True, hide_index=True)
+st.dataframe(casos[cols], width="stretch", hide_index=True)
 
 st.subheader("Notas metodologicas para lectura impresa")
 st.markdown(

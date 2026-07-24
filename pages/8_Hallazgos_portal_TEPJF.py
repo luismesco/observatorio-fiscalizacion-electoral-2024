@@ -58,6 +58,6 @@ else:
                 "url_oficial",
             ]
         ],
-        use_container_width=True,
+        width="stretch",
         hide_index=True,
     )

@@ -535,7 +535,7 @@ with left_intro:
         xaxis=dict(title="", showgrid=True, gridcolor="rgba(107,21,49,.13)", zeroline=False),
         yaxis=dict(title=""),
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
 with right_intro:
     st.subheader("Estado de los montos")
@@ -551,7 +551,7 @@ with right_intro:
         xaxis=dict(title=""),
         yaxis=dict(title="", showgrid=True, gridcolor="rgba(107,21,49,.13)", zeroline=False),
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
 st.subheader("Sentencias y expedientes consultables")
 st.caption("Enlaces directos al expediente localizado en el portal del TEPJF.")
@@ -848,7 +848,7 @@ with left:
         xaxis=dict(showgrid=True, gridcolor="rgba(107,21,49,.13)", zeroline=False),
         yaxis=dict(title=""),
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
 with right:
     st.subheader("Principio de elección")
@@ -863,7 +863,7 @@ with right:
         yaxis=dict(showgrid=True, gridcolor="rgba(107,21,49,.13)", zeroline=False),
         xaxis=dict(title=""),
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
 st.subheader("Rostros de la legislatura")
 st.caption("Muestra filtrada de fichas públicas de la Cámara de Diputados.")
@@ -894,7 +894,7 @@ cols_table = [
     "licencia_en_listado",
     "perfil_url",
 ]
-st.dataframe(view[cols_table], use_container_width=True, hide_index=True)
+st.dataframe(view[cols_table], width="stretch", hide_index=True)
 st.download_button(
     "Descargar diputaciones electas CSV",
     view.to_csv(index=False).encode("utf-8"),

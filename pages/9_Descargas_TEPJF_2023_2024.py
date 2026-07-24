@@ -11,7 +11,7 @@ if str(SRC) not in sys.path:
 import pandas as pd
 import streamlit as st
 
-from observatorio.ui import page_setup
+from observatorio.ui import page_setup, responsive_kpi_grid
 
 
 page_setup("Descargas TEPJF 2023-2024")
@@ -28,11 +28,14 @@ if not manifest_path.exists():
     st.info("Aun no existe manifiesto de descargas.")
 else:
     manifest = pd.read_csv(manifest_path, keep_default_na=False)
-    cols = st.columns(4)
-    cols[0].metric("Inventario", len(manifest))
-    cols[1].metric("Descargadas", int((manifest["status"] == "descargado").sum()))
-    cols[2].metric("CAPTCHA portal", int((manifest["status"] == "captcha_portal").sum()))
-    cols[3].metric("Anios", manifest["year"].nunique())
+    responsive_kpi_grid(
+        [
+            ("Inventario", len(manifest)),
+            ("Descargadas", int((manifest["status"] == "descargado").sum())),
+            ("CAPTCHA portal", int((manifest["status"] == "captcha_portal").sum())),
+            ("Anios", manifest["year"].nunique()),
+        ]
+    )
 
     year = st.multiselect("Anio", sorted(manifest["year"].unique()), default=sorted(manifest["year"].unique()))
     status = st.multiselect("Estado", sorted(manifest["status"].unique()), default=sorted(manifest["status"].unique()))
@@ -45,6 +48,6 @@ else:
     ]
     st.dataframe(
         view[["expediente", "year", "tema", "status", "file_size", "filename", "url"]],
-        use_container_width=True,
+        width="stretch",
         hide_index=True,
     )

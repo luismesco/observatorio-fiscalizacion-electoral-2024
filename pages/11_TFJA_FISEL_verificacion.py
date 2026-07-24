@@ -36,7 +36,7 @@ else:
     data = pd.read_csv(path, keep_default_na=False)
     estado = st.multiselect("Estado", sorted(data["estado_verificacion"].unique()), default=sorted(data["estado_verificacion"].unique()))
     view = data[data["estado_verificacion"].isin(estado)]
-    st.dataframe(view, use_container_width=True, hide_index=True)
+    st.dataframe(view, width="stretch", hide_index=True)
 
     st.subheader("Fuentes oficiales para continuar")
     st.markdown(

@@ -32,9 +32,9 @@ else:
     fig = px.bar(chart_df, x="monto_original", y="sujeto_nombre", orientation="h")
     colors = ["#FF6600" if x == "Movimiento Ciudadano" else "#6B1531" if x == "Morena" else "#2B5C8A" if x == "Partido Accion Nacional" else "#1E5B4F" for x in chart_df["sujeto_nombre"]]
     fig.update_traces(marker_color=colors)
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
 st.subheader("Personas candidatas en la muestra")
 cols = ["expediente", "persona_candidata", "partido_principal", "consecuencia_no_economica", "gravedad_textual"]
 available = [c for c in cols if c in casos.columns]
-st.dataframe(casos[available], use_container_width=True, hide_index=True)
+st.dataframe(casos[available], width="stretch", hide_index=True)
