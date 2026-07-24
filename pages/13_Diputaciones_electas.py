@@ -49,6 +49,14 @@ hallazgos = pd.read_csv(processed / "hallazgos_portal.csv", keep_default_na=Fals
 def cached_pdf_report() -> bytes:
     return get_diputaciones_report_pdf_bytes()
 
+
+@st.cache_data(show_spinner=False)
+def cached_criteria_pdf() -> bytes:
+    pdf_path = ROOT / "exports" / "criterios_fiscalizacion_diputaciones_2024.pdf"
+    if not pdf_path.exists():
+        return b""
+    return pdf_path.read_bytes()
+
 party_all = df.groupby("partido_estimado", as_index=False).size().rename(columns={"size": "diputaciones"})
 party_counts = dict(zip(party_all["partido_estimado"], party_all["diputaciones"]))
 bloque_morena = sum(party_counts.get(x, 0) for x in ["MORENA", "PVEM", "PT"])
@@ -160,6 +168,34 @@ CASE_LOCATION_OVERRIDES = {
     "REAL-FED-006": ("Michoacan", "Distrito 10 Morelia"),
     "REAL-FED-007": ("Michoacan", "Distrito 06"),
 }
+TEPJF_URLS = {
+    "SUP-RAP-342/2024": "https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SUP-RAP-0342-2024-",
+    "SUP-RAP-352/2024": "https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SUP-RAP-0352-2024-",
+    "SUP-RAP-357/2024": "https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SUP-RAP-0357-2024-",
+    "SUP-RAP-413/2024": "https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SUP-RAP-0413-2024-",
+    "SUP-RAP-414/2024": "https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SUP-RAP-0414-2024-",
+    "SUP-RAP-415/2024": "https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SUP-RAP-0415-2024-",
+    "SUP-REC-764/2024": "https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SUP-REC-0764-2024-",
+    "SCM-RAP-47/2024": "https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SCM-RAP-0047-2024-",
+    "SCM-JIN-27/2024": "https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SCM-JIN-0027-2024-",
+    "SCM-JIN-30/2024": "https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SCM-JIN-0030-2024-",
+    "SCM-JIN-56/2024": "https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SCM-JIN-0056-2024-",
+    "SCM-JIN-103/2024": "https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SCM-JIN-0103-2024-",
+}
+CRITERIA = [
+    ("FIS-01", "Exhaustividad del dictamen, anexos y conclusiones", "Dictamen y resolución", "Sala Superior / Sala Regional Ciudad de México", "SUP-RAP-342/2024; SCM-RAP-47/2024", "La autoridad debe permitir reconstruir la relación entre hallazgo, anexo, conclusión y sanción. Si la motivación no explica el paso del hecho observado a la consecuencia, procede revisar el acto.", "Revocación para efectos, revocación parcial o confirmación.", "Ordena que la lectura del dictamen no se reduzca al monto: exige identificar conclusión, soporte y respuesta administrativa.", "Antes: diseñar matrices de observaciones. Durante: ubicar el anexo y la conclusión afectados. Después: documentar qué parte quedó firme y qué debe rehacerse."),
+    ("FIS-02", "Fallas del Sistema Integral de Fiscalización", "SIF", "Sala Superior", "SUP-RAP-342/2024; SUP-RAP-357/2024; SUP-RAP-413/2024", "La referencia genérica a fallas del SIF no desvirtúa una infracción si no se acredita cómo impidió cumplir una obligación concreta.", "Confirmación cuando el agravio es genérico; posible revocación parcial si incide en una conclusión específica.", "Sirve para distinguir problemas técnicos documentados de defensas abstractas frente a registros extemporáneos u omisiones.", "Antes: preparar bitácoras técnicas. Durante: conservar evidencia de carga, módulo y operación. Después: vincular la falla con una conclusión concreta."),
+    ("FIS-03", "Documentación soporte y comprobación fiscal", "Comprobación de gasto", "Sala Superior", "SUP-RAP-352/2024; SUP-RAP-357/2024", "La falta de soporte fiscal, contractual o contable idóneo puede sostener sanciones si el sujeto obligado no desvirtúa la observación.", "Confirmación de conclusiones o sanciones cuando no se acredita el soporte.", "Da un estándar práctico para revisar facturas, contratos, muestras y correspondencia entre operación, proveedor y campaña.", "Antes: definir expedientes digitales mínimos. Durante: revisar soporte por operación. Después: depurar registros firmes y pendientes de aclaración."),
+    ("FIS-04", "Comprobantes electrónicos de pago", "CEP, XML y soporte", "Sala Superior", "SUP-RAP-352/2024; SUP-RAP-357/2024; SUP-RAP-413/2024", "La defensa sobre comprobantes electrónicos debe individualizar cada operación y explicar por qué no actualiza infracción.", "Confirmación cuando falta explicación específica.", "Evita revisar los comprobantes como bloques generales y obliga a enlazar documento, póliza, operación y observación.", "Antes: homogeneizar campos de CEP y XML. Durante: revisar correspondencia por póliza. Después: registrar causas de confirmación o revocación."),
+    ("FIS-05", "Registro oportuno y duplicidad de consecuencias", "Registro en tiempo real", "Sala Superior", "SUP-RAP-357/2024", "La autoridad debe distinguir registro inexistente, extemporáneo o duplicado, y ajustar la consecuencia a esa diferencia.", "Revocación parcial cuando hay error de individualización; confirmación si la observación subsiste.", "Permite separar errores de captura, registros tardíos y omisiones reales para evitar consecuencias duplicadas.", "Antes: calendarizar obligaciones. Durante: comparar fecha de operación y registro. Después: identificar recálculos o conclusiones subsistentes."),
+    ("FIS-06", "Prorrateo y candidaturas beneficiadas", "Beneficio electoral", "Sala Superior", "SUP-RAP-413/2024", "El prorrateo debe reflejar gasto, propaganda, candidatura beneficiada, ámbito territorial y regla de distribución aplicable.", "Revocación parcial o confirmación según la precisión del análisis.", "Conecta la cuantificación con el beneficio real de campaña y con el territorio de la diputación federal.", "Antes: definir criterios de beneficio. Durante: codificar piezas por candidatura y distrito. Después: explicar ajustes al monto observado."),
+    ("FIS-07", "Omisión de reportar propaganda, eventos o gastos", "Gasto no reportado", "Sala Superior / Sala Regional Ciudad de México", "SUP-RAP-342/2024; SUP-RAP-357/2024; SUP-RAP-413/2024; SCM-RAP-47/2024", "La omisión se analiza por existencia del gasto o propaganda, beneficio electoral, obligación de reporte y suficiencia del soporte.", "Confirmación, revocación para efectos o revocación parcial.", "Es el criterio base para ordenar observaciones de propaganda, eventos y gastos que no aparecen en la contabilidad ordinaria.", "Antes: crear catálogos de conducta. Durante: vincular evidencia con evento o pieza. Después: separar omisiones firmes de estudios rehechos."),
+    ("FIS-08", "Aportaciones prohibidas", "Quejas de fiscalización", "Sala Regional Ciudad de México", "SCM-RAP-47/2024", "La autoridad debe valorar hechos, fuente de aportación, bien o servicio, beneficiario y relación con campaña.", "Revocación para nueva resolución si el estudio administrativo fue insuficiente.", "Ayuda a construir fichas de queja que separen hecho denunciado, aportante, beneficio y estándar de prueba.", "Antes: definir campos de queja. Durante: documentar aportante, valor y beneficio. Después: controlar cumplimiento de nueva resolución."),
+    ("FIS-09", "Fiscalización y nulidad de elección", "Rebase de tope y determinancia", "Sala Superior / Sala Regional Ciudad de México", "SCM-JIN-27/2024; SUP-REC-764/2024; SUP-RAP-352/2024; SUP-RAP-357/2024; SUP-RAP-413/2024", "La sanción administrativa aislada no equivale por sí misma a nulidad; se requiere monto, acumulación al tope, determinancia y vínculo con la elección.", "Confirmación de validez o análisis de nulidad sólo si se acredita el impacto exigido.", "Separa la lectura administrativa de fiscalización de la consecuencia jurisdiccional sobre validez de la elección.", "Antes: ubicar topes y umbrales. Durante: monitorear acumulación de gastos. Después: distinguir sanción, rebase y nulidad."),
+    ("FIS-10", "Precisión del acto y principio impugnado", "Juicio de inconformidad", "Sala Regional Ciudad de México", "SCM-JIN-27/2024; SCM-JIN-30/2024; SCM-JIN-56/2024; SCM-JIN-103/2024", "En diputaciones federales, la impugnación debe leerse conforme al acto, principio, distrito, agravios y viabilidad jurídica del planteamiento.", "Confirmación, modificación del cómputo, acumulación o estudio delimitado del acto impugnado.", "Permite organizar expedientes que mezclan mayoría relativa, representación proporcional, cómputo distrital y nulidad.", "Antes: preparar fichas por distrito y principio. Durante: revisar escritos y agravios. Después: actualizar cómputos y efectos."),
+    ("FIS-11", "Competencia por cargo, principio y territorio", "Competencia", "Sala Superior", "SUP-RAP-414/2024; SUP-RAP-415/2024", "La competencia depende de tipo de elección, principio, cargo, entidad, distrito y vínculo con la candidatura o elección impugnada.", "Acuerdos de competencia o remisión a sala regional.", "Es un control de entrada para evitar mezclar asuntos federales, locales, de candidatura y de cómputo.", "Antes: etiquetar órgano probable. Durante: verificar cargo y territorio. Después: registrar remisión o reasignación del asunto."),
+    ("FIS-12", "Efectos de revocación", "Efectos", "Sala Superior / Sala Regional Ciudad de México", "SUP-RAP-342/2024; SUP-RAP-357/2024; SUP-RAP-413/2024; SCM-RAP-47/2024", "El sentido de una sentencia puede confirmar una parte, revocar otra o exigir un nuevo pronunciamiento de la autoridad.", "Confirmación parcial, revocación para efectos, recálculo o nueva resolución.", "Permite que dictamen, resolución y sentencia queden en una misma cadena editorial sin usar lenguaje técnico innecesario.", "Antes: prever salidas posibles. Durante: capturar puntos resolutivos. Después: dar seguimiento a recálculos, reposiciones y montos firmes."),
+]
 
 
 def exp_key(value: str) -> str:
@@ -267,11 +303,35 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.download_button(
-    "Descargar PDF",
-    data=cached_pdf_report(),
-    file_name="observatorio_diputaciones_electas_2023_2024.pdf",
+pdf_options = {
+    "Fiscalización de diputaciones federales 2024": {
+        "data": cached_pdf_report(),
+        "file_name": "observatorio_diputaciones_electas_2023_2024.pdf",
+        "note": "Análisis ejecutivo de sanciones, expedientes, montos y efectos jurisdiccionales.",
+    },
+    "Criterios en materia de fiscalización electoral": {
+        "data": cached_criteria_pdf(),
+        "file_name": "criterios_fiscalizacion_diputaciones_2024.pdf",
+        "note": "Compilación de criterios de Sala Superior y Sala Regional Ciudad de México.",
+    },
+}
+download_left, download_right = st.columns([.72, .28])
+selected_pdf = download_left.selectbox(
+    "Análisis disponible",
+    list(pdf_options),
+    key="pdf_analysis_download",
+)
+selected_payload = pdf_options[selected_pdf]
+download_left.markdown(
+    f'<div class="download-note">{html.escape(selected_payload["note"])}</div>',
+    unsafe_allow_html=True,
+)
+download_right.download_button(
+    "Descarga este análisis",
+    data=selected_payload["data"],
+    file_name=selected_payload["file_name"],
     mime="application/pdf",
+    disabled=not selected_payload["data"],
 )
 
 st.markdown(
@@ -338,6 +398,122 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+
+criteria_records = [
+    {
+        "id": item[0],
+        "title": item[1],
+        "theme": item[2],
+        "organ": item[3],
+        "source": item[4],
+        "rule": item[5],
+        "effect": item[6],
+        "relevance": item[7],
+        "utility": item[8],
+    }
+    for item in CRITERIA
+]
+st.markdown(
+    """
+    <section class="criteria-reader" id="criterios-fiscalizacion">
+      <div class="reader-head">
+        <div>
+          <div class="label">Criterios de fiscalización</div>
+          <div class="title">Retícula de lectura jurídica</div>
+        </div>
+        <div class="body">
+          La sección usa una retícula por capas: primero ubica tema y órgano, después abre cada ficha
+          con criterio, expediente, efecto, relevancia y utilidad temporal. En móvil se vuelve una lectura
+          vertical; en tablet conserva mapa de navegación; en PC deja visible una guía lateral.
+        </div>
+      </div>
+    </section>
+    """,
+    unsafe_allow_html=True,
+)
+filter_cols = st.columns([1, 1, 1])
+theme_filter = filter_cols[0].selectbox(
+    "Tema de criterio",
+    ["Todos"] + sorted({row["theme"] for row in criteria_records}),
+    key="criterios_tema",
+)
+organ_filter = filter_cols[1].selectbox(
+    "Órgano",
+    ["Todos", "Sala Superior", "Sala Regional Ciudad de México", "Ambas salas"],
+    key="criterios_organo",
+)
+moment_filter = filter_cols[2].selectbox(
+    "Momento de utilidad",
+    ["Todos", "Antes", "Durante", "Después"],
+    key="criterios_momento",
+)
+filtered_criteria = criteria_records
+if theme_filter != "Todos":
+    filtered_criteria = [row for row in filtered_criteria if row["theme"] == theme_filter]
+if organ_filter == "Sala Superior":
+    filtered_criteria = [row for row in filtered_criteria if "Sala Superior" in row["organ"]]
+elif organ_filter == "Sala Regional Ciudad de México":
+    filtered_criteria = [row for row in filtered_criteria if "Ciudad de México" in row["organ"]]
+elif organ_filter == "Ambas salas":
+    filtered_criteria = [row for row in filtered_criteria if "/" in row["organ"]]
+if moment_filter != "Todos":
+    filtered_criteria = [row for row in filtered_criteria if f"{moment_filter}:" in row["utility"]]
+nav_items = [
+    f'<a href="#{html.escape(row["id"].lower())}"><b>{html.escape(row["id"])}</b><span>{html.escape(row["theme"])}</span></a>'
+    for row in filtered_criteria
+]
+
+
+def criterion_source_links(row: dict[str, str]) -> str:
+    source_links = []
+    for expediente in [part.strip() for part in row["source"].split(";")]:
+        url = TEPJF_URLS.get(expediente)
+        if url:
+            source_links.append(f'<a href="{html.escape(url)}" target="_blank" rel="noopener">{html.escape(expediente)}</a>')
+        else:
+            source_links.append(f'<span>{html.escape(expediente)}</span>')
+    return "".join(source_links)
+
+
+st.markdown(
+    f"""
+    <div class="reader-filter-note">{len(filtered_criteria)} criterios visibles · cambia los filtros para leer por tema, órgano o momento del proceso.</div>
+    <div class="criteria-map">{''.join(nav_items)}</div>
+    """,
+    unsafe_allow_html=True,
+)
+
+criteria_lane, timeline_lane = st.columns([1.48, .52])
+with criteria_lane:
+    for row in filtered_criteria:
+        st.markdown(f'<span id="{html.escape(row["id"].lower())}"></span>', unsafe_allow_html=True)
+        with st.expander(f'{row["id"]} · {row["title"]}', expanded=row["id"] == "FIS-01"):
+            st.markdown(
+                f"""
+                <div class="criterion-body streamlit-criterion">
+                  <div class="criterion-field rule"><label>Criterio jurídico</label><p>{html.escape(row["rule"])}</p></div>
+                  <div class="criterion-field"><label>Órgano</label><p>{html.escape(row["organ"])}</p></div>
+                  <div class="criterion-field"><label>Tema</label><p>{html.escape(row["theme"])}</p></div>
+                  <div class="criterion-field"><label>Expediente</label><div class="source-links">{criterion_source_links(row)}</div></div>
+                  <div class="criterion-field"><label>Efecto</label><p>{html.escape(row["effect"])}</p></div>
+                  <div class="criterion-field"><label>Relevancia para dictamen/resolución</label><p>{html.escape(row["relevance"])}</p></div>
+                  <div class="criterion-field utility"><label>Utilidad antes, durante y después</label><p>{html.escape(row["utility"])}</p></div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+with timeline_lane:
+    st.markdown(
+        """
+        <aside class="criteria-timeline">
+        <div class="timeline-card"><b>Antes del proceso</b><span>Definir mapas de riesgo, campos mínimos, evidencias esperadas y criterios de revisión para campañas de diputaciones federales.</span></div>
+        <div class="timeline-card"><b>Durante el proceso</b><span>Monitorear reportes, quejas, propaganda, eventos, soporte documental y señales de beneficio por candidatura o distrito.</span></div>
+        <div class="timeline-card"><b>Después del proceso</b><span>Separar montos firmes, revocaciones, recálculos, nulidad, cumplimiento y actualización de fichas, app y PDF.</span></div>
+      </aside>
+        """,
+        unsafe_allow_html=True,
+    )
 
 left_intro, right_intro = st.columns([1.05, .95])
 with left_intro:

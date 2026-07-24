@@ -1,0 +1,12 @@
+.git
+.DS_Store
+.pytest_cache
+__pycache__
+*.pyc
+.venv
+data/raw
+data/interim
+documents
+exports/captura*.png
+exports/capturas
+tests
