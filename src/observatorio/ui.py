@@ -1,10 +1,8 @@
 from __future__ import annotations
 
-import html
 import sys
 from pathlib import Path
 
-import pandas as pd
 import streamlit as st
 
 
@@ -1144,32 +1142,3 @@ def format_money(value: float | int | str) -> str:
         return f"${float(value):,.2f}"
     except (TypeError, ValueError):
         return "$0.00"
-
-
-def responsive_kpi_grid(items: list[tuple[str, str | int | float]], *, money_labels: set[str] | None = None) -> None:
-    money_labels = money_labels or set()
-    cards = ['<div class="responsive-kpi-grid">']
-    for label, value in items:
-        value_class = "kpi-value money" if label in money_labels else "kpi-value"
-        cards.append(
-            '<div class="responsive-kpi">'
-            f'<div class="kpi-label">{html.escape(str(label))}</div>'
-            f'<div class="{value_class}">{html.escape(str(value))}</div>'
-            "</div>"
-        )
-    cards.append("</div>")
-    st.markdown("".join(cards), unsafe_allow_html=True)
-
-
-def add_global_filters(casos: pd.DataFrame) -> dict[str, list[str]]:
-    st.sidebar.header("Filtros")
-    filters: dict[str, list[str]] = {}
-    for label, column in [
-        ("Nivel", "nivel"),
-        ("Partido", "partido_principal"),
-        ("Conducta", "conducta_principal"),
-        ("Sentido", "sentido"),
-    ]:
-        options = sorted([x for x in casos.get(column, pd.Series(dtype=str)).unique() if str(x)])
-        filters[column] = st.sidebar.multiselect(label, options, default=options)
-    return filters

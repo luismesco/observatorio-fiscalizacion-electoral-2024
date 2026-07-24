@@ -14,7 +14,7 @@ import streamlit as st
 
 from observatorio.data_loader import filtered_cases, load_all
 from observatorio.metrics import count_by, kpis
-from observatorio.ui import add_global_filters, format_money, page_setup, responsive_kpi_grid
+from observatorio.ui import format_money, page_setup
 
 
 page_setup("Observatorio de Fiscalización")
@@ -31,6 +31,38 @@ def cached_pdf(path: str) -> bytes:
     if not pdf_path.exists():
         return b""
     return pdf_path.read_bytes()
+
+
+def responsive_kpi_grid(items: list[tuple[str, str | int | float]], *, money_labels: set[str] | None = None) -> None:
+    money_labels = money_labels or set()
+    cards = ['<div class="responsive-kpi-grid">']
+    for label, value in items:
+        value_class = "kpi-value money" if label in money_labels else "kpi-value"
+        cards.append(
+            '<div class="responsive-kpi">'
+            f'<div class="kpi-label">{html.escape(str(label))}</div>'
+            f'<div class="{value_class}">{html.escape(str(value))}</div>'
+            "</div>"
+        )
+    cards.append("</div>")
+    st.markdown("".join(cards), unsafe_allow_html=True)
+
+
+def filter_controls() -> dict[str, list[str]]:
+    with st.expander("Ajustar corte de datos", expanded=False):
+        cols = st.columns(4)
+        filters: dict[str, list[str]] = {}
+        for idx, (label, column) in enumerate(
+            [
+                ("Nivel", "nivel"),
+                ("Partido", "partido_principal"),
+                ("Conducta", "conducta_principal"),
+                ("Sentido", "sentido"),
+            ]
+        ):
+            options = sorted([x for x in casos[column].unique() if str(x)]) if column in casos.columns else []
+            filters[column] = cols[idx].multiselect(label, options, default=options)
+    return filters
 
 
 st.markdown(
@@ -175,17 +207,29 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-nav_left, nav_right = st.columns([1, 1])
-with nav_left:
-    st.page_link("pages/13_Diputaciones_electas.py", label="Abrir análisis de diputaciones y criterios", icon=":material/article:")
-with nav_right:
-    st.page_link("pages/10_Analisis_corpus_TEPJF.py", label="Abrir corpus de sentencias TEPJF", icon=":material/travel_explore:")
+st.markdown(
+    """
+    <div class="home-doc-grid">
+      <div class="home-doc-card">
+        <b>Análisis de diputaciones y criterios</b>
+        <span>Descarga los PDF desde el selector superior y consulta el panel de datos en esta misma página.</span>
+        <a href="#descargas">Ir a descargas</a>
+      </div>
+      <div class="home-doc-card">
+        <b>Corpus de sentencias TEPJF</b>
+        <span>El corte de sentencias y los hallazgos se sintetizan en los PDF editoriales y en las gráficas de datos.</span>
+        <a href="#panel-datos">Ir al panel</a>
+      </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 st.markdown('<span class="home-panel-anchor" id="panel-datos"></span>', unsafe_allow_html=True)
 st.title("Panel de datos del corte 2023-2024")
 st.caption("Corte operativo federal para reconstruir acto de origen, impugnación, agravios, sentido, efectos y diputaciones electas.")
 
-filters = add_global_filters(casos)
+filters = filter_controls()
 casos_filtrados = filtered_cases(
     casos,
     nivel=filters["nivel"],
