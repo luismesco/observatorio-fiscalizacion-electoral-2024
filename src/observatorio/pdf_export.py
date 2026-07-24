@@ -893,8 +893,12 @@ def export_diputaciones_report_pdf(
 def get_diputaciones_report_pdf_bytes() -> bytes:
     pdf_path = export_dir() / REPORT_PDF
     if pdf_path.exists():
-        newest_source = max((project_root() / path).stat().st_mtime for path in SOURCE_FILES)
-        if pdf_path.stat().st_mtime >= newest_source:
+        source_mtimes = [
+            (project_root() / path).stat().st_mtime
+            for path in SOURCE_FILES
+            if (project_root() / path).exists()
+        ]
+        if not source_mtimes or pdf_path.stat().st_mtime >= max(source_mtimes):
             return pdf_path.read_bytes()
     pdf_path = export_diputaciones_report_pdf()
     return pdf_path.read_bytes()

@@ -14,7 +14,7 @@ import streamlit as st
 
 from observatorio.data_loader import filtered_cases, load_all
 from observatorio.metrics import count_by, kpis
-from observatorio.ui import add_global_filters, format_money, mvp_notice, page_setup
+from observatorio.ui import add_global_filters, format_money, page_setup
 
 
 page_setup("Observatorio de Fiscalización")
@@ -22,6 +22,7 @@ data = load_all()
 casos = data["casos"]
 sanciones = data["sanciones"]
 agravios = data["agravios"]
+base_stats = kpis(casos, sanciones, agravios)
 
 
 @st.cache_data(show_spinner=False)
@@ -34,13 +35,14 @@ def cached_pdf(path: str) -> bytes:
 
 st.markdown(
     """
-    <nav class="site-nav">
+    <nav class="site-nav home-nav">
       <div class="site-brand">Observatorio Electoral</div>
       <div class="site-links">
-        <a class="active" href="/">Inicio</a>
-        <a href="/Diputaciones_electas">Diputaciones</a>
-        <a href="/Infografia_editorial">Infografía</a>
-        <a href="/Analisis_corpus_TEPJF">Sentencias</a>
+        <a class="active" href="#inicio">Inicio</a>
+        <a href="#descargas">Descargas</a>
+        <a href="#publicaciones">Publicaciones</a>
+        <a href="#interactivo">Interactivo</a>
+        <a href="#panel-datos">Datos</a>
       </div>
     </nav>
     """,
@@ -48,16 +50,43 @@ st.markdown(
 )
 
 st.markdown(
-    """
-    <section class="intro-lede">
+    f"""
+    <span class="home-panel-anchor" id="inicio"></span>
+    <section class="home-hero">
       <div>
-        <div class="intro-kicker">Observatorio de Fiscalización Electoral</div>
-        <div class="intro-title"><span>Diputaciones</span><span>federales</span><span>2024</span></div>
+        <div class="home-kicker">Observatorio de Fiscalización Electoral</div>
+        <div class="home-title"><span>Diputaciones</span><span>federales</span><span>2024</span></div>
       </div>
-      <div class="intro-copy">
-        Hub editorial para consultar qué se sancionó en la elección de diputaciones federales
-        y qué criterios emitieron Sala Superior y Sala Regional Ciudad de México en materia de
-        fiscalización electoral del proceso federal 2023-2024.
+      <div>
+        <div class="home-deck">
+          Una experiencia editorial e interactiva para consultar qué se sancionó en la elección
+          de diputaciones federales y qué criterios emitieron Sala Superior y Sala Regional Ciudad
+          de México en materia de fiscalización electoral del proceso 2023-2024.
+        </div>
+        <div class="home-folio">
+          <div><b>{base_stats["casos"]}</b><span>Expedientes base</span></div>
+          <div><b>{base_stats["sanciones"]}</b><span>Registros de sanción</span></div>
+          <div><b>{base_stats["agravios"]}</b><span>Agravios clasificados</span></div>
+        </div>
+      </div>
+    </section>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    """
+    <span class="home-panel-anchor" id="descargas"></span>
+    <section class="home-download-band">
+      <div class="home-section-head">
+        <div>
+          <div class="label">Descargas editoriales</div>
+          <div class="title">Elige el análisis</div>
+        </div>
+        <div class="body">
+          Los PDF finales están integrados en la app para descarga directa. El selector cambia el archivo
+          disponible sin sacar al lector del flujo de lectura.
+        </div>
       </div>
     </section>
     """,
@@ -98,18 +127,48 @@ download_right.download_button(
 
 st.markdown(
     """
-    <section class="plain-steps">
-      <div>
-        <strong>1. Qué se sancionó</strong>
-        <span>Lectura ejecutiva de conductas, montos observados, expedientes y efectos de las resoluciones.</span>
+    <span class="home-panel-anchor" id="publicaciones"></span>
+    <section class="home-section">
+      <div class="home-section-head">
+        <div>
+          <div class="label">Publicaciones principales</div>
+          <div class="title">Dos puertas de lectura</div>
+        </div>
+        <div class="body">
+          La app combina piezas editoriales cerradas en PDF con una lectura navegable por datos,
+          criterios, expedientes y entidades. Primero lee, después explora.
+        </div>
       </div>
-      <div>
-        <strong>2. Criterios emitidos</strong>
-        <span>Fichas jurídicas navegables por tema, órgano y utilidad antes, durante y después del proceso electoral.</span>
+      <div class="home-doc-grid">
+        <div class="home-doc-card">
+          <b>Qué se sancionó en las elecciones de diputaciones federales 2024</b>
+          <span>Lectura ejecutiva de conductas, montos observados, expedientes, sujetos obligados y efectos de las resoluciones.</span>
+          <a href="#descargas">Seleccionar PDF</a>
+        </div>
+        <div class="home-doc-card">
+          <b>Criterios de fiscalización electoral derivados del proceso 2023-2024</b>
+          <span>Fichas jurídicas por órgano, expediente, tema, regla, efecto, relevancia y utilidad temporal.</span>
+          <a href="#interactivo">Explorar criterios</a>
+        </div>
       </div>
-      <div>
-        <strong>3. Consulta interactiva</strong>
-        <span>Explora diputaciones electas, sentencias, corpus documental, verificación y hallazgos desde las secciones de la app.</span>
+    </section>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    """
+    <span class="home-panel-anchor" id="interactivo"></span>
+    <section class="home-section">
+      <div class="home-section-head">
+        <div>
+          <div class="label">Lectura interactiva</div>
+          <div class="title">Navega sin perder contexto</div>
+        </div>
+        <div class="body">
+          La sección de diputaciones concentra la retícula completa: descargas, criterios plegables,
+          mapa territorial, expedientes consultables y registro de curules.
+        </div>
       </div>
     </section>
     """,
@@ -122,9 +181,9 @@ with nav_left:
 with nav_right:
     st.page_link("pages/10_Analisis_corpus_TEPJF.py", label="Abrir corpus de sentencias TEPJF", icon=":material/travel_explore:")
 
+st.markdown('<span class="home-panel-anchor" id="panel-datos"></span>', unsafe_allow_html=True)
 st.title("Panel de datos del corte 2023-2024")
 st.caption("Corte operativo federal para reconstruir acto de origen, impugnación, agravios, sentido, efectos y diputaciones electas.")
-mvp_notice()
 
 filters = add_global_filters(casos)
 casos_filtrados = filtered_cases(

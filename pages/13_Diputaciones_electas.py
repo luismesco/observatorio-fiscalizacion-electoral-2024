@@ -26,10 +26,10 @@ st.markdown(
     <nav class="site-nav">
       <div class="site-brand">Observatorio Electoral</div>
       <div class="site-links">
-        <a class="active" href="/Diputaciones_electas">Diputaciones</a>
-        <a href="/Infografia_editorial">Infografía</a>
-        <a href="/Analisis_corpus_TEPJF">Sentencias</a>
-        <a href="/TFJA_FISEL_verificacion">Verificación</a>
+        <a class="active" href="#descargas">Descargas</a>
+        <a href="#criterios-fiscalizacion">Criterios</a>
+        <a href="#mapa-territorial">Mapa</a>
+        <a href="#registro-curules">Curules</a>
       </div>
     </nav>
     """,
@@ -47,6 +47,9 @@ hallazgos = pd.read_csv(processed / "hallazgos_portal.csv", keep_default_na=Fals
 
 @st.cache_data(show_spinner=False)
 def cached_pdf_report() -> bytes:
+    pdf_path = ROOT / "exports" / "diputaciones_electas_reporte.pdf"
+    if pdf_path.exists():
+        return pdf_path.read_bytes()
     return get_diputaciones_report_pdf_bytes()
 
 
@@ -288,7 +291,7 @@ state_points = {
 
 st.markdown(
     """
-    <section class="intro-lede">
+    <section class="intro-lede" id="descargas">
       <div>
         <div class="intro-kicker">Observatorio de Fiscalización Electoral</div>
         <div class="intro-title"><span>Qué se</span><span>sancionó</span><span>en la elección</span></div>
@@ -755,7 +758,7 @@ for _, entity_label in MAP_ENTITY_COLUMNS:
     )
 st.markdown(
     f"""
-    <section class="map-deck">
+    <section class="map-deck" id="mapa-territorial">
       <div class="map-copy">
         <div class="label">Mapa de incidencias</div>
         <div class="title">Estados marcados por expediente</div>
@@ -878,6 +881,7 @@ for _, row in gallery.iterrows():
 html.append("</div>")
 st.markdown("".join(html), unsafe_allow_html=True)
 
+st.markdown('<span id="registro-curules"></span>', unsafe_allow_html=True)
 st.subheader("Registro de curules")
 cols_table = [
     "nombre_listado",
