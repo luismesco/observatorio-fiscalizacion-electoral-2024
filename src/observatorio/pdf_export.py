@@ -567,6 +567,17 @@ p {{ margin: 0; color: #665a52; font-size: 13px; line-height: 1.45; font-weight:
 .reading-note p {{ margin-top: 7px; font-size: 10.2px; line-height: 1.34; }}
 .hero-grid {{ display: grid; grid-template-columns: 1.18fr .82fr; gap: 32px; align-items: end; }}
 .hero-copy {{ max-width: 3.3in; font-size: 17px; }}
+.summary-page h1 {{ font-size: 39px; line-height: .9; max-width: 6.25in; }}
+.summary-page .hero-grid {{ grid-template-columns: 1.06fr .94fr; gap: 28px; align-items: start; }}
+.summary-page .hero-copy {{ max-width: 3.45in; font-size: 14px; line-height: 1.38; }}
+.summary-page .metric-board {{ margin-top: 18px; gap: 14px; padding-top: 13px; }}
+.summary-page .metric {{ min-height: 74px; }}
+.summary-page .metric strong {{ font-size: 30px; }}
+.summary-page .metric span {{ font-size: 8.8px; }}
+.summary-page .split {{ gap: 22px; }}
+.summary-page h2 {{ font-size: 20px; margin-bottom: 9px; }}
+.summary-page .cause-row {{ padding: 5.5px 0; }}
+.summary-page .party-row {{ margin: 6px 0; }}
 .metric-board {{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 28px; border-top: 6px solid #14100d; padding-top: 16px; }}
 .metric {{ border-left: 6px solid #6B1531; padding-left: 12px; min-height: 92px; }}
 .metric:nth-child(2) {{ border-color: #C59A3D; }}
@@ -620,6 +631,30 @@ p {{ margin: 0; color: #665a52; font-size: 13px; line-height: 1.45; font-weight:
 .criteria-strip div {{ border-top: 1px solid rgba(20,16,13,.28); padding-top: 8px; }}
 .criteria-strip b {{ display: block; color: #3b0718; font-size: 20px; line-height: .95; }}
 .criteria-strip span {{ display: block; margin-top: 5px; color: #665a52; font-size: 9px; font-weight: 900; text-transform: uppercase; line-height: 1.12; }}
+.model-page h2 {{ margin-bottom: 16px; }}
+.model-hero {{ display: grid; grid-template-columns: .84fr 1.16fr; gap: 30px; align-items: start; }}
+.model-kicker {{ color: #6B1531; font-size: 10px; font-weight: 900; text-transform: uppercase; }}
+.model-title {{ color: #14100d; font-size: 34px; font-weight: 900; line-height: .92; text-transform: uppercase; margin-top: 8px; }}
+.model-lede {{ border-top: 5px solid #14100d; padding-top: 10px; }}
+.model-lede p {{ font-size: 10.8px; line-height: 1.36; }}
+.model-lede strong {{ display: block; color: #3b0718; font-size: 10px; font-weight: 900; text-transform: uppercase; margin-bottom: 5px; }}
+.model-process {{ display: grid; grid-template-columns: repeat(6, 1fr); gap: 9px; margin-top: 18px; }}
+.process-step {{ border-top: 4px solid #6B1531; border-bottom: 1px solid #d7c7b2; padding: 8px 6px 7px; min-height: 68px; }}
+.process-step:nth-child(2), .process-step:nth-child(5) {{ border-top-color: #C59A3D; }}
+.process-step b {{ display: block; color: #3b0718; font-size: 8.4px; line-height: 1.12; text-transform: uppercase; }}
+.process-step span {{ display: block; color: #665a52; font-size: 7.2px; font-weight: 700; line-height: 1.18; margin-top: 5px; }}
+.model-grid {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 18px; }}
+.model-card {{ border-top: 5px solid #C59A3D; padding-top: 9px; min-height: 116px; }}
+.model-card strong {{ display: block; color: #3b0718; font-size: 12px; line-height: 1.12; text-transform: uppercase; }}
+.model-card p {{ margin-top: 7px; font-size: 9px; line-height: 1.28; }}
+.discipline-label {{ margin-top: 14px; color: #6B1531; font-size: 9px; font-weight: 900; text-transform: uppercase; }}
+.discipline-grid {{ display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 7px; }}
+.discipline {{ border-top: 1px solid rgba(20,16,13,.28); padding-top: 7px; }}
+.discipline b {{ display: block; color: #3b0718; font-size: 10px; line-height: 1.1; text-transform: uppercase; }}
+.discipline span {{ display: block; color: #665a52; font-size: 7.4px; font-weight: 700; line-height: 1.18; margin-top: 5px; }}
+.model-page .criteria-strip {{ margin-top: 15px; }}
+.model-page .criteria-strip b {{ font-size: 17px; }}
+.model-page .criteria-strip span {{ font-size: 7.8px; }}
 .incidence-list {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px; }}
 .incidence-card {{ border-top: 1px solid rgba(20,16,13,.23); padding-top: 8px; min-height: 170px; }}
 .incidence-card strong {{ display: block; color: #3b0718; font-size: 11px; text-transform: uppercase; }}
@@ -691,14 +726,14 @@ a {{ color: #6B1531; font-weight: 900; text-decoration: none; }}
     <div class="footer"><span>{REPORT_FOOTER}</span><span>Página 2 de {total_pages}</span></div>
   </section>
 
-  <section class="page">
+  <section class="page summary-page">
     <div class="top-rule"></div>
     <div class="hero-grid">
       <div>
         <div class="kicker">Observatorio de Fiscalización Electoral · Proceso federal 2023-2024</div>
         <h1>Qué se sancionó en las elecciones de diputaciones federales 2024</h1>
       </div>
-      <p class="hero-copy">Reporte ejecutivo construido desde expedientes, registros de sanción del INE y hallazgos oficiales. Los {money(total_sancionado)} corresponden a la suma de montos originales observados por el INE en {registros_cuantificados} registros cuantificados relacionados con los expedientes base.</p>
+      <p class="hero-copy">Análisis construido desde expedientes, registros de sanción del INE y hallazgos oficiales. Los {money(total_sancionado)} corresponden a la suma de montos originales observados por el INE en {registros_cuantificados} registros cuantificados relacionados con los expedientes base.</p>
     </div>
     <div class="metric-board">
       <div class="metric"><strong>{len(casos)}</strong><span>expedientes base con sentencia TEPJF</span></div>
@@ -743,23 +778,39 @@ a {{ color: #6B1531; font-weight: 900; text-decoration: none; }}
 
   {''.join(case_sections)}
 
-  <section class="page">
+  <section class="page model-page">
     <div class="top-rule"></div>
     <h2>Modelo de trabajo para fiscalización</h2>
-    <div class="meeting-lede">
+    <div class="model-hero">
       <div>
-        <div class="label">Modelo institucional de actualización</div>
-        <div class="title">De la fuente oficial al corte verificable</div>
+        <div class="model-kicker">Sistematización del análisis</div>
+        <div class="model-title">De la fuente oficial al seguimiento electoral</div>
       </div>
-      <p>El Observatorio puede operar como una cadena documental: cada expediente se incorpora desde una fuente oficial, se contrasta con el dictamen o resolución administrativa y se transforma en un dato verificable antes de alimentar la app, la sumatoria y el PDF. La lógica editorial es conservar la distinción entre controversias localizables y cantidades positivas que sí pueden agregarse.</p>
+      <div class="model-lede">
+        <strong>Qué se hizo y por qué importa</strong>
+        <p>Se integró un corte documental con sentencias públicas del TEPJF, actos de fiscalización del INE, registros de sanción y hallazgos territoriales. El valor del modelo está en convertir expedientes dispersos en una base consultable: antes del proceso permite anticipar riesgos; durante el proceso permite seguimiento oportuno; después del proceso permite explicar criterios, efectos y montos sin confundir controversias con pesos agregables.</p>
+      </div>
     </div>
-    <div class="meeting-grid">
-      <div class="meeting-card"><strong>1. Dictamen y resolución</strong><p>El punto de entrada son los actos de fiscalización de campaña federal 2023-2024. El modelo conserva la clave administrativa, la conclusión revisada, la conducta observada y el expediente jurisdiccional que confirmó, modificó o revocó el análisis.</p></div>
-      <div class="meeting-card"><strong>2. Criterios jurisdiccionales</strong><p>Los criterios se ordenan por órgano, tema y efecto: gasto no reportado, soporte documental, propaganda, rebase, aportaciones prohibidas, competencia y alcance de la revocación. Cada regla se mantiene vinculada a su fuente oficial.</p></div>
-      <div class="meeting-card"><strong>3. Base viva de consulta</strong><p>La app debe leer una matriz única con expediente, URL oficial, acto de origen, sujeto obligado, candidatura vinculada, entidad, distrito, monto positivo, estado de validación y efecto. Así el reporte se actualiza sin rehacer la narrativa.</p></div>
+    <div class="model-process">
+      <div class="process-step"><b>Fuente oficial</b><span>Sentencia, dictamen, resolución o queja con URL institucional.</span></div>
+      <div class="process-step"><b>Extracción</b><span>Texto, expediente, acto de origen, órgano, fecha y cargo.</span></div>
+      <div class="process-step"><b>Clasificación</b><span>Tema, conducta, entidad, distrito, candidatura y sujeto obligado.</span></div>
+      <div class="process-step"><b>Criterio</b><span>Regla jurídica, carga probatoria, efecto y alcance de la decisión.</span></div>
+      <div class="process-step"><b>Cuantificación</b><span>Monto positivo, monto firme o caso consultable no integrado.</span></div>
+      <div class="process-step"><b>Seguimiento</b><span>App, PDF, fichas y alertas para actualización durante el proceso.</span></div>
     </div>
-    <div class="flow-grid">
-      <span>Fuente oficial</span><span>Extracción de texto</span><span>Validación jurídica</span><span>Matriz normalizada</span><span>App y PDF</span>
+    <div class="model-grid">
+      <div class="model-card"><strong>Antes del proceso</strong><p>Permite construir mapas de riesgo, detectar conductas recurrentes, preparar criterios de revisión y organizar fuentes oficiales antes de que la fiscalización se vuelva contenciosa.</p></div>
+      <div class="model-card"><strong>Durante el proceso</strong><p>Sirve para monitorear quejas, registros, propaganda, gastos reportados, actos de autoridad y posibles efectos sobre candidaturas, distritos o campañas.</p></div>
+      <div class="model-card"><strong>Después del proceso</strong><p>Ordena sentencias, montos, revocaciones y criterios para explicar qué ocurrió, qué quedó firme y qué debe actualizarse en bases públicas o reportes.</p></div>
+    </div>
+    <div class="discipline-label">Enfoque multidisciplinario</div>
+    <div class="discipline-grid">
+      <div class="discipline"><b>Abogacía</b><span>Ubica criterios, cargas probatorias, efectos y precedentes aplicables.</span></div>
+      <div class="discipline"><b>Comunicación</b><span>Convierte expedientes complejos en narrativas verificables para audiencias públicas.</span></div>
+      <div class="discipline"><b>Ciencia política</b><span>Relaciona sanciones, territorio, competencia electoral y comportamiento partidista.</span></div>
+      <div class="discipline"><b>Economía</b><span>Distingue montos observados, firmes y no integrados para análisis financiero.</span></div>
+      <div class="discipline"><b>Coordinación</b><span>Mantiene una base común para alimentar app, fichas, PDF y seguimiento.</span></div>
     </div>
     <div class="criteria-strip">
       <div><b>{int(resumen["fiscalizacion"].sum())}</b><span>sentencias del corpus con marca de fiscalización</span></div>
