@@ -694,6 +694,168 @@ def page_setup(title: str) -> None:
           font-weight: 700;
           line-height: 1.42;
         }
+        .viz-section {
+          border-top: 6px solid var(--black);
+          border-bottom: 1px solid rgba(20,16,13,.24);
+          margin: 32px 0 26px;
+          padding: 20px 0 22px;
+          animation: editorialRise .48s ease both;
+        }
+        .viz-head {
+          display: grid;
+          grid-template-columns: .72fr 1.28fr;
+          gap: 28px;
+          align-items: end;
+          margin-bottom: 18px;
+        }
+        .viz-head .label {
+          color: var(--guinda);
+          font-size: .78rem;
+          font-weight: 900;
+          text-transform: uppercase;
+        }
+        .viz-head .title {
+          color: var(--black);
+          font-size: clamp(2rem, 4vw, 4.4rem);
+          font-weight: 900;
+          line-height: .88;
+          text-transform: uppercase;
+          margin-top: 8px;
+        }
+        .viz-head p {
+          color: var(--muted);
+          font-size: 1rem;
+          font-weight: 700;
+          line-height: 1.42;
+          margin: 0;
+        }
+        .sanction-extremes {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 18px;
+          margin: 18px 0 20px;
+        }
+        .sanction-extremes div {
+          border-top: 5px solid var(--guinda);
+          background: linear-gradient(180deg, #fffdf8, #fbf2e5);
+          padding: 16px 0 0;
+          animation: editorialRise .54s ease both;
+        }
+        .sanction-extremes div:nth-child(2) { border-color: var(--dorado); animation-delay: .08s; }
+        .sanction-extremes span {
+          color: var(--muted);
+          display: block;
+          font-size: .68rem;
+          font-weight: 900;
+          text-transform: uppercase;
+        }
+        .sanction-extremes b {
+          color: var(--black);
+          display: block;
+          font-size: clamp(1.05rem, 1.8vw, 1.55rem);
+          font-weight: 900;
+          line-height: 1.04;
+          margin-top: 8px;
+          text-transform: uppercase;
+        }
+        .sanction-extremes strong {
+          color: var(--guinda-dark);
+          display: block;
+          font-size: clamp(2rem, 3.4vw, 3rem);
+          font-weight: 900;
+          line-height: .9;
+          margin-top: 10px;
+        }
+        .sanction-extremes em {
+          color: var(--muted);
+          display: block;
+          font-size: .78rem;
+          font-style: normal;
+          font-weight: 850;
+          margin-top: 8px;
+          text-transform: uppercase;
+        }
+        .expedient-table-wrap {
+          border-top: 6px solid var(--guinda);
+          background: linear-gradient(180deg, #fffdf8, #fbf2e5);
+          margin: 14px 0 24px;
+          overflow-x: auto;
+          box-shadow: 0 16px 34px rgba(70,45,25,.08);
+          animation: editorialRise .5s ease both;
+        }
+        .expedient-table {
+          width: 100%;
+          min-width: 940px;
+          border-collapse: collapse;
+        }
+        .expedient-table th {
+          background: var(--black);
+          color: #fffdf8;
+          font-size: .68rem;
+          font-weight: 900;
+          line-height: 1.1;
+          padding: 12px 12px;
+          text-align: left;
+          text-transform: uppercase;
+          white-space: nowrap;
+        }
+        .expedient-table th:nth-child(5),
+        .expedient-table td.money-cell { text-align: right; }
+        .expedient-table td {
+          border-bottom: 1px solid rgba(20,16,13,.16);
+          color: var(--muted);
+          font-size: .78rem;
+          font-weight: 750;
+          line-height: 1.32;
+          padding: 13px 12px;
+          vertical-align: top;
+        }
+        .expedient-table tbody tr:nth-child(even) td { background: rgba(234,215,166,.16); }
+        .expedient-table tbody tr:hover td { background: rgba(107,21,49,.07); }
+        .expedient-table a {
+          color: var(--guinda);
+          font-weight: 900;
+          text-decoration: none;
+          border-bottom: 1px solid rgba(107,21,49,.38);
+        }
+        .exp-id {
+          color: var(--black) !important;
+          font-weight: 900 !important;
+          min-width: 180px;
+        }
+        .exp-id span,
+        .money-cell span {
+          color: var(--muted);
+          display: block;
+          font-size: .68rem;
+          font-weight: 850;
+          margin-top: 5px;
+          text-transform: uppercase;
+        }
+        .money-cell {
+          color: var(--guinda-dark) !important;
+          font-size: 1rem !important;
+          font-weight: 900 !important;
+          white-space: nowrap;
+        }
+        .status-pill {
+          background: var(--guinda);
+          border-radius: 999px;
+          color: #fffdf8;
+          display: inline-flex;
+          font-size: .64rem;
+          font-weight: 900;
+          line-height: 1.05;
+          padding: 7px 10px;
+          text-transform: uppercase;
+        }
+        .expedient-empty {
+          border-top: 5px solid var(--dorado);
+          background: #fffdf8;
+          color: var(--muted);
+          font-weight: 800;
+          padding: 18px 0;
+        }
         .home-panel-anchor { display: block; height: 1px; scroll-margin-top: 90px; }
         @keyframes editorialRise {
           from { opacity: 0; transform: translateY(14px); }
@@ -702,6 +864,22 @@ def page_setup(title: str) -> None:
         @keyframes dockFloat {
           from { opacity: 0; transform: translateY(18px) scale(.98); }
           to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @supports (animation-timeline: view()) {
+          .home-section,
+          .analysis-reader,
+          .criteria-reader,
+          .data-editorial-head,
+          .viz-section,
+          .responsive-kpi,
+          .expedient-table-wrap,
+          .stPlotlyChart {
+            animation-name: editorialRise;
+            animation-duration: 1ms;
+            animation-fill-mode: both;
+            animation-timeline: view();
+            animation-range: entry 8% cover 24%;
+          }
         }
         .meeting-brief {
           display: grid;
@@ -1333,7 +1511,7 @@ def page_setup(title: str) -> None:
         @media (max-width: 900px) {
           .site-nav { align-items: flex-start; flex-direction: column; }
           .site-links { justify-content: flex-start; }
-          .intro-lede, .sanction-board, .plain-steps, .meeting-brief, .meeting-grid, .map-deck, .link-item, .editorial-grid, .summary-strip, .story-hero, .story-split, .criteria-reader .reader-head, .criteria-lanes, .home-hero, .home-section-head, .home-doc-grid, .data-editorial-head, .reading-rail, .analysis-head, .analysis-grid, .analysis-split { grid-template-columns: 1fr; }
+          .intro-lede, .sanction-board, .plain-steps, .meeting-brief, .meeting-grid, .map-deck, .link-item, .editorial-grid, .summary-strip, .story-hero, .story-split, .criteria-reader .reader-head, .criteria-lanes, .home-hero, .home-section-head, .home-doc-grid, .data-editorial-head, .reading-rail, .analysis-head, .analysis-grid, .analysis-split, .viz-head, .sanction-extremes { grid-template-columns: 1fr; }
           .link-item a { text-align: left; }
           .case-ribbon, .kpi-grid, .incidence-list, .criteria-map { grid-template-columns: repeat(2, minmax(0, 1fr)); }
           .masthead .headline { font-size: 2.5rem; }
@@ -1372,6 +1550,11 @@ def page_setup(title: str) -> None:
           .analysis-row { grid-template-columns: 1fr; gap: 4px; }
           .analysis-row b,
           .analysis-row em { text-align: left; }
+          .viz-head .title { font-size: clamp(2.1rem, 11vw, 3.25rem); }
+          .expedient-table-wrap { margin-left: -.9rem; margin-right: -.9rem; border-top-width: 5px; }
+          .expedient-table th,
+          .expedient-table td { padding: 11px 10px; }
+          .map-notes { position: static; width: auto; padding: 10px; }
           .criterion-detail summary { grid-template-columns: 48px 1fr; gap: 10px; }
           .criterion-detail summary span { grid-column: 1 / -1; text-align: left; }
           .criterion-body { padding-left: 0; }

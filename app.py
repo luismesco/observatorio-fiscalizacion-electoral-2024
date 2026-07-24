@@ -16,6 +16,7 @@ import streamlit as st
 
 from observatorio.data_loader import filtered_cases, load_all
 from observatorio.metrics import count_by, kpis
+from observatorio.pdf_export import diputaciones_map_svg
 from observatorio.ui import format_money, page_setup
 
 
@@ -24,6 +25,9 @@ data = load_all()
 casos = data["casos"]
 sanciones = data["sanciones"]
 agravios = data["agravios"]
+hallazgos = data["hallazgos_portal"]
+diputados_path = ROOT / "data" / "analysis" / "diputados_lxvi_electos.csv"
+diputados = pd.read_csv(diputados_path, keep_default_na=False) if diputados_path.exists() else pd.DataFrame()
 base_stats = kpis(casos, sanciones, agravios)
 
 TEPJF_URLS = {
@@ -173,6 +177,81 @@ def top_conducts_html() -> str:
     )
 
 
+def subject_sanction_stats(source: pd.DataFrame) -> tuple[dict[str, str], dict[str, str]]:
+    if source.empty:
+        empty = {"name": "Sin datos", "amount": "$0", "detail": "$0.00"}
+        return empty, empty
+    data = source.copy()
+    data["monto_original"] = pd.to_numeric(data.get("monto_original", 0), errors="coerce").fillna(0)
+    grouped = (
+        data[data["monto_original"].gt(0)]
+        .groupby("sujeto_nombre", as_index=False)
+        .agg(monto=("monto_original", "sum"), registros=("sancion_id", "count"))
+        .sort_values("monto", ascending=False)
+    )
+    if grouped.empty:
+        empty = {"name": "Sin montos positivos", "amount": "$0", "detail": "$0.00"}
+        return empty, empty
+    highest = grouped.iloc[0]
+    lowest = grouped.iloc[-1]
+    return (
+        {
+            "name": str(highest["sujeto_nombre"]),
+            "amount": money_compact(highest["monto"]),
+            "detail": f'{format_money(highest["monto"])} · {int(highest["registros"])} registros',
+        },
+        {
+            "name": str(lowest["sujeto_nombre"]),
+            "amount": money_compact(lowest["monto"]),
+            "detail": f'{format_money(lowest["monto"])} · {int(lowest["registros"])} registros',
+        },
+    )
+
+
+def expedient_table_html(source: pd.DataFrame, sanction_source: pd.DataFrame) -> str:
+    if source.empty:
+        return '<div class="expedient-empty">Sin expedientes para los filtros seleccionados.</div>'
+    amounts = pd.DataFrame(columns=["caso_id", "monto"])
+    if not sanction_source.empty:
+        sanctions = sanction_source.copy()
+        sanctions["monto_original"] = pd.to_numeric(sanctions["monto_original"], errors="coerce").fillna(0)
+        amounts = sanctions.groupby("caso_id", as_index=False)["monto_original"].sum().rename(columns={"monto_original": "monto"})
+    rows = source.merge(amounts, on="caso_id", how="left")
+    rows["monto"] = rows["monto"].fillna(0)
+    body = []
+    for _, row in rows.iterrows():
+        url = str(row.get("url_sentencia", "")).strip()
+        expediente = html.escape(str(row.get("expediente", "")))
+        expediente_html = f'<a href="{html.escape(url)}" target="_blank" rel="noopener">{expediente}</a>' if url else expediente
+        body.append(
+            "<tr>"
+            f'<td class="exp-id">{expediente_html}<span>{html.escape(str(row.get("fecha_sentencia", "")))}</span></td>'
+            f'<td>{html.escape(text_label(row.get("partido_principal", "")))}</td>'
+            f'<td>{html.escape(text_label(row.get("conducta_principal", "")))}</td>'
+            f'<td><span class="status-pill">{html.escape(text_label(row.get("sentido", "")))}</span></td>'
+            f'<td class="money-cell">{html.escape(money_compact(row["monto"]))}<span>{html.escape(format_money(row["monto"]))}</span></td>'
+            f'<td>{html.escape(text_label(row.get("efectos_resumen", "")))}</td>'
+            "</tr>"
+        )
+    return (
+        '<div class="expedient-table-wrap"><table class="expedient-table">'
+        "<thead><tr><th>Expediente</th><th>Sujeto</th><th>Conducta</th><th>Sentido</th><th>Monto observado</th><th>Efecto</th></tr></thead>"
+        f"<tbody>{''.join(body)}</tbody></table></div>"
+    )
+
+
+def incidence_map_html() -> str:
+    if hallazgos.empty or "entidad" not in hallazgos.columns:
+        return ""
+    counts = (
+        hallazgos.assign(entidad_label=hallazgos["entidad"].replace({"Ciudad de Mexico": "Ciudad de México", "Michoacan": "Michoacán"}))
+        .groupby("entidad_label", as_index=False)
+        .size()
+        .rename(columns={"size": "incidencias"})
+    )
+    return diputaciones_map_svg(counts)
+
+
 def criterion_source_links(source: str) -> str:
     links = []
     for expediente in [part.strip() for part in source.split(";")]:
@@ -220,14 +299,14 @@ def filter_controls() -> dict[str, list[str]]:
 st.markdown(
     """
     <nav class="site-nav home-nav">
-      <div class="site-brand">Observatorio Electoral</div>
+        <div class="site-brand">Observatorio Electoral</div>
       <div class="site-links">
         <a class="active" href="#inicio">Inicio</a>
-        <a href="#descargas">Descargas</a>
         <a href="#publicaciones">Publicaciones</a>
         <a href="#analisis-en-pagina">Análisis</a>
         <a href="#criterios-en-pagina">Criterios</a>
         <a href="#panel-datos">Datos</a>
+        <a href="#descargas">Descargas</a>
       </div>
     </nav>
     """,
@@ -259,25 +338,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.markdown(
-    """
-    <span class="home-panel-anchor" id="descargas"></span>
-    <section class="home-download-band">
-      <div class="home-section-head">
-        <div>
-          <div class="label">Descargas editoriales</div>
-          <div class="title">Elige el análisis</div>
-        </div>
-        <div class="body">
-          Los PDF finales están integrados en la app para descarga directa. El selector cambia el archivo
-          disponible sin sacar al lector del flujo de lectura.
-        </div>
-      </div>
-    </section>
-    """,
-    unsafe_allow_html=True,
-)
-
 pdf_options = {
     "Qué se sancionó en las elecciones de diputaciones federales 2024": {
         "path": "exports/diputaciones_electas_reporte.pdf",
@@ -302,26 +362,6 @@ st.markdown(
     </div>
     """,
     unsafe_allow_html=True,
-)
-
-download_left, download_right = st.columns([.72, .28])
-selected_pdf = download_left.selectbox(
-    "Análisis disponible",
-    list(pdf_options),
-    key="home_pdf_analysis_download",
-)
-selected_payload = pdf_options[selected_pdf]
-selected_bytes = cached_pdf(selected_payload["path"])
-download_left.markdown(
-    f'<div class="download-note">{html.escape(selected_payload["note"])}</div>',
-    unsafe_allow_html=True,
-)
-download_right.download_button(
-    "Descarga este análisis",
-    data=selected_bytes,
-    file_name=selected_payload["file_name"],
-    mime="application/pdf",
-    disabled=not selected_bytes,
 )
 
 st.markdown(
@@ -544,6 +584,86 @@ responsive_kpi_grid(
     money_labels={"Monto original", "Monto final conocido"},
 )
 
+most_sanctioned, least_sanctioned = subject_sanction_stats(sanciones_filtradas)
+if not diputados.empty:
+    party_curules = (
+        diputados.groupby("partido_estimado", as_index=False)
+        .size()
+        .rename(columns={"size": "curules"})
+        .sort_values("curules", ascending=True)
+    )
+    party_colors = {
+        "MORENA": "#6B1531",
+        "PVEM": "#1E5B4F",
+        "PT": "#C59A3D",
+        "PAN": "#2B5C8A",
+        "PRI": "#8A1F2D",
+        "MC": "#FF6600",
+    }
+    st.markdown(
+        f"""
+        <section class="viz-section" id="curules">
+          <div class="viz-head">
+            <div>
+              <div class="label">Resultado legislativo</div>
+              <div class="title">Curules finales</div>
+            </div>
+            <p>
+              Composición de las 500 diputaciones LXVI conforme al registro integrado.
+              Esta lectura permite contrastar fuerza legislativa y sanciones observadas.
+            </p>
+          </div>
+          <div class="sanction-extremes">
+            <div><span>Más multado</span><b>{html.escape(most_sanctioned["name"])}</b><strong>{html.escape(most_sanctioned["amount"])}</strong><em>{html.escape(most_sanctioned["detail"])}</em></div>
+            <div><span>Menos multado con monto positivo</span><b>{html.escape(least_sanctioned["name"])}</b><strong>{html.escape(least_sanctioned["amount"])}</strong><em>{html.escape(least_sanctioned["detail"])}</em></div>
+          </div>
+        </section>
+        """,
+        unsafe_allow_html=True,
+    )
+    fig_curules = px.bar(
+        party_curules,
+        x="curules",
+        y="partido_estimado",
+        orientation="h",
+        text="curules",
+        color="partido_estimado",
+        color_discrete_map=party_colors,
+    )
+    fig_curules.update_traces(textposition="outside", cliponaxis=False)
+    fig_curules.update_layout(
+        height=max(360, 44 * len(party_curules) + 120),
+        margin=dict(l=110, r=56, t=10, b=42),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        showlegend=False,
+        font=dict(family="Montserrat", size=13),
+        xaxis=dict(title="", automargin=True, showgrid=True, gridcolor="rgba(107,21,49,.12)"),
+        yaxis=dict(title="", automargin=True),
+    )
+    st.plotly_chart(fig_curules, width="stretch")
+
+map_html = incidence_map_html()
+if map_html:
+    st.markdown(
+        f"""
+        <section class="viz-section" id="mapa">
+          <div class="viz-head">
+            <div>
+              <div class="label">Lectura territorial</div>
+              <div class="title">Mapa de incidencias</div>
+            </div>
+            <p>
+              Entidades con hallazgos prioritarios asociados a fiscalización, candidaturas
+              o sentencias vinculadas al corte de diputaciones federales.
+            </p>
+          </div>
+          {map_html}
+        </section>
+        """,
+        unsafe_allow_html=True,
+    )
+
 st.markdown('<div class="chart-kicker">Lectura por sujeto obligado</div>', unsafe_allow_html=True)
 st.subheader("Casos por partido")
 chart_df = count_by(casos_filtrados, "partido_principal")
@@ -585,21 +705,50 @@ else:
     st.info("Sin datos para los filtros seleccionados.")
 
 st.subheader("Tabla de expedientes")
-visible_cols = [
-    "nivel",
-    "expediente",
-    "organo_resolutor",
-    "partido_principal",
-    "conducta_principal",
-    "sentido",
-    "efectos_resumen",
-    "revision_humana",
-]
-st.dataframe(casos_filtrados[[c for c in visible_cols if c in casos_filtrados.columns]], width="stretch", hide_index=True)
+st.markdown(expedient_table_html(casos_filtrados, sanciones_filtradas), unsafe_allow_html=True)
 st.download_button("Descargar CSV filtrado", casos_filtrados.to_csv(index=False).encode("utf-8"), "casos_filtrados.csv", "text/csv")
 
 st.subheader("Lectura ejecutiva")
 st.write(
     "El observatorio se concentra en diputaciones federales 2024: distingue sentencias de fondo, revocaciones para efectos, "
     "sobreseimientos y asuntos de queja en materia de fiscalizacion sin presentar el corpus como universo exhaustivo."
+)
+
+st.markdown(
+    """
+    <span class="home-panel-anchor" id="descargas"></span>
+    <section class="home-download-band final-download">
+      <div class="home-section-head">
+        <div>
+          <div class="label">Descargas editoriales</div>
+          <div class="title">Conserva el análisis</div>
+        </div>
+        <div class="body">
+          Después de leer la página, descarga la pieza editorial completa. Los pills permanecen visibles
+          durante toda la navegación; esta sección deja el selector formal al cierre.
+        </div>
+      </div>
+    </section>
+    """,
+    unsafe_allow_html=True,
+)
+
+download_left, download_right = st.columns([.72, .28])
+selected_pdf = download_left.selectbox(
+    "Análisis disponible",
+    list(pdf_options),
+    key="home_pdf_analysis_download_final",
+)
+selected_payload = pdf_options[selected_pdf]
+selected_bytes = cached_pdf(selected_payload["path"])
+download_left.markdown(
+    f'<div class="download-note">{html.escape(selected_payload["note"])}</div>',
+    unsafe_allow_html=True,
+)
+download_right.download_button(
+    "Descarga este análisis",
+    data=selected_bytes,
+    file_name=selected_payload["file_name"],
+    mime="application/pdf",
+    disabled=not selected_bytes,
 )

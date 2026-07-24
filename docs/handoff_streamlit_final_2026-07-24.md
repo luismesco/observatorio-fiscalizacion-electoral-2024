@@ -25,6 +25,10 @@ La version final debe operar como experiencia editorial unica:
 - analisis de fiscalizacion legible en la app, no solo descargable;
 - fichas de criterios consultables dentro de la app;
 - panel de datos con filtros dentro del cuerpo de la pagina;
+- mapa territorial de incidencias;
+- composicion final de curules de la LXVI Legislatura;
+- sujeto mas sancionado y sujeto con menor monto positivo observado;
+- tabla editorial de expedientes con enlace oficial, sujeto, conducta, sentido, monto y efecto;
 - graficas y tabla sin depender de paginas secundarias.
 
 ## PDFs integrados
@@ -70,6 +74,8 @@ Se agrego un dock fijo inferior con dos pills:
 
 El dock usa enlaces `data:application/pdf;base64` para permitir descarga directa sin abrir una nueva seccion ni depender de botones flotantes nativos de Streamlit.
 
+La seccion formal de descargas se movio al final de la pagina para que el flujo sea: leer, interactuar, contrastar datos y descargar.
+
 ### Analisis dentro de la pagina
 
 Se agrego una seccion editorial antes del panel de datos. Incluye:
@@ -99,6 +105,29 @@ Los filtros del panel se movieron a un expander dentro de la pagina:
 `Ajustar corte de datos`
 
 Esto conserva la interactividad sin reactivar sidebar.
+
+### Tabla editorial de expedientes
+
+Se sustituyo la tabla nativa por una tabla HTML con paleta guinda, negro, dorado y dorado claro. Incluye:
+
+- expediente con enlace oficial TEPJF;
+- fecha de sentencia;
+- sujeto;
+- conducta;
+- sentido;
+- monto observado compacto y monto exacto;
+- efecto de la resolucion.
+
+### Curules, mapa y sanciones por sujeto
+
+Se agregaron:
+
+- grafica de composicion final de 500 curules;
+- mapa de incidencias territoriales;
+- tarjeta de sujeto mas sancionado;
+- tarjeta de sujeto con menor monto positivo observado.
+
+Estos bloques se alimentan desde `data/analysis/diputados_lxvi_electos.csv`, `data/processed/hallazgos_portal.csv` y `data/processed/sanciones.csv`.
 
 ### Estilo editorial
 
