@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 import html
 import sys
 from pathlib import Path
@@ -33,15 +34,36 @@ def cached_pdf(path: str) -> bytes:
     return pdf_path.read_bytes()
 
 
-def responsive_kpi_grid(items: list[tuple[str, str | int | float]], *, money_labels: set[str] | None = None) -> None:
+def pdf_data_uri(path: str) -> str:
+    payload = cached_pdf(path)
+    if not payload:
+        return "#"
+    encoded = base64.b64encode(payload).decode("ascii")
+    return f"data:application/pdf;base64,{encoded}"
+
+
+def money_compact(value: float | int | str) -> str:
+    try:
+        amount = float(value)
+    except (TypeError, ValueError):
+        return "$0"
+    if abs(amount) >= 1_000_000:
+        return f"${amount / 1_000_000:.1f} M"
+    if abs(amount) >= 1_000:
+        return f"${amount / 1_000:.1f} K"
+    return f"${amount:,.0f}"
+
+
+def responsive_kpi_grid(items: list[tuple[str, str | int | float, str | None]], *, money_labels: set[str] | None = None) -> None:
     money_labels = money_labels or set()
     cards = ['<div class="responsive-kpi-grid">']
-    for label, value in items:
+    for label, value, detail in items:
         value_class = "kpi-value money" if label in money_labels else "kpi-value"
         cards.append(
             '<div class="responsive-kpi">'
             f'<div class="kpi-label">{html.escape(str(label))}</div>'
             f'<div class="{value_class}">{html.escape(str(value))}</div>'
+            f'<div class="kpi-detail">{html.escape(str(detail or ""))}</div>'
             "</div>"
         )
     cards.append("</div>")
@@ -137,6 +159,20 @@ pdf_options = {
         "note": "PDF de criterios de Sala Superior y Sala Regional Ciudad de México, enfocado en diputaciones federales.",
     },
 }
+
+st.markdown(
+    f"""
+    <div class="download-dock" aria-label="Descargas del observatorio">
+      <span>Descarga este análisis</span>
+      <a class="pill primary" href="{pdf_data_uri(pdf_options["Qué se sancionó en las elecciones de diputaciones federales 2024"]["path"])}"
+         download="{pdf_options["Qué se sancionó en las elecciones de diputaciones federales 2024"]["file_name"]}">Fiscalización</a>
+      <a class="pill secondary" href="{pdf_data_uri(pdf_options["Criterios de fiscalización electoral derivados del proceso 2023-2024"]["path"])}"
+         download="{pdf_options["Criterios de fiscalización electoral derivados del proceso 2023-2024"]["file_name"]}">Criterios</a>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
 download_left, download_right = st.columns([.72, .28])
 selected_pdf = download_left.selectbox(
     "Análisis disponible",
@@ -191,7 +227,7 @@ st.markdown(
 st.markdown(
     """
     <span class="home-panel-anchor" id="interactivo"></span>
-    <section class="home-section">
+    <section class="home-section reading-section">
       <div class="home-section-head">
         <div>
           <div class="label">Lectura interactiva</div>
@@ -201,6 +237,11 @@ st.markdown(
           La sección de diputaciones concentra la retícula completa: descargas, criterios plegables,
           mapa territorial, expedientes consultables y registro de curules.
         </div>
+      </div>
+      <div class="reading-rail">
+        <div><b>01</b><span>Lee la síntesis editorial y descarga el PDF que corresponda.</span></div>
+        <div><b>02</b><span>Ajusta el corte de datos sin salir de la página.</span></div>
+        <div><b>03</b><span>Contrasta partido, sentido de resolución y tabla de expedientes.</span></div>
       </div>
     </section>
     """,
@@ -225,9 +266,23 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.markdown('<span class="home-panel-anchor" id="panel-datos"></span>', unsafe_allow_html=True)
-st.title("Panel de datos del corte 2023-2024")
-st.caption("Corte operativo federal para reconstruir acto de origen, impugnación, agravios, sentido, efectos y diputaciones electas.")
+st.markdown(
+    """
+    <span class="home-panel-anchor" id="panel-datos"></span>
+    <section class="data-editorial-head">
+      <div>
+        <div class="label">Panel de datos</div>
+        <div class="title">Corte 2023-2024</div>
+      </div>
+      <p>
+        Corte operativo federal para reconstruir acto de origen, impugnación, agravios,
+        sentido, efectos y diputaciones electas. Las cifras se presentan con lectura
+        ejecutiva y monto exacto documentado.
+      </p>
+    </section>
+    """,
+    unsafe_allow_html=True,
+)
 
 filters = filter_controls()
 casos_filtrados = filtered_cases(
@@ -244,16 +299,17 @@ agravios_filtrados = agravios[agravios["caso_id"].astype(str).isin(ids)] if ids 
 stats = kpis(casos_filtrados, sanciones_filtradas, agravios_filtrados)
 responsive_kpi_grid(
     [
-        ("Casos", stats["casos"]),
-        ("Sujetos", stats["sujetos"]),
-        ("Sanciones", stats["sanciones"]),
-        ("Monto original", format_money(stats["monto_original"])),
-        ("Monto final conocido", format_money(stats["monto_final"])),
-        ("Agravios", stats["agravios"]),
+        ("Casos", stats["casos"], "Expedientes base"),
+        ("Sujetos", stats["sujetos"], "Partidos o coaliciones"),
+        ("Sanciones", stats["sanciones"], "Registros INE"),
+        ("Monto original", money_compact(stats["monto_original"]), format_money(stats["monto_original"])),
+        ("Monto final conocido", money_compact(stats["monto_final"]), format_money(stats["monto_final"])),
+        ("Agravios", stats["agravios"], "Conceptos clasificados"),
     ],
     money_labels={"Monto original", "Monto final conocido"},
 )
 
+st.markdown('<div class="chart-kicker">Lectura por sujeto obligado</div>', unsafe_allow_html=True)
 st.subheader("Casos por partido")
 chart_df = count_by(casos_filtrados, "partido_principal")
 if not chart_df.empty:
@@ -273,6 +329,7 @@ if not chart_df.empty:
 else:
     st.info("Sin datos para los filtros seleccionados.")
 
+st.markdown('<div class="chart-kicker">Resultado jurisdiccional</div>', unsafe_allow_html=True)
 st.subheader("Sentido de resolucion")
 chart_df = count_by(casos_filtrados, "sentido")
 if not chart_df.empty:
