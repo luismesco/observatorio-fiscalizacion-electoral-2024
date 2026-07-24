@@ -20,6 +20,22 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
+## Publicar en Streamlit Community Cloud
+
+La app esta preparada para publicarse desde GitHub en Streamlit Community Cloud.
+
+- Repository: `luismesco/observatorio-fiscalizacion-electoral-2024`
+- Branch: `main`
+- Main file path: `app.py`
+- Python version: `3.12`
+
+Los PDF finales de descarga se incluyen en `exports/`:
+
+- `exports/diputaciones_electas_reporte.pdf`
+- `exports/criterios_fiscalizacion_diputaciones_2024.pdf`
+
+No se requieren secretos para el despliegue actual.
+
 ## Estructura
 
 - `app.py`: resumen ejecutivo.
