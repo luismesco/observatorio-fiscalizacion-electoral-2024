@@ -309,30 +309,30 @@ st.markdown(
     f"""
     <section class="meeting-brief">
       <div class="meeting-copy">
-        <div class="label">Prioridad fiscalización · reunión de trabajo</div>
-        <div class="title">Tres salidas para ordenar la conversación</div>
+        <div class="label">Modelo de actualización y seguimiento</div>
+        <div class="title">De la fuente oficial a la base viva</div>
         <p>
-          El corte actual permite presentar una evaluación de lo ya integrado y proponer un modelo de actualización
-          continua. La lectura se limita a diputaciones federales 2024 y separa con claridad dictamen administrativo,
-          resolución jurisdiccional y datos que todavía requieren validación antes de incorporarse al cálculo.
+          El corte actual convierte sentencias, dictámenes, resoluciones y registros de sanción en una matriz
+          verificable. La lectura se limita a diputaciones federales 2024 y separa con claridad controversias
+          consultables, criterios jurisdiccionales y montos positivos que sí pueden incorporarse a la sumatoria.
         </p>
       </div>
       <div class="meeting-grid">
         <div>
-          <b>1. Dictamen y resolución</b>
-          <span>Compilar los criterios de fiscalización derivados del dictamen y resolución de campaña para diputaciones federales. Punto de partida: INE/CG1928/2024, INE/CG1929/2024 y resoluciones vinculadas.</span>
+          <b>1. Fuente y extracción</b>
+          <span>Registrar URL oficial, expediente, acto de origen, conducta, órgano resolutor, candidatura, entidad, distrito y monto observado cuando exista una cantidad económica positiva.</span>
         </div>
         <div>
-          <b>2. Criterios jurisdiccionales</b>
-          <span>Separar criterios de Sala Superior y Sala Regional Ciudad de México, con énfasis en gasto no reportado, soporte documental, propaganda, rebase de tope, quejas de fiscalización y efectos de confirmar, revocar o modificar.</span>
+          <b>2. Criterio y efecto</b>
+          <span>Clasificar la regla aplicable, la carga probatoria, el alcance de la confirmación, modificación o revocación, y el efecto práctico sobre sujetos obligados, campañas o resultados.</span>
         </div>
         <div>
-          <b>3. Flujo de datos en app</b>
-          <span>Usar una matriz viva: fuente oficial, expediente, acto de origen, conducta, monto positivo, territorio, efecto de sentencia, estado de validación y enlace TEPJF. Así el reporte puede actualizarse sin rehacer la narrativa.</span>
+          <b>3. Seguimiento activo</b>
+          <span>Actualizar la app, fichas y PDF desde una base común para observar riesgos antes del proceso, monitorear incidencias durante la campaña y explicar resultados después de la fiscalización.</span>
         </div>
       </div>
       <div class="meeting-flow">
-        <span>Fuente oficial</span><i></i><span>Extracción</span><i></i><span>Validación jurídica</span><i></i><span>Matriz de datos</span><i></i><span>App y PDF</span>
+        <span>Fuente oficial</span><i></i><span>Extracción</span><i></i><span>Criterio validado</span><i></i><span>Matriz viva</span><i></i><span>App y PDF</span>
       </div>
     </section>
     """,
