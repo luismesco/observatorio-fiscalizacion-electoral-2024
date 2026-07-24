@@ -25,6 +25,86 @@ sanciones = data["sanciones"]
 agravios = data["agravios"]
 base_stats = kpis(casos, sanciones, agravios)
 
+TEPJF_URLS = {
+    "SUP-RAP-342/2024": "https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SUP-RAP-0342-2024-",
+    "SUP-RAP-352/2024": "https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SUP-RAP-0352-2024-",
+    "SUP-RAP-357/2024": "https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SUP-RAP-0357-2024-",
+    "SUP-RAP-413/2024": "https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SUP-RAP-0413-2024-",
+    "SUP-REC-764/2024": "https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SUP-REC-0764-2024-",
+    "SCM-RAP-47/2024": "https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SCM-RAP-0047-2024-",
+    "SCM-JIN-27/2024": "https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SCM-JIN-0027-2024-",
+    "SCM-JIN-30/2024": "https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SCM-JIN-0030-2024-",
+}
+
+CRITERIA = [
+    {
+        "id": "FIS-01",
+        "title": "Exhaustividad del dictamen, anexos y conclusiones",
+        "organ": "Sala Superior / Sala Regional Ciudad de México",
+        "source": "SUP-RAP-342/2024; SCM-RAP-47/2024",
+        "theme": "Dictamen y resolución",
+        "rule": "La autoridad debe permitir reconstruir la relación entre hallazgo, anexo, conclusión y sanción.",
+        "effect": "Revocación para efectos, revocación parcial o confirmación.",
+        "relevance": "La lectura del dictamen no se reduce al monto: exige identificar conclusión, soporte y respuesta administrativa.",
+        "utility": "Antes: diseñar matrices de observaciones. Durante: ubicar anexo y conclusión. Después: documentar qué quedó firme y qué debe rehacerse.",
+    },
+    {
+        "id": "FIS-02",
+        "title": "Fallas del Sistema Integral de Fiscalización",
+        "organ": "Sala Superior",
+        "source": "SUP-RAP-342/2024; SUP-RAP-357/2024; SUP-RAP-413/2024",
+        "theme": "SIF",
+        "rule": "La referencia genérica a fallas del SIF no desvirtúa una infracción si no se acredita cómo impidió cumplir una obligación concreta.",
+        "effect": "Confirmación cuando el agravio es genérico; posible revocación parcial si incide en una conclusión específica.",
+        "relevance": "Distingue problemas técnicos documentados de defensas abstractas frente a registros extemporáneos u omisiones.",
+        "utility": "Antes: preparar bitácoras técnicas. Durante: conservar evidencia de carga, módulo y operación. Después: vincular la falla con una conclusión concreta.",
+    },
+    {
+        "id": "FIS-03",
+        "title": "Documentación soporte y comprobación fiscal",
+        "organ": "Sala Superior",
+        "source": "SUP-RAP-352/2024; SUP-RAP-357/2024",
+        "theme": "Comprobación de gasto",
+        "rule": "La falta de soporte fiscal, contractual o contable idóneo puede sostener sanciones si el sujeto obligado no desvirtúa la observación.",
+        "effect": "Confirmación de conclusiones o sanciones cuando no se acredita el soporte.",
+        "relevance": "Da un estándar práctico para revisar facturas, contratos, muestras y correspondencia entre operación, proveedor y campaña.",
+        "utility": "Antes: definir expedientes digitales mínimos. Durante: revisar soporte por operación. Después: depurar registros firmes y pendientes.",
+    },
+    {
+        "id": "FIS-04",
+        "title": "Omisión de reportar propaganda, eventos o gastos",
+        "organ": "Sala Superior / Sala Regional Ciudad de México",
+        "source": "SUP-RAP-342/2024; SUP-RAP-357/2024; SUP-RAP-413/2024; SCM-RAP-47/2024",
+        "theme": "Gasto no reportado",
+        "rule": "La omisión se analiza por existencia del gasto o propaganda, beneficio electoral, obligación de reporte y suficiencia del soporte.",
+        "effect": "Confirmación, revocación para efectos o revocación parcial.",
+        "relevance": "Ordena observaciones de propaganda, eventos y gastos que no aparecen en la contabilidad ordinaria.",
+        "utility": "Antes: crear catálogos de conducta. Durante: vincular evidencia con evento o pieza. Después: separar omisiones firmes de estudios rehechos.",
+    },
+    {
+        "id": "FIS-05",
+        "title": "Fiscalización y nulidad de elección",
+        "organ": "Sala Superior / Sala Regional Ciudad de México",
+        "source": "SCM-JIN-27/2024; SUP-REC-764/2024; SUP-RAP-352/2024; SUP-RAP-413/2024",
+        "theme": "Rebase de tope y determinancia",
+        "rule": "La sanción administrativa aislada no equivale por sí misma a nulidad; se requiere monto, acumulación al tope, determinancia y vínculo con la elección.",
+        "effect": "Confirmación de validez o análisis de nulidad sólo si se acredita el impacto exigido.",
+        "relevance": "Separa la lectura administrativa de fiscalización de la consecuencia jurisdiccional sobre validez de la elección.",
+        "utility": "Antes: ubicar topes y umbrales. Durante: monitorear acumulación de gastos. Después: distinguir sanción, rebase y nulidad.",
+    },
+    {
+        "id": "FIS-06",
+        "title": "Efectos de revocación",
+        "organ": "Sala Superior / Sala Regional Ciudad de México",
+        "source": "SUP-RAP-342/2024; SUP-RAP-357/2024; SUP-RAP-413/2024; SCM-RAP-47/2024",
+        "theme": "Efectos",
+        "rule": "El sentido de una sentencia puede confirmar una parte, revocar otra o exigir un nuevo pronunciamiento de la autoridad.",
+        "effect": "Confirmación parcial, revocación para efectos, recálculo o nueva resolución.",
+        "relevance": "Permite que dictamen, resolución y sentencia queden en una misma cadena editorial sin lenguaje innecesariamente técnico.",
+        "utility": "Antes: prever salidas posibles. Durante: capturar puntos resolutivos. Después: dar seguimiento a recálculos, reposiciones y montos firmes.",
+    },
+]
+
 
 @st.cache_data(show_spinner=False)
 def cached_pdf(path: str) -> bytes:
@@ -52,6 +132,55 @@ def money_compact(value: float | int | str) -> str:
     if abs(amount) >= 1_000:
         return f"${amount / 1_000:.1f} K"
     return f"${amount:,.0f}"
+
+
+def text_label(value: str) -> str:
+    replacements = {
+        "documentacion soporte faltante": "documentación soporte faltante",
+        "omision de presentar XML": "omisión de presentar XML",
+        "omision de reportar gastos": "omisión de reportar gastos",
+        "omision de reportar inserciones en medios impresos": "omisión de reportar inserciones en medios impresos",
+        "omision de reportar propaganda en internet": "omisión de reportar propaganda en internet",
+        "propaganda internet federal no reportada": "propaganda en internet federal no reportada",
+        "rebase pago efectivo representantes de casilla": "rebase por pago en efectivo a representantes de casilla",
+        "registro extemporaneo": "registro extemporáneo",
+        "comprobantes fiscales XML faltantes": "comprobantes fiscales XML faltantes",
+        "factura con complemento INE faltante": "factura con complemento INE faltante",
+    }
+    return replacements.get(str(value), str(value))
+
+
+def top_conducts_html() -> str:
+    data = sanciones.copy()
+    if data.empty or "monto_original" not in data.columns:
+        return ""
+    data["monto_original"] = pd.to_numeric(data["monto_original"], errors="coerce").fillna(0)
+    grouped = (
+        data[data["monto_original"].gt(0)]
+        .groupby("conducta", as_index=False)
+        .agg(monto=("monto_original", "sum"), registros=("sancion_id", "count"))
+        .sort_values("monto", ascending=False)
+        .head(6)
+    )
+    return "".join(
+        '<div class="analysis-row">'
+        f'<span>{html.escape(text_label(row["conducta"]))}</span>'
+        f'<b>{html.escape(money_compact(row["monto"]))}</b>'
+        f'<em>{int(row["registros"])} registro{"s" if int(row["registros"]) != 1 else ""}</em>'
+        "</div>"
+        for _, row in grouped.iterrows()
+    )
+
+
+def criterion_source_links(source: str) -> str:
+    links = []
+    for expediente in [part.strip() for part in source.split(";")]:
+        url = TEPJF_URLS.get(expediente)
+        if url:
+            links.append(f'<a href="{html.escape(url)}" target="_blank" rel="noopener">{html.escape(expediente)}</a>')
+        else:
+            links.append(f'<span>{html.escape(expediente)}</span>')
+    return "".join(links)
 
 
 def responsive_kpi_grid(items: list[tuple[str, str | int | float, str | None]], *, money_labels: set[str] | None = None) -> None:
@@ -95,7 +224,8 @@ st.markdown(
         <a class="active" href="#inicio">Inicio</a>
         <a href="#descargas">Descargas</a>
         <a href="#publicaciones">Publicaciones</a>
-        <a href="#interactivo">Interactivo</a>
+        <a href="#analisis-en-pagina">Análisis</a>
+        <a href="#criterios-en-pagina">Criterios</a>
         <a href="#panel-datos">Datos</a>
       </div>
     </nav>
@@ -211,12 +341,12 @@ st.markdown(
         <div class="home-doc-card">
           <b>Qué se sancionó en las elecciones de diputaciones federales 2024</b>
           <span>Lectura ejecutiva de conductas, montos observados, expedientes, sujetos obligados y efectos de las resoluciones.</span>
-          <a href="#descargas">Seleccionar PDF</a>
+          <a href="#analisis-en-pagina">Leer análisis</a>
         </div>
         <div class="home-doc-card">
           <b>Criterios de fiscalización electoral derivados del proceso 2023-2024</b>
           <span>Fichas jurídicas por órgano, expediente, tema, regla, efecto, relevancia y utilidad temporal.</span>
-          <a href="#interactivo">Explorar criterios</a>
+          <a href="#criterios-en-pagina">Explorar criterios</a>
         </div>
       </div>
     </section>
@@ -253,8 +383,8 @@ st.markdown(
     <div class="home-doc-grid">
       <div class="home-doc-card">
         <b>Análisis de diputaciones y criterios</b>
-        <span>Descarga los PDF desde el selector superior y consulta el panel de datos en esta misma página.</span>
-        <a href="#descargas">Ir a descargas</a>
+        <span>Lee la síntesis dentro de la app, abre criterios y descarga el PDF si necesitas la pieza cerrada.</span>
+        <a href="#analisis-en-pagina">Leer en página</a>
       </div>
       <div class="home-doc-card">
         <b>Corpus de sentencias TEPJF</b>
@@ -265,6 +395,110 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+
+st.markdown(
+    f"""
+    <section class="analysis-reader" id="analisis-en-pagina">
+      <div class="analysis-head">
+        <div>
+          <div class="label">Análisis en página</div>
+          <div class="title">Qué se sancionó</div>
+        </div>
+        <p>
+          El corte reconstruye la cadena entre dictamen del INE, resolución administrativa,
+          impugnación y sentencia. No se limita a descargar el PDF: aquí se puede leer la
+          síntesis, ubicar las conductas y abrir criterios sin salir de la app.
+        </p>
+      </div>
+      <div class="analysis-grid">
+        <article class="analysis-card lead">
+          <b>Hallazgo central</b>
+          <p>
+            En los expedientes revisados, la discusión se concentró en omisiones de reporte,
+            soporte documental, comprobantes XML, propaganda en internet y pagos a representantes.
+            La justicia electoral no sustituyó la fiscalización: revisó si el INE motivó,
+            individualizó y sostuvo cada conclusión.
+          </p>
+        </article>
+        <article class="analysis-card">
+          <b>Monto administrativo</b>
+          <p>
+            El monto original observado asciende a {money_compact(base_stats["monto_original"])}
+            y el monto final conocido en este corte es {money_compact(base_stats["monto_final"])}.
+            La diferencia importa porque algunas conclusiones quedaron firmes, otras se confirmaron
+            parcialmente y otras fueron devueltas para nuevo estudio.
+          </p>
+        </article>
+        <article class="analysis-card">
+          <b>Lectura jurisdiccional</b>
+          <p>
+            Las sentencias distinguen confirmar una sanción, revocar para efectos, modificar una
+            conclusión o declarar inoperante un agravio. Esa distinción evita leer toda observación
+            como sanción firme o como nulidad automática.
+          </p>
+        </article>
+      </div>
+      <div class="analysis-split">
+        <div>
+          <div class="chart-kicker">Conductas con mayor monto observado</div>
+          <div class="analysis-list">{top_conducts_html()}</div>
+        </div>
+        <div class="analysis-note">
+          <b>Cómo leer esta sección</b>
+          <span>
+            Primero identifica la conducta; después revisa si el monto fue controvertido,
+            confirmado, modificado o pendiente. Finalmente conecta la regla jurisdiccional con
+            su utilidad antes, durante y después del proceso electoral.
+          </span>
+        </div>
+      </div>
+    </section>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    """
+    <section class="criteria-reader" id="criterios-en-pagina">
+      <div class="reader-head">
+        <div>
+          <div class="label">Criterios emitidos</div>
+          <div class="title">Fichas navegables</div>
+        </div>
+        <div class="body">
+          Compilación operativa de criterios derivados de Sala Superior y Sala Regional Ciudad
+          de México. Cada ficha conserva órgano, expediente, tema, regla, efecto, relevancia
+          para dictamen/resolución y utilidad temporal.
+        </div>
+      </div>
+    </section>
+    """,
+    unsafe_allow_html=True,
+)
+
+criteria_nav = "".join(
+    f'<a href="#{item["id"].lower()}"><b>{html.escape(item["id"])}</b><span>{html.escape(item["theme"])}</span></a>'
+    for item in CRITERIA
+)
+st.markdown(f'<div class="criteria-map">{criteria_nav}</div>', unsafe_allow_html=True)
+
+for item in CRITERIA:
+    st.markdown(f'<span id="{html.escape(item["id"].lower())}"></span>', unsafe_allow_html=True)
+    with st.expander(f'{item["id"]} · {item["title"]}', expanded=item["id"] == "FIS-01"):
+        st.markdown(
+            f"""
+            <div class="criterion-body streamlit-criterion">
+              <div class="criterion-field rule"><label>Regla o criterio</label><p>{html.escape(item["rule"])}</p></div>
+              <div class="criterion-field"><label>Órgano</label><p>{html.escape(item["organ"])}</p></div>
+              <div class="criterion-field"><label>Expediente</label><div class="source-links">{criterion_source_links(item["source"])}</div></div>
+              <div class="criterion-field"><label>Tema</label><p>{html.escape(item["theme"])}</p></div>
+              <div class="criterion-field"><label>Efecto</label><p>{html.escape(item["effect"])}</p></div>
+              <div class="criterion-field"><label>Relevancia para dictamen/resolución</label><p>{html.escape(item["relevance"])}</p></div>
+              <div class="criterion-field utility"><label>Utilidad antes, durante y después</label><p>{html.escape(item["utility"])}</p></div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
 st.markdown(
     """

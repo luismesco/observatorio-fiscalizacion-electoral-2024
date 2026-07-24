@@ -566,6 +566,134 @@ def page_setup(title: str) -> None:
           margin-top: 22px;
           padding-top: 16px;
         }
+        .analysis-reader {
+          border-top: 6px solid var(--black);
+          border-bottom: 1px solid rgba(20,16,13,.28);
+          margin: 38px 0 28px;
+          padding: 20px 0 24px;
+          animation: editorialRise .48s ease both;
+        }
+        .analysis-head {
+          display: grid;
+          grid-template-columns: .7fr 1.3fr;
+          gap: 28px;
+          align-items: end;
+          margin-bottom: 20px;
+        }
+        .analysis-head .label {
+          color: var(--guinda);
+          font-size: .78rem;
+          font-weight: 900;
+          text-transform: uppercase;
+        }
+        .analysis-head .title {
+          color: var(--black);
+          font-size: clamp(2.35rem, 4.8vw, 5.3rem);
+          font-weight: 900;
+          line-height: .86;
+          text-transform: uppercase;
+          margin-top: 8px;
+        }
+        .analysis-head p {
+          color: var(--muted);
+          font-size: clamp(1rem, 1.55vw, 1.28rem);
+          font-weight: 700;
+          line-height: 1.42;
+          margin: 0;
+        }
+        .analysis-grid {
+          display: grid;
+          grid-template-columns: 1.12fr .94fr .94fr;
+          gap: 20px;
+          margin: 18px 0 24px;
+        }
+        .analysis-card {
+          background: linear-gradient(180deg, #fffdf8, #fbf2e5);
+          border-top: 5px solid var(--guinda);
+          padding: 18px 0 0;
+          animation: editorialRise .5s ease both;
+          transition: transform .2s ease, border-color .2s ease;
+        }
+        .analysis-card:nth-child(2) { border-color: var(--dorado); animation-delay: .06s; }
+        .analysis-card:nth-child(3) { border-color: var(--verde); animation-delay: .12s; }
+        .analysis-card:hover { transform: translateY(-3px); border-color: var(--black); }
+        .analysis-card b {
+          color: var(--black);
+          display: block;
+          font-size: clamp(1.18rem, 1.8vw, 1.65rem);
+          font-weight: 900;
+          line-height: 1.02;
+          text-transform: uppercase;
+          margin-bottom: 10px;
+        }
+        .analysis-card p {
+          color: var(--muted);
+          font-size: .94rem;
+          font-weight: 700;
+          line-height: 1.45;
+          margin: 0;
+        }
+        .analysis-split {
+          display: grid;
+          grid-template-columns: 1.24fr .76fr;
+          gap: 24px;
+          align-items: start;
+        }
+        .analysis-list {
+          display: grid;
+          gap: 10px;
+          margin-top: 12px;
+        }
+        .analysis-row {
+          display: grid;
+          grid-template-columns: minmax(180px, 1fr) minmax(86px, auto) minmax(72px, auto);
+          gap: 12px;
+          align-items: baseline;
+          border-top: 1px solid rgba(20,16,13,.18);
+          padding-top: 10px;
+        }
+        .analysis-row span {
+          color: var(--black);
+          font-size: .84rem;
+          font-weight: 900;
+          line-height: 1.16;
+          text-transform: uppercase;
+        }
+        .analysis-row b {
+          color: var(--guinda-dark);
+          font-size: 1.08rem;
+          font-weight: 900;
+          text-align: right;
+          white-space: nowrap;
+        }
+        .analysis-row em {
+          color: var(--muted);
+          font-size: .68rem;
+          font-style: normal;
+          font-weight: 900;
+          text-align: right;
+          text-transform: uppercase;
+        }
+        .analysis-note {
+          border-left: 7px solid var(--dorado);
+          background: rgba(251,242,229,.55);
+          padding: 15px 0 15px 18px;
+        }
+        .analysis-note b {
+          color: var(--guinda-dark);
+          display: block;
+          font-size: .88rem;
+          font-weight: 900;
+          text-transform: uppercase;
+          margin-bottom: 8px;
+        }
+        .analysis-note span {
+          color: var(--muted);
+          display: block;
+          font-size: .9rem;
+          font-weight: 700;
+          line-height: 1.42;
+        }
         .home-panel-anchor { display: block; height: 1px; scroll-margin-top: 90px; }
         @keyframes editorialRise {
           from { opacity: 0; transform: translateY(14px); }
@@ -1205,7 +1333,7 @@ def page_setup(title: str) -> None:
         @media (max-width: 900px) {
           .site-nav { align-items: flex-start; flex-direction: column; }
           .site-links { justify-content: flex-start; }
-          .intro-lede, .sanction-board, .plain-steps, .meeting-brief, .meeting-grid, .map-deck, .link-item, .editorial-grid, .summary-strip, .story-hero, .story-split, .criteria-reader .reader-head, .criteria-lanes, .home-hero, .home-section-head, .home-doc-grid, .data-editorial-head, .reading-rail { grid-template-columns: 1fr; }
+          .intro-lede, .sanction-board, .plain-steps, .meeting-brief, .meeting-grid, .map-deck, .link-item, .editorial-grid, .summary-strip, .story-hero, .story-split, .criteria-reader .reader-head, .criteria-lanes, .home-hero, .home-section-head, .home-doc-grid, .data-editorial-head, .reading-rail, .analysis-head, .analysis-grid, .analysis-split { grid-template-columns: 1fr; }
           .link-item a { text-align: left; }
           .case-ribbon, .kpi-grid, .incidence-list, .criteria-map { grid-template-columns: repeat(2, minmax(0, 1fr)); }
           .masthead .headline { font-size: 2.5rem; }
@@ -1240,6 +1368,10 @@ def page_setup(title: str) -> None:
           .responsive-kpi .kpi-value { font-size: clamp(2.15rem, 14vw, 3rem); }
           .responsive-kpi .kpi-value.money { font-size: clamp(2rem, 12vw, 2.8rem); }
           .data-editorial-head .title { font-size: clamp(2.2rem, 12vw, 3.6rem); line-height: .9; }
+          .analysis-head .title { font-size: clamp(2.2rem, 12vw, 3.45rem); line-height: .9; }
+          .analysis-row { grid-template-columns: 1fr; gap: 4px; }
+          .analysis-row b,
+          .analysis-row em { text-align: left; }
           .criterion-detail summary { grid-template-columns: 48px 1fr; gap: 10px; }
           .criterion-detail summary span { grid-column: 1 / -1; text-align: left; }
           .criterion-body { padding-left: 0; }

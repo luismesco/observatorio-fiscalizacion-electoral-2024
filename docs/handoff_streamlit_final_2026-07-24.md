@@ -21,7 +21,9 @@ La version final debe operar como experiencia editorial unica:
 - portada institucional;
 - navegacion por anclas internas;
 - descargas de PDF siempre disponibles;
-- lectura dinamica con secciones editoriales;
+- lectura dinamica con secciones editoriales dentro de la pagina;
+- analisis de fiscalizacion legible en la app, no solo descargable;
+- fichas de criterios consultables dentro de la app;
 - panel de datos con filtros dentro del cuerpo de la pagina;
 - graficas y tabla sin depender de paginas secundarias.
 
@@ -36,6 +38,13 @@ Ambos se ofrecen desde:
 
 - selector principal de descargas;
 - dock fijo inferior con botones tipo pill para descarga inmediata.
+
+Los PDF son respaldo editorial descargable. El contenido central tambien debe poder leerse en la pagina mediante:
+
+- seccion `Analisis en pagina / Que se sanciono`;
+- conductas con mayor monto observado;
+- fichas `Criterios emitidos`;
+- panel de datos exploratorio.
 
 ## Decisiones tomadas
 
@@ -60,6 +69,28 @@ Se agrego un dock fijo inferior con dos pills:
 - Criterios.
 
 El dock usa enlaces `data:application/pdf;base64` para permitir descarga directa sin abrir una nueva seccion ni depender de botones flotantes nativos de Streamlit.
+
+### Analisis dentro de la pagina
+
+Se agrego una seccion editorial antes del panel de datos. Incluye:
+
+- hallazgo central;
+- monto administrativo con lectura ejecutiva;
+- lectura jurisdiccional;
+- conductas con mayor monto observado;
+- nota de uso para conectar conducta, monto, sentencia y efecto.
+
+### Criterios consultables
+
+Se agregaron fichas expandibles con:
+
+- organo;
+- expediente;
+- tema;
+- regla o criterio;
+- efecto;
+- relevancia para dictamen/resolucion;
+- utilidad antes, durante y despues.
 
 ### Filtros fuera del sidebar
 
@@ -144,3 +175,5 @@ Si los PDFs crecen mucho, conviene servirlos desde archivos estaticos o GitHub R
 ## Criterio de version final
 
 La version final en linea debe verse sin sidebar, con dos descargas siempre visibles, con KPI sin cortes, y con lectura editorial similar al lenguaje grafico de los PDF.
+
+Adicionalmente, el lector debe poder comprender el analisis principal sin descargar los PDF.
