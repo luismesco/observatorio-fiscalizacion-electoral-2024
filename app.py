@@ -862,7 +862,6 @@ party_chart_filters = filter_controls(
     title="Casos por partido",
     note="Estos filtros afectan únicamente la gráfica de casos por partido y el resultado jurisdiccional inmediato.",
     key_prefix="party_chart",
-    include_party=False,
 )
 casos_grafica = filtered_cases(
     casos,
@@ -967,16 +966,27 @@ st.markdown(
       <div class="methodology-grid">
         <article>
           <b>Relevancia del análisis</b>
-          <p>Ofrece una lectura institucional de sanciones y criterios para consulta pública, archivo, seguimiento de efectos y revisión de dictámenes o resoluciones posteriores.</p>
+          <p>Ofrece una lectura institucional de sanciones, agravios y criterios para consulta pública, archivo, seguimiento de efectos y revisión de dictámenes o resoluciones posteriores. Permite distinguir montos observados, montos firmes, asuntos pendientes y casos sin estudio de fondo.</p>
         </article>
         <article>
           <b>Metodología</b>
-          <p>Se delimitó el corte a diputaciones federales; se normalizaron expedientes, sujetos, conductas, montos, agravios y sentido de resolución; y se contrastaron los registros con sentencias oficiales y bases documentales del observatorio.</p>
+          <p>Se delimitó el corte a diputaciones federales; se normalizaron expedientes, sujetos, conductas, montos, agravios y sentido de resolución; y se contrastaron registros de sanción con sentencias oficiales, fichas de criterios y bases documentales del observatorio.</p>
         </article>
         <article>
           <b>Referencias</b>
-          <p>Las referencias principales son las sentencias oficiales del TEPJF enlazadas en la tabla y el mapa, los registros de fiscalización del INE y la información pública de integración de la Cámara de Diputados.</p>
+          <p>Las referencias principales son las sentencias oficiales del TEPJF enlazadas en la tabla y el mapa, los registros de fiscalización del INE, la información pública de integración de la Cámara de Diputados y los documentos editoriales descargables.</p>
         </article>
+        <article>
+          <b>Sistematización del flujo</b>
+          <p>Para futuras actualizaciones conviene sostener una matriz única por expediente: acto de origen, sujeto obligado, conducta, monto observado, monto final, efecto jurisdiccional, criterio aplicable, entidad y enlace oficial verificable.</p>
+        </article>
+      </div>
+      <div class="workflow-strip">
+        <div><b>01</b><span>Capturar expediente y fuente oficial.</span></div>
+        <div><b>02</b><span>Normalizar sujeto, conducta, monto y sentido.</span></div>
+        <div><b>03</b><span>Vincular criterio, efecto y entidad territorial.</span></div>
+        <div><b>04</b><span>Validar montos firmes, pendientes o no aplicables.</span></div>
+        <div><b>05</b><span>Publicar PDF, datos y ficha navegable.</span></div>
       </div>
     </section>
     """,
