@@ -234,3 +234,5 @@ Si los PDFs crecen mucho, conviene servirlos desde archivos estaticos o GitHub R
 La version final en linea debe verse sin sidebar, con dos descargas siempre visibles, con KPI sin cortes, y con lectura editorial similar al lenguaje grafico de los PDF.
 
 Adicionalmente, el lector debe poder comprender el analisis principal sin descargar los PDF.
+
+En movil, el contenedor principal usa `border-box` para impedir recortes por padding y el titulo de portada reduce su escala para conservar palabras completas desde 320 px. Los pills fijos identifican de forma explicita la accion y el documento: `Descargar / Fiscalizacion` y `Descargar / Criterios`.

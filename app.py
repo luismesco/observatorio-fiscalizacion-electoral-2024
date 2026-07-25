@@ -725,11 +725,21 @@ pdf_options = {
 st.markdown(
     f"""
     <div class="download-dock" aria-label="Descargas del observatorio">
-      <span>Descarga este análisis</span>
+      <span class="dock-label">Documentos PDF</span>
       <a class="pill primary" href="{pdf_data_uri(pdf_options["Qué se sancionó en las elecciones de diputaciones federales 2024"]["path"])}"
-         download="{pdf_options["Qué se sancionó en las elecciones de diputaciones federales 2024"]["file_name"]}">Fiscalización</a>
+         download="{pdf_options["Qué se sancionó en las elecciones de diputaciones federales 2024"]["file_name"]}"
+         aria-label="Descargar análisis de fiscalización en PDF"
+         title="Descargar análisis de fiscalización en PDF">
+        <span class="download-mark" aria-hidden="true">↓</span>
+        <span class="download-copy"><b>Descargar</b><small>Fiscalización</small></span>
+      </a>
       <a class="pill secondary" href="{pdf_data_uri(pdf_options["Criterios de fiscalización electoral derivados del proceso 2023-2024"]["path"])}"
-         download="{pdf_options["Criterios de fiscalización electoral derivados del proceso 2023-2024"]["file_name"]}">Criterios</a>
+         download="{pdf_options["Criterios de fiscalización electoral derivados del proceso 2023-2024"]["file_name"]}"
+         aria-label="Descargar análisis de criterios en PDF"
+         title="Descargar análisis de criterios en PDF">
+        <span class="download-mark" aria-hidden="true">↓</span>
+        <span class="download-copy"><b>Descargar</b><small>Criterios</small></span>
+      </a>
     </div>
     """,
     unsafe_allow_html=True,

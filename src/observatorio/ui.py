@@ -35,7 +35,25 @@ def page_setup(title: str) -> None:
         [data-testid="stSidebar"], [data-testid="stWidgetLabel"], button, input, textarea, select {
           font-family: "Montserrat", sans-serif !important;
         }
-        .block-container { max-width: 1180px; padding-top: 2rem; padding-left: clamp(1rem, 3vw, 2.2rem); padding-right: clamp(1rem, 3vw, 2.2rem); padding-bottom: 6.5rem; }
+        .block-container {
+          box-sizing: border-box !important;
+          max-width: 1180px;
+          min-width: 0;
+          overflow-x: clip;
+          padding-top: 2rem;
+          padding-left: clamp(1rem, 3vw, 2.2rem);
+          padding-right: clamp(1rem, 3vw, 2.2rem);
+          padding-bottom: 6.5rem;
+          width: 100% !important;
+        }
+        .block-container > [data-testid="stVerticalBlock"],
+        .block-container [data-testid="stElementContainer"],
+        .home-hero,
+        .home-hero > * {
+          box-sizing: border-box;
+          max-width: 100%;
+          min-width: 0;
+        }
         .block-container:before {
           content: "";
           display: block;
@@ -124,7 +142,7 @@ def page_setup(title: str) -> None:
           backdrop-filter: blur(12px);
           animation: dockFloat .7s ease both .35s;
         }
-        .download-dock span {
+        .download-dock .dock-label {
           color: var(--muted);
           font-size: .68rem;
           font-weight: 900;
@@ -146,7 +164,36 @@ def page_setup(title: str) -> None:
           text-transform: uppercase;
           box-shadow: inset 0 -3px 0 rgba(20,16,13,.18);
           transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
-          white-space: nowrap;
+          white-space: normal;
+        }
+        .download-dock .download-mark {
+          border-bottom: 2px solid currentColor;
+          color: inherit;
+          flex: 0 0 auto;
+          font-size: 1rem;
+          font-weight: 900;
+          line-height: .8;
+          margin-right: 7px;
+          padding-bottom: 2px;
+        }
+        .download-dock .download-copy {
+          color: inherit;
+          display: grid;
+          line-height: 1;
+          text-align: left;
+        }
+        .download-dock .download-copy b {
+          color: inherit;
+          font-size: .62rem;
+          font-weight: 900;
+          line-height: 1;
+        }
+        .download-dock .download-copy small {
+          color: inherit;
+          font-size: .62rem;
+          font-weight: 900;
+          line-height: 1;
+          margin-top: 3px;
         }
         .download-dock .pill:hover {
           transform: translateY(-2px);
@@ -1989,18 +2036,33 @@ def page_setup(title: str) -> None:
           .criteria-timeline { position: static; grid-template-columns: 1fr; }
         }
         @media (max-width: 640px) {
-          .block-container { padding-top: 1rem; padding-left: .9rem; padding-right: .9rem; }
+          .block-container {
+            padding-top: 1rem;
+            padding-left: .9rem;
+            padding-right: .9rem;
+            padding-bottom: 8rem;
+          }
           .block-container:before { height: 5px; margin-bottom: 14px; }
           .site-links { gap: 12px; }
           .site-links a { font-size: .66rem; }
           .download-dock {
             left: .75rem;
             right: .75rem;
-            bottom: .75rem;
+            bottom: max(.55rem, env(safe-area-inset-bottom));
+            gap: 7px;
             justify-content: space-between;
+            padding: 7px;
           }
-          .download-dock span { display: none; }
-          .download-dock .pill { flex: 1; min-height: 42px; padding: 0 10px; }
+          .download-dock .dock-label { display: none; }
+          .download-dock .pill {
+            flex: 1 1 0;
+            min-height: 48px;
+            min-width: 0;
+            padding: 0 8px;
+          }
+          .download-dock .download-mark { font-size: .9rem; margin-right: 5px; }
+          .download-dock .download-copy b,
+          .download-dock .download-copy small { font-size: .58rem; }
           .intro-lede { gap: 16px; margin-top: 16px; }
           .intro-title { font-size: clamp(2rem, 13vw, 3.35rem); line-height: 1; }
           .intro-copy { font-size: .96rem; }
@@ -2009,7 +2071,7 @@ def page_setup(title: str) -> None:
           .cause-row .money { text-align: left; font-size: 1.1rem; }
           .incidence-strip, .case-ribbon, .kpi-grid, .incidence-list, .meeting-flow, .tight-grid, .criteria-map, .criterion-body, .criteria-timeline, .home-folio { grid-template-columns: 1fr; }
           .home-hero { min-height: 0; padding-top: 24px; }
-          .home-title { font-size: clamp(2.72rem, 13vw, 4.5rem); }
+          .home-title { font-size: clamp(2.15rem, 10.5vw, 3.2rem); }
           .home-title span { white-space: normal; }
           .responsive-kpi-grid { grid-template-columns: 1fr; }
           .responsive-kpi { min-height: 124px; padding: 16px 14px; }
