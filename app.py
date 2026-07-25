@@ -4,6 +4,7 @@ import base64
 import html
 import json
 import sys
+import unicodedata
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -178,6 +179,12 @@ def text_label(value: str) -> str:
     return replacements.get(str(value), str(value))
 
 
+def anchor_slug(value: object) -> str:
+    normalized = unicodedata.normalize("NFKD", str(value or "").lower())
+    ascii_text = normalized.encode("ascii", "ignore").decode("ascii")
+    return "-".join(part for part in ascii_text.replace("/", " ").split() if part)
+
+
 def top_conducts_html() -> str:
     data = sanciones.copy()
     if data.empty or "monto_original" not in data.columns:
@@ -287,7 +294,7 @@ def incidence_map_html() -> str:
         official_name = state["name"]
         display_name = official_aliases.get(official_name, official_name)
         count = active_counts.get(display_name, 0)
-        slug = display_name.lower().replace(" ", "-").replace("é", "e").replace("á", "a")
+        slug = anchor_slug(display_name)
         class_name = "state active linked" if count else "state"
         path = f'<path class="{class_name}" d="{state["path"]}"><title>{html.escape(display_name)}</title></path>'
         if count:
@@ -301,7 +308,7 @@ def incidence_map_html() -> str:
             shapes.append(path)
     cards = []
     for entity, group in normalized.groupby("entidad_label", sort=True):
-        slug = entity.lower().replace(" ", "-").replace("é", "e").replace("á", "a")
+        slug = anchor_slug(entity)
         entries = []
         for _, row in group.iterrows():
             url = str(row.get("url_oficial", "")).strip()
@@ -316,6 +323,7 @@ def incidence_map_html() -> str:
             )
         cards.append(
             f'<article class="incidence-card" id="incidencia-{html.escape(slug)}">'
+            '<a class="incidence-close" href="#mapa-incidencias">Ver entidades activas</a>'
             f'<strong>{html.escape(entity)}</strong>'
             f'{"".join(entries)}'
             '</article>'
@@ -735,7 +743,7 @@ map_html = incidence_map_html()
 if map_html:
     st.markdown(
         f"""
-        <section class="viz-section" id="mapa">
+        <section class="viz-section" id="mapa-incidencias">
           <div class="viz-head">
             <div>
               <div class="label">Lectura territorial</div>

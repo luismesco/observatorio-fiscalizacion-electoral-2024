@@ -132,7 +132,7 @@ Se agregaron:
 
 Estos bloques se alimentan desde `data/analysis/diputados_lxvi_electos.csv`, `data/processed/hallazgos_portal.csv` y `data/processed/sanciones.csv`.
 
-El mapa usa estados activos enlazados a fichas de incidencia. Cada ficha incluye expediente, tema, explicacion breve de prioridad y enlace a la sentencia oficial cuando existe URL disponible.
+El mapa usa estados activos enlazados a fichas de incidencia. Al seleccionar una entidad, la vista muestra solo la ficha del estado correspondiente; el enlace `Ver entidades activas` devuelve al conjunto. Cada ficha incluye expediente, tema, explicacion breve de prioridad y enlace a la sentencia oficial cuando existe URL disponible.
 
 ### Estilo editorial
 
@@ -144,6 +144,8 @@ Se reforzo la continuidad visual con los PDF mediante:
 - tarjetas con borde superior;
 - jerarquia tipografica en mayusculas;
 - animaciones de entrada y hover;
+- scroll suave en navegacion por anclas;
+- transiciones en mapa, tarjetas, filas de analisis y fichas de criterios;
 - secciones de lectura guiada.
 
 El texto visible al lector debe mantener tono institucional y academico: observatorio, consulta, analisis, corpus, criterio, expediente, sentencia y efecto. Evitar lenguaje de producto como "app", "experiencia", "primero lee, despues explora" o explicaciones internas de componentes.
