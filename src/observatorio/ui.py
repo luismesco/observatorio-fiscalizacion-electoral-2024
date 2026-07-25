@@ -897,8 +897,12 @@ def page_setup(title: str) -> None:
         }
         .home-panel-anchor { display: block; height: 1px; scroll-margin-top: 90px; }
         @keyframes editorialRise {
-          from { opacity: 0; transform: translateY(14px); }
+          from { opacity: 0; transform: translateY(24px); }
           to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes editorialReveal {
+          from { opacity: 0; filter: blur(5px); transform: translateY(34px) scale(.985); }
+          to { opacity: 1; filter: blur(0); transform: translateY(0) scale(1); }
         }
         @keyframes editorialFocus {
           from { opacity: 0; transform: translateY(18px) scale(.985); }
@@ -924,14 +928,28 @@ def page_setup(title: str) -> None:
           .data-editorial-head,
           .viz-section,
           .responsive-kpi,
+          .filter-band,
+          .chart-kicker,
+          .section-subhead,
+          .executive-reading,
+          .methodology-band,
+          .home-download-band,
+          .criterion-detail,
           .expedient-table-wrap,
-          .stPlotlyChart {
-            animation-name: editorialRise;
+          [data-testid="stPlotlyChart"],
+          iframe {
+            animation-name: editorialReveal;
             animation-duration: 1ms;
             animation-fill-mode: both;
             animation-timeline: view();
-            animation-range: entry 8% cover 24%;
+            animation-range: entry 4% cover 26%;
           }
+          .responsive-kpi:nth-child(2n),
+          .methodology-grid article:nth-child(2n),
+          .workflow-strip div:nth-child(2n) { animation-range: entry 8% cover 30%; }
+          .responsive-kpi:nth-child(3n),
+          .methodology-grid article:nth-child(3n),
+          .workflow-strip div:nth-child(3n) { animation-range: entry 12% cover 34%; }
         }
         .meeting-brief {
           display: grid;
@@ -1919,6 +1937,18 @@ def page_setup(title: str) -> None:
           .criterion-body { padding-left: 0; }
           .map-copy .title { font-size: clamp(2rem, 11vw, 3rem); line-height: .94; }
           .link-item { gap: 8px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          html { scroll-behavior: auto; }
+          *, *::before, *::after {
+            animation-delay: 0s !important;
+            animation-duration: .01ms !important;
+            animation-iteration-count: 1 !important;
+            animation-timeline: auto !important;
+            filter: none !important;
+            scroll-behavior: auto !important;
+            transition-duration: .01ms !important;
+          }
         }
         @page { size: letter landscape; margin: 0.42in; }
         @media print {

@@ -140,6 +140,8 @@ El mapa se renderiza como componente HTML interactivo para permitir seleccion di
 
 El componente del mapa usa altura compacta para evitar espacio blanco antes de la siguiente seccion. El panel de ficha tiene scroll interno cuando una entidad acumula varias referencias, de modo que el bloque no empuja artificialmente la lectura.
 
+La seleccion territorial ya no se superpone al mapa: las entidades activas se presentan en una franja de botones de gran superficie, sincronizada con el SVG y con una sola ficha visible. Ciudad de Mexico incorpora un marcador accesible adicional sobre su posicion geografica para evitar que su contorno reducido dificulte la seleccion. El componente comunica su altura real a Streamlit para adaptarse sin dejar vacios artificiales.
+
 La tabla de expedientes explica los montos en cero: si no existe monto firme, si el asunto fue sobreseido o si falta nueva determinacion, la celda de monto incorpora una nota de lectura para evitar interpretar `$0` como ausencia de irregularidad.
 
 El cierre metodologico incluye una propuesta de sistematizacion futura: capturar expediente y fuente oficial, normalizar sujeto/conducta/monto/sentido, vincular criterio y entidad, validar estados de monto y publicar PDF, datos y ficha navegable.
@@ -155,6 +157,9 @@ Se reforzo la continuidad visual con los PDF mediante:
 - jerarquia tipografica en mayusculas;
 - animaciones de entrada y hover;
 - scroll suave en navegacion por anclas;
+- revelado progresivo al entrar al viewport para secciones, graficas, mapa, filtros y fichas;
+- secuencia visual escalonada en KPI y bloques metodologicos;
+- alternativa sin movimiento mediante `prefers-reduced-motion`;
 - transiciones en mapa, tarjetas, filas de analisis y fichas de criterios;
 - secciones de lectura guiada.
 
