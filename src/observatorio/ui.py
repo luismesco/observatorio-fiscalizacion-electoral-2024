@@ -155,6 +155,13 @@ def page_setup(title: str) -> None:
         .download-dock .primary { background: var(--guinda); }
         .download-dock .secondary { background: var(--verde); }
         h1, h2, h3 { color: var(--ink); letter-spacing: 0; font-family: "Montserrat", sans-serif; overflow-wrap: normal; word-break: normal; hyphens: none; }
+        h1, h2, h3,
+        [data-testid="stMarkdownContainer"] h1,
+        [data-testid="stMarkdownContainer"] h2,
+        [data-testid="stMarkdownContainer"] h3 {
+          font-weight: 900 !important;
+          text-transform: uppercase;
+        }
         h1 { font-size: clamp(2.2rem, 4vw, 4.6rem); font-weight: 900; line-height: .92; border-bottom: 4px solid var(--guinda); padding-bottom: .55rem; text-transform: uppercase; }
         h2 { font-size: 1.42rem; font-weight: 900; border-top: 6px solid var(--black); padding-top: .55rem; text-transform: uppercase; }
         h3 { font-size: 1rem; font-weight: 900; text-transform: uppercase; }
@@ -866,9 +873,15 @@ def page_setup(title: str) -> None:
         .expedient-empty {
           border-top: 5px solid var(--dorado);
           background: #fffdf8;
-          color: var(--muted);
-          font-weight: 800;
+          color: var(--guinda-dark);
+          font-size: 1rem;
+          font-weight: 900;
           padding: 18px 0;
+          text-transform: uppercase;
+        }
+        .expedient-empty strong {
+          color: var(--guinda-dark);
+          font-weight: 900;
         }
         .home-panel-anchor { display: block; height: 1px; scroll-margin-top: 90px; }
         @keyframes editorialRise {
@@ -1630,6 +1643,71 @@ def page_setup(title: str) -> None:
           line-height: 1.3;
           margin: -4px 0 14px;
         }
+        .section-subhead {
+          border-top: 6px solid var(--black);
+          color: var(--black);
+          font-size: clamp(1.9rem, 3.2vw, 3.9rem);
+          font-weight: 900;
+          line-height: .9;
+          margin: 28px 0 18px;
+          padding-top: 12px;
+          text-transform: uppercase;
+        }
+        .executive-reading {
+          border-bottom: 1px solid rgba(20,16,13,.24);
+          margin: 22px 0 28px;
+          padding-bottom: 20px;
+        }
+        .executive-reading p {
+          color: var(--muted);
+          font-size: clamp(1rem, 1.45vw, 1.2rem);
+          font-weight: 750;
+          line-height: 1.48;
+          max-width: 1060px;
+        }
+        .executive-reading strong {
+          color: var(--black);
+          font-weight: 900;
+        }
+        .methodology-band {
+          border-top: 6px solid var(--guinda);
+          border-bottom: 1px solid rgba(20,16,13,.24);
+          margin: 32px 0 28px;
+          padding: 20px 0 24px;
+          animation: editorialRise .52s ease both;
+        }
+        .methodology-grid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 18px;
+          margin-top: 20px;
+        }
+        .methodology-grid article {
+          background: linear-gradient(180deg, #fffdf8, #fbf2e5);
+          border-top: 4px solid var(--dorado);
+          padding: 14px 0 0;
+          transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+        }
+        .methodology-grid article:hover {
+          border-top-color: var(--guinda);
+          box-shadow: 0 16px 34px rgba(70,45,25,.1);
+          transform: translateY(-3px);
+        }
+        .methodology-grid b {
+          color: var(--guinda-dark);
+          display: block;
+          font-size: .9rem;
+          font-weight: 900;
+          line-height: 1.1;
+          text-transform: uppercase;
+        }
+        .methodology-grid p {
+          color: var(--muted);
+          font-size: .86rem;
+          font-weight: 720;
+          line-height: 1.42;
+          margin: 8px 0 0;
+        }
         div[data-baseweb="select"] > div { border-radius: 0; border: 1px solid var(--line); background: #fffdf8; min-height: 46px; }
         .filter-band {
           border-top: 5px solid var(--guinda);
@@ -1660,18 +1738,26 @@ def page_setup(title: str) -> None:
         }
         [data-testid="stPills"] button {
           background: #fffdf8 !important;
-          border: 1px solid rgba(107,21,49,.28) !important;
+          border: 1.5px solid rgba(107,21,49,.82) !important;
           border-radius: 999px !important;
-          color: var(--guinda-dark) !important;
+          color: var(--guinda) !important;
           font-weight: 900 !important;
           text-transform: uppercase !important;
           transition: background .18s ease, color .18s ease, border-color .18s ease, transform .18s ease;
+        }
+        [data-testid="stPills"] button * {
+          color: inherit !important;
         }
         [data-testid="stPills"] button:hover {
           border-color: var(--guinda) !important;
           transform: translateY(-1px);
         }
-        [data-testid="stPills"] button[aria-pressed="true"] {
+        [data-testid="stPills"] button[aria-pressed="true"],
+        [data-testid="stPills"] button[aria-selected="true"],
+        [data-testid="stPills"] button[aria-checked="true"],
+        [data-testid="stPills"] button[data-selected="true"],
+        [data-testid="stPills"] [role="option"][aria-selected="true"],
+        [data-testid="stPills"] [role="checkbox"][aria-checked="true"] {
           background: var(--guinda) !important;
           border-color: var(--guinda) !important;
           color: #fffdf8 !important;
@@ -1683,7 +1769,7 @@ def page_setup(title: str) -> None:
         @media (max-width: 900px) {
           .site-nav { align-items: flex-start; flex-direction: column; }
           .site-links { justify-content: flex-start; }
-          .intro-lede, .sanction-board, .plain-steps, .meeting-brief, .meeting-grid, .map-deck, .link-item, .editorial-grid, .summary-strip, .story-hero, .story-split, .criteria-reader .reader-head, .criteria-lanes, .home-hero, .home-section-head, .home-doc-grid, .data-editorial-head, .reading-rail, .analysis-head, .analysis-grid, .analysis-split, .viz-head, .sanction-extremes { grid-template-columns: 1fr; }
+          .intro-lede, .sanction-board, .plain-steps, .meeting-brief, .meeting-grid, .map-deck, .link-item, .editorial-grid, .summary-strip, .story-hero, .story-split, .criteria-reader .reader-head, .criteria-lanes, .home-hero, .home-section-head, .home-doc-grid, .data-editorial-head, .reading-rail, .analysis-head, .analysis-grid, .analysis-split, .viz-head, .sanction-extremes, .methodology-grid { grid-template-columns: 1fr; }
           .link-item a { text-align: left; }
           .case-ribbon, .kpi-grid, .incidence-list, .criteria-map, .incidence-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
           .masthead .headline { font-size: 2.5rem; }

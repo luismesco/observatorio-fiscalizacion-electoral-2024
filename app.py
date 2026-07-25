@@ -240,7 +240,7 @@ def subject_sanction_stats(source: pd.DataFrame) -> tuple[dict[str, str], dict[s
 
 def expedient_table_html(source: pd.DataFrame, sanction_source: pd.DataFrame) -> str:
     if source.empty:
-        return '<div class="expedient-empty">Sin expedientes para los filtros seleccionados.</div>'
+        return '<div class="expedient-empty"><strong>Sin expedientes para los filtros seleccionados.</strong></div>'
     amounts = pd.DataFrame(columns=["caso_id", "monto"])
     if not sanction_source.empty:
         sanctions = sanction_source.copy()
@@ -807,14 +807,55 @@ if not chart_df.empty:
 else:
     st.info("Sin datos para los filtros seleccionados.")
 
-st.subheader("Tabla de expedientes")
+st.markdown('<div class="section-subhead">Tabla de expedientes</div>', unsafe_allow_html=True)
 st.markdown(expedient_table_html(casos_filtrados, sanciones_filtradas), unsafe_allow_html=True)
 st.download_button("Descargar CSV filtrado", casos_filtrados.to_csv(index=False).encode("utf-8"), "casos_filtrados.csv", "text/csv")
 
-st.subheader("Lectura ejecutiva")
-st.write(
-    "El observatorio se concentra en diputaciones federales 2024: distingue sentencias de fondo, revocaciones para efectos, "
-    "sobreseimientos y asuntos de queja en materia de fiscalizacion sin presentar el corpus como universo exhaustivo."
+st.markdown(
+    """
+    <section class="executive-reading">
+      <div class="section-subhead">Lectura ejecutiva</div>
+      <p>
+        <strong>El observatorio se concentra en diputaciones federales 2024:</strong>
+        distingue sentencias de fondo, revocaciones para efectos, sobreseimientos y asuntos
+        de queja en materia de fiscalización, sin presentar el corpus como universo exhaustivo.
+      </p>
+    </section>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    """
+    <section class="methodology-band">
+      <div class="home-section-head">
+        <div>
+          <div class="label">Cierre metodológico</div>
+          <div class="title">Relevancia, método y referencias</div>
+        </div>
+        <div class="body">
+          El análisis permite reconstruir la relación entre conducta observada, sujeto obligado,
+          monto controvertido, efecto jurisdiccional y criterio aplicable al proceso electoral
+          federal 2023-2024.
+        </div>
+      </div>
+      <div class="methodology-grid">
+        <article>
+          <b>Relevancia del análisis</b>
+          <p>Ofrece una lectura institucional de sanciones y criterios para consulta pública, archivo, seguimiento de efectos y revisión de dictámenes o resoluciones posteriores.</p>
+        </article>
+        <article>
+          <b>Metodología</b>
+          <p>Se delimitó el corte a diputaciones federales; se normalizaron expedientes, sujetos, conductas, montos, agravios y sentido de resolución; y se contrastaron los registros con sentencias oficiales y bases documentales del observatorio.</p>
+        </article>
+        <article>
+          <b>Referencias</b>
+          <p>Las referencias principales son las sentencias oficiales del TEPJF enlazadas en la tabla y el mapa, los registros de fiscalización del INE y la información pública de integración de la Cámara de Diputados.</p>
+        </article>
+      </div>
+    </section>
+    """,
+    unsafe_allow_html=True,
 )
 
 st.markdown(

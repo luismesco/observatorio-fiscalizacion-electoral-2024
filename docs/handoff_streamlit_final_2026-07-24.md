@@ -30,6 +30,7 @@ La version final debe operar como experiencia editorial unica:
 - sujeto mas sancionado y sujeto con menor monto positivo observado;
 - tabla editorial de expedientes con enlace oficial, sujeto, conducta, sentido, monto y efecto;
 - filtros tipo pill en el cuerpo de la pagina;
+- cierre metodologico con relevancia, metodo y referencias antes de descargas;
 - graficas y tabla sin depender de paginas secundarias.
 
 ## PDFs integrados
@@ -107,6 +108,8 @@ Los filtros del panel se movieron al cuerpo de la pagina como pills multiselecci
 
 Si no hay seleccion activa, el corte conserva el corpus completo. La seleccion de uno o mas pills acota el panel sin usar desplegables ni reactivar sidebar.
 
+El tema de Streamlit se fija en `.streamlit/config.toml` con `primaryColor = "#6B1531"` para evitar el rojo/coral nativo en widgets.
+
 ### Tabla editorial de expedientes
 
 Se sustituyo la tabla nativa por una tabla HTML con paleta guinda, negro, dorado y dorado claro. Incluye:
@@ -154,6 +157,7 @@ El texto visible al lector debe mantener tono institucional y academico: observa
 
 - `app.py`: experiencia publica final.
 - `src/observatorio/ui.py`: estilos globales, Montserrat, reticula, dock, KPI, animaciones y helpers visuales.
+- `.streamlit/config.toml`: tema base de Streamlit con color primario guinda.
 - `src/observatorio/data_loader.py`: carga y filtros de datos.
 - `src/observatorio/metrics.py`: KPIs, conteos y agregados.
 - `requirements.txt`: dependencias para Streamlit Cloud.
