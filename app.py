@@ -30,6 +30,25 @@ diputados_path = ROOT / "data" / "analysis" / "diputados_lxvi_electos.csv"
 diputados = pd.read_csv(diputados_path, keep_default_na=False) if diputados_path.exists() else pd.DataFrame()
 base_stats = kpis(casos, sanciones, agravios)
 
+PARTY_COLORS = {
+    "MORENA": "#6B1531",
+    "Movimiento Ciudadano": "#FF6600",
+    "MC": "#FF6600",
+    "Partido Accion Nacional": "#2B5C8A",
+    "Partido Acción Nacional": "#2B5C8A",
+    "PAN": "#2B5C8A",
+    "Partido del Trabajo": "#C59A3D",
+    "PT": "#C59A3D",
+    "Partido Revolucionario Institucional": "#8A1F2D",
+    "PRI": "#8A1F2D",
+    "Partido Verde Ecologista de Mexico": "#1E5B4F",
+    "Partido Verde Ecologista de México": "#1E5B4F",
+    "PVEM": "#1E5B4F",
+    "Fuerza y Corazon por Mexico": "#2B5C8A",
+    "Fuerza y Corazón por México": "#2B5C8A",
+    "Sigamos Haciendo Historia": "#6B1531",
+}
+
 TEPJF_URLS = {
     "SUP-RAP-342/2024": "https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SUP-RAP-0342-2024-",
     "SUP-RAP-352/2024": "https://www.te.gob.mx/sentenciasHTML/convertir/expediente/SUP-RAP-0352-2024-",
@@ -592,14 +611,6 @@ if not diputados.empty:
         .rename(columns={"size": "curules"})
         .sort_values("curules", ascending=True)
     )
-    party_colors = {
-        "MORENA": "#6B1531",
-        "PVEM": "#1E5B4F",
-        "PT": "#C59A3D",
-        "PAN": "#2B5C8A",
-        "PRI": "#8A1F2D",
-        "MC": "#FF6600",
-    }
     st.markdown(
         f"""
         <section class="viz-section" id="curules">
@@ -628,7 +639,7 @@ if not diputados.empty:
         orientation="h",
         text="curules",
         color="partido_estimado",
-        color_discrete_map=party_colors,
+        color_discrete_map=PARTY_COLORS,
     )
     fig_curules.update_traces(textposition="outside", cliponaxis=False)
     fig_curules.update_layout(
@@ -668,7 +679,14 @@ st.markdown('<div class="chart-kicker">Lectura por sujeto obligado</div>', unsaf
 st.subheader("Casos por partido")
 chart_df = count_by(casos_filtrados, "partido_principal")
 if not chart_df.empty:
-    fig = px.bar(chart_df, x="casos", y="partido_principal", orientation="h", color_discrete_sequence=["#6B1531"])
+    fig = px.bar(
+        chart_df,
+        x="casos",
+        y="partido_principal",
+        orientation="h",
+        color="partido_principal",
+        color_discrete_map=PARTY_COLORS,
+    )
     fig.update_layout(
         height=max(360, 54 * len(chart_df) + 120),
         margin=dict(l=160, r=36, t=12, b=44),
