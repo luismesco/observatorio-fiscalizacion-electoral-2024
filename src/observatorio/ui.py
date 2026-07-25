@@ -361,6 +361,25 @@ def page_setup(title: str) -> None:
           background: rgba(255,255,255,.94);
           backdrop-filter: blur(10px);
         }
+        .reading-progress {
+          background: rgba(107,21,49,.12);
+          bottom: -1px;
+          height: 3px;
+          left: 0;
+          overflow: hidden;
+          pointer-events: none;
+          position: absolute;
+          right: 0;
+        }
+        .reading-progress span {
+          background: var(--guinda);
+          display: block;
+          height: 100%;
+          transform: scaleX(0);
+          transform-origin: left center;
+          transition: transform .1s linear;
+          width: 100%;
+        }
         .home-hero {
           display: grid;
           grid-template-columns: 1.18fr .82fr;
@@ -951,6 +970,36 @@ def page_setup(title: str) -> None:
           .responsive-kpi:nth-child(3n),
           .methodology-grid article:nth-child(3n),
           .systematization-flow li:nth-child(3n) { animation-range: entry 12% cover 34%; }
+        }
+        html.js-scroll-motion .scroll-reveal {
+          animation: none !important;
+          animation-timeline: auto !important;
+          filter: blur(7px);
+          opacity: 0;
+          transform: translateY(38px) scale(.982);
+          transition:
+            opacity .72s cubic-bezier(.2,.72,.18,1) var(--reveal-delay, 0ms),
+            transform .82s cubic-bezier(.2,.72,.18,1) var(--reveal-delay, 0ms),
+            filter .72s ease var(--reveal-delay, 0ms);
+          will-change: opacity, transform, filter;
+        }
+        html.js-scroll-motion .scroll-reveal.is-visible {
+          filter: blur(0);
+          opacity: 1;
+          transform: translateY(0) scale(1);
+          will-change: auto;
+        }
+        html.js-scroll-motion .criterion-detail.scroll-reveal,
+        html.js-scroll-motion .responsive-kpi.scroll-reveal,
+        html.js-scroll-motion .methodology-grid article.scroll-reveal,
+        html.js-scroll-motion .systematization-flow li.scroll-reveal {
+          transform: translateY(24px);
+        }
+        html.js-scroll-motion .criterion-detail.scroll-reveal.is-visible,
+        html.js-scroll-motion .responsive-kpi.scroll-reveal.is-visible,
+        html.js-scroll-motion .methodology-grid article.scroll-reveal.is-visible,
+        html.js-scroll-motion .systematization-flow li.scroll-reveal.is-visible {
+          transform: translateY(0);
         }
         .meeting-brief {
           display: grid;
@@ -2003,6 +2052,11 @@ def page_setup(title: str) -> None:
             filter: none !important;
             scroll-behavior: auto !important;
             transition-duration: .01ms !important;
+          }
+          html.js-scroll-motion .scroll-reveal {
+            filter: none !important;
+            opacity: 1 !important;
+            transform: none !important;
           }
         }
         @page { size: letter landscape; margin: 0.42in; }

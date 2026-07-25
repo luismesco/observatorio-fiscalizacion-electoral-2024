@@ -161,6 +161,8 @@ Se reforzo la continuidad visual con los PDF mediante:
 - revelado progresivo al entrar al viewport para secciones, graficas, mapa, filtros y fichas;
 - secuencia visual escalonada en KPI y bloques metodologicos;
 - alternativa sin movimiento mediante `prefers-reduced-motion`;
+- observador JavaScript de interseccion instalado desde un componente Streamlit para mantener el revelado por scroll en Safari y navegadores sin `animation-timeline`;
+- barra de progreso de lectura y actualizacion del apartado activo en la navegacion;
 - transiciones en mapa, tarjetas, filas de analisis y fichas de criterios;
 - secciones de lectura guiada.
 

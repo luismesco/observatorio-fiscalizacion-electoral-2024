@@ -461,6 +461,141 @@ def incidence_map_html() -> str:
     )
 
 
+def install_scroll_motion() -> None:
+    components.html(
+        """
+        <script>
+        (() => {
+          const parentWindow = window.parent;
+          const parentDocument = parentWindow.document;
+          parentWindow.__observatorioMotionCleanup?.();
+
+          const selectors = [
+            '.home-section',
+            '.analysis-reader',
+            '.criteria-reader',
+            '.criterion-detail',
+            '.data-editorial-head',
+            '.responsive-kpi',
+            '.viz-section',
+            '.filter-band',
+            '.chart-kicker',
+            '.section-subhead',
+            '.executive-reading',
+            '.methodology-band',
+            '.methodology-grid article',
+            '.systematization-band',
+            '.systematization-flow li',
+            '.home-download-band',
+            '.expedient-table-wrap',
+            '[data-testid="stPlotlyChart"]',
+            'iframe'
+          ];
+          const targets = [...new Set(
+            selectors.flatMap((selector) => [...parentDocument.querySelectorAll(selector)])
+          )].filter((element) => element !== window.frameElement);
+
+          parentDocument.documentElement.classList.add('js-scroll-motion');
+          const reduceMotion = parentWindow.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          targets.forEach((element) => element.classList.add('scroll-reveal'));
+
+          [
+            '.responsive-kpi-grid',
+            '.methodology-grid',
+            '.systematization-flow',
+            '.home-doc-grid',
+            '.criteria-map'
+          ].forEach((selector) => {
+            parentDocument.querySelectorAll(selector).forEach((group) => {
+              [...group.children].forEach((child, index) => {
+                child.style.setProperty('--reveal-delay', `${Math.min(index, 5) * 65}ms`);
+              });
+            });
+          });
+
+          let observer;
+          if (reduceMotion || !('IntersectionObserver' in parentWindow)) {
+            targets.forEach((element) => element.classList.add('is-visible'));
+          } else {
+            observer = new parentWindow.IntersectionObserver((entries) => {
+              entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+              });
+            }, {
+              root: null,
+              rootMargin: '0px 0px -9% 0px',
+              threshold: 0.08
+            });
+            targets.forEach((element) => observer.observe(element));
+          }
+
+          const progress = parentDocument.querySelector('.reading-progress span');
+          const appView = parentDocument.querySelector('[data-testid="stAppViewContainer"]');
+          const mainScroller = parentDocument.querySelector('[data-testid="stMain"]');
+          const navLinks = [...parentDocument.querySelectorAll('.site-links a[href^="#"]')];
+          const scrollSources = [parentWindow, appView, mainScroller].filter(Boolean);
+          let framePending = false;
+
+          const updateReadingState = () => {
+            framePending = false;
+            const root = parentDocument.documentElement;
+            const body = parentDocument.body;
+            const scrollTop = Math.max(
+              parentWindow.scrollY || 0,
+              root.scrollTop || 0,
+              body.scrollTop || 0,
+              appView?.scrollTop || 0,
+              mainScroller?.scrollTop || 0
+            );
+            const scrollHeight = Math.max(
+              root.scrollHeight,
+              body.scrollHeight,
+              appView?.scrollHeight || 0,
+              mainScroller?.scrollHeight || 0
+            );
+            const viewportHeight = mainScroller?.clientHeight || appView?.clientHeight || parentWindow.innerHeight || 1;
+            const ratio = Math.min(1, Math.max(0, scrollTop / Math.max(1, scrollHeight - viewportHeight)));
+            progress?.style.setProperty('transform', `scaleX(${ratio})`);
+
+            let activeLink = navLinks[0];
+            navLinks.forEach((link) => {
+              const anchor = parentDocument.querySelector(link.getAttribute('href'));
+              if (anchor && anchor.getBoundingClientRect().top <= Math.min(220, viewportHeight * .28)) {
+                activeLink = link;
+              }
+            });
+            navLinks.forEach((link) => {
+              const active = link === activeLink;
+              link.classList.toggle('active', active);
+              if (active) link.setAttribute('aria-current', 'location');
+              else link.removeAttribute('aria-current');
+            });
+          };
+
+          const requestUpdate = () => {
+            if (framePending) return;
+            framePending = true;
+            parentWindow.requestAnimationFrame(updateReadingState);
+          };
+          scrollSources.forEach((source) => source.addEventListener('scroll', requestUpdate, {passive: true}));
+          parentWindow.addEventListener('resize', requestUpdate, {passive: true});
+          updateReadingState();
+
+          parentWindow.__observatorioMotionCleanup = () => {
+            observer?.disconnect();
+            scrollSources.forEach((source) => source.removeEventListener('scroll', requestUpdate));
+            parentWindow.removeEventListener('resize', requestUpdate);
+          };
+        })();
+        </script>
+        """,
+        height=0,
+        scrolling=False,
+    )
+
+
 def criterion_source_links(source: str) -> str:
     links = []
     for expediente in [part.strip() for part in source.split(";")]:
@@ -533,6 +668,7 @@ def filter_controls(
 st.markdown(
     """
     <nav class="site-nav home-nav">
+      <div class="reading-progress" aria-hidden="true"><span></span></div>
         <div class="site-brand">Observatorio Electoral</div>
       <div class="site-links">
         <a class="active" href="#inicio">Inicio</a>
@@ -1090,3 +1226,5 @@ download_right.download_button(
     mime="application/pdf",
     disabled=not selected_bytes,
 )
+
+install_scroll_motion()
