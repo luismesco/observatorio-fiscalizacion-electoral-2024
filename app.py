@@ -367,8 +367,8 @@ def incidence_map_html() -> str:
         * { box-sizing: border-box; }
         body { margin: 0; background: transparent; color: var(--black); font-family: "Montserrat", sans-serif; overflow-x: hidden; }
         .map-shell { display: grid; grid-template-columns: minmax(0, .95fr) minmax(300px, 1.05fr); gap: 22px; align-items: stretch; }
-        .mexico-map-wrap { position: relative; border-top: 5px solid var(--guinda); background: #fbf7ef; min-height: 430px; overflow: hidden; }
-        .map-svg { width: 100%; height: 430px; display: block; }
+        .mexico-map-wrap { position: relative; border-top: 5px solid var(--guinda); background: #fbf7ef; min-height: 380px; overflow: hidden; }
+        .map-svg { width: 100%; height: 380px; display: block; }
         .state { fill: #e8ddcc; stroke: #fffdf8; stroke-width: 2.2; vector-effect: non-scaling-stroke; }
         .state.active { fill: var(--guinda); stroke: #fffdf8; cursor: pointer; transition: fill .18s ease, filter .18s ease, opacity .18s ease; }
         .state.active:hover, .state.active.selected { fill: var(--dorado); filter: drop-shadow(0 5px 8px rgba(107,21,49,.28)); opacity: .98; }
@@ -377,7 +377,7 @@ def incidence_map_html() -> str:
         .map-note:hover, .map-note.selected { background: #fffdf8; border-color: var(--dorado); transform: translateX(-2px); }
         .map-note strong { display: block; color: var(--guinda-dark); font-size: .74rem; font-weight: 900; line-height: 1.08; text-transform: uppercase; }
         .map-note span { display: block; color: var(--muted); font-size: .64rem; font-weight: 900; margin-top: 2px; text-transform: uppercase; }
-        .incidence-card-panel { border-top: 5px solid var(--guinda); background: linear-gradient(180deg, #fffdf8, #fbf2e5); min-height: 430px; overflow: hidden; }
+        .incidence-card-panel { border-top: 5px solid var(--guinda); background: linear-gradient(180deg, #fffdf8, #fbf2e5); min-height: 380px; max-height: 380px; overflow-y: auto; }
         .incidence-card { display: none; padding: 18px 18px 20px; animation: focusIn .28s ease both; }
         .incidence-card.selected { display: block; }
         .incidence-card strong { color: var(--black); display: block; font-size: clamp(1.45rem, 3vw, 2.15rem); font-weight: 900; line-height: .95; margin-bottom: 14px; text-transform: uppercase; overflow-wrap: anywhere; }
@@ -387,7 +387,7 @@ def incidence_map_html() -> str:
         .incidence-card-entry p { color: var(--muted); font-size: .8rem; font-weight: 750; line-height: 1.34; margin: 7px 0 8px; overflow-wrap: anywhere; }
         .incidence-card-entry a { color: var(--guinda); font-size: .72rem; font-weight: 900; text-decoration: none; text-transform: uppercase; border-bottom: 1px solid rgba(107,21,49,.36); }
         @keyframes focusIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @media (max-width: 760px) { .map-shell { grid-template-columns: 1fr; } .map-notes { position: static; width: auto; padding: 0 12px 12px; } .mexico-map-wrap, .incidence-card-panel { min-height: 0; } .map-svg { height: 320px; } }
+        @media (max-width: 760px) { .map-shell { grid-template-columns: 1fr; } .map-notes { position: static; width: auto; padding: 0 12px 12px; } .mexico-map-wrap { min-height: 300px; } .incidence-card-panel { min-height: 260px; max-height: 260px; } .map-svg { height: 300px; } }
         </style>
         """
         f'<div class="map-shell" data-default="{html.escape(first_slug)}">'
@@ -854,7 +854,7 @@ if map_html:
         """,
         unsafe_allow_html=True,
     )
-    components.html(map_html, height=740, scrolling=False)
+    components.html(map_html, height=430, scrolling=True)
 
 st.markdown('<div class="chart-kicker">Lectura por sujeto obligado</div>', unsafe_allow_html=True)
 party_chart_filters = filter_controls(

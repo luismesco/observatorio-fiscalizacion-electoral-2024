@@ -138,6 +138,8 @@ Estos bloques se alimentan desde `data/analysis/diputados_lxvi_electos.csv`, `da
 
 El mapa se renderiza como componente HTML interactivo para permitir seleccion directa de entidades. Al seleccionar una entidad activa en el mapa o en la lista lateral, la vista muestra solo la ficha del estado correspondiente. Cada ficha incluye expediente, tema, explicacion breve de prioridad y enlace a la sentencia oficial cuando existe URL disponible.
 
+El componente del mapa usa altura compacta para evitar espacio blanco antes de la siguiente seccion. El panel de ficha tiene scroll interno cuando una entidad acumula varias referencias, de modo que el bloque no empuja artificialmente la lectura.
+
 La tabla de expedientes explica los montos en cero: si no existe monto firme, si el asunto fue sobreseido o si falta nueva determinacion, la celda de monto incorpora una nota de lectura para evitar interpretar `$0` como ausencia de irregularidad.
 
 El cierre metodologico incluye una propuesta de sistematizacion futura: capturar expediente y fuente oficial, normalizar sujeto/conducta/monto/sentido, vincular criterio y entidad, validar estados de monto y publicar PDF, datos y ficha navegable.
