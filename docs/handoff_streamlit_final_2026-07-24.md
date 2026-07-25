@@ -35,16 +35,26 @@ La version final debe operar como experiencia editorial unica:
 - propuesta independiente de sistematizacion del flujo, navegable desde el encabezado;
 - graficas y tabla sin depender de paginas secundarias.
 
-## PDFs integrados
+## PDFs integrados y descarga publica
 
-Los archivos usados por la app son:
+Los archivos editoriales fuente son:
 
 - `exports/diputaciones_electas_reporte.pdf`
 - `exports/criterios_fiscalizacion_diputaciones_2024.pdf`
 
-Ambos se ofrecen desde:
+Las copias versionadas para publicacion se conservan en:
 
-- selector principal de descargas;
+- `static/que_se_sanciono_diputaciones_federales_2024.pdf`
+- `static/criterios_fiscalizacion_diputaciones_2024.pdf`
+
+La descarga publica no depende de la envoltura de Streamlit. Ambos archivos se
+publicaron como activos de GitHub Releases:
+
+`https://github.com/luismesco/observatorio-fiscalizacion-electoral-2024/releases/tag/analisis-diputaciones-2024-v1`
+
+Se ofrecen desde:
+
+- selector final de descargas;
 - dock fijo inferior con botones tipo pill para descarga inmediata.
 
 Los PDF son respaldo editorial descargable. El contenido central tambien debe poder leerse en la pagina mediante:
@@ -76,7 +86,9 @@ Se agrego un dock fijo inferior con dos pills:
 - Fiscalizacion;
 - Criterios.
 
-El dock usa enlaces `data:application/pdf;base64` para permitir descarga directa sin abrir una nueva seccion ni depender de botones flotantes nativos de Streamlit.
+El dock usa enlaces directos a los activos de GitHub Releases. La respuesta final
+incluye `Content-Disposition: attachment`; no se codifican los PDF en base64 ni se
+descarga HTML de autenticacion de Streamlit.
 
 La seccion formal de descargas se movio al final de la pagina para que el flujo sea: leer, interactuar, contrastar datos y descargar.
 
@@ -173,6 +185,7 @@ El texto visible al lector debe mantener tono institucional y academico: observa
 - `app.py`: experiencia publica final.
 - `src/observatorio/ui.py`: estilos globales, Montserrat, reticula, dock, KPI, animaciones y helpers visuales.
 - `.streamlit/config.toml`: tema base de Streamlit con color primario guinda.
+- `static/*.pdf`: copias versionadas de los dos documentos editoriales finales.
 - `src/observatorio/data_loader.py`: carga y filtros de datos.
 - `src/observatorio/metrics.py`: KPIs, conteos y agregados.
 - `requirements.txt`: dependencias para Streamlit Cloud.
@@ -218,16 +231,27 @@ Problemas corregidos:
 - barra lateral automatica de Streamlit;
 - `ImportError` por helper agregado durante redeploy;
 - KPI monetarios cortados;
-- warnings por `use_container_width=True`.
+- warnings por `use_container_width=True`;
+- recorte horizontal en Safari/iPhone;
+- pills cubiertos por la insignia movil de Streamlit;
+- instalacion tardia de transiciones;
+- descarga de HTML con extension `.pdf`.
 
 ## Riesgos actuales
 
-El dock fijo usa PDFs embebidos como base64. Los archivos actuales son razonables para este enfoque:
+Streamlit Community Cloud puede entrar en reposo y presentar un arranque en frio
+mas lento que el render local. Los PDF ya no forman parte del payload de la pagina,
+por lo que su tamano no penaliza el render inicial.
 
-- criterios: alrededor de 629 KB;
-- fiscalizacion: alrededor de 1.1 MB.
+La version publica depende de que los activos de GitHub Releases conserven estos
+nombres:
 
-Si los PDFs crecen mucho, conviene servirlos desde archivos estaticos o GitHub Releases y cambiar los pills a enlaces directos.
+- `que_se_sanciono_diputaciones_federales_2024.pdf`;
+- `criterios_fiscalizacion_diputaciones_2024.pdf`.
+
+Si se reemplazan, se debe mantener el tag
+`analisis-diputaciones-2024-v1` y los nombres de archivo, o actualizar
+`download_url` en `app.py`.
 
 ## Criterio de version final
 
@@ -260,18 +284,17 @@ Validacion Playwright realizada en anchos de 320, 360, 375, 393 y 430 px:
 - ancho desplazable del documento igual al ancho del viewport;
 - portada y titulo contenidos dentro del viewport;
 - pills completos, con etiqueta explicita de descarga;
-- atributos `download` y PDF base64 conservados;
+- atributos `download` y URL de GitHub Releases conservados;
 - dock visible por encima de una insignia Streamlit simulada;
 - tabla ancha confinada a su propio contenedor con desplazamiento horizontal;
 - comportamiento de movimiento reducido conservado.
 
 ### Rendimiento y activacion temprana de movimiento
 
-Los PDF dejaron de codificarse como `data:` base64 en el HTML. Streamlit sirve las
-copias finales desde `static/` mediante `server.enableStaticServing`, y los enlaces
-del dock y de la seccion final apuntan a `/app/static/`. Esto elimina la lectura,
-codificacion y envio repetido de aproximadamente 1.7 MB de PDF en cada render y
-mantiene el atributo `download`.
+Los PDF dejaron de codificarse como `data:` base64 en el HTML. El repositorio
+conserva copias en `static/`, pero la aplicacion publica descarga los activos de
+GitHub Releases. Esto elimina la lectura, codificacion y envio repetido de
+aproximadamente 1.69 MiB de PDF en cada render y mantiene el atributo `download`.
 
 El observador de movimiento se instala inmediatamente despues de la portada y del
 dock. Un observador del DOM registra de forma incremental las secciones, graficas,
@@ -283,7 +306,7 @@ Medicion local de control en viewport movil de 393 px:
 - portada y dock visibles: aproximadamente 2.2 segundos;
 - documento completo disponible: aproximadamente 4.8 segundos;
 - ancho del documento: 393 px;
-- PDF servidos con `application/pdf`, sin URL base64;
+- PDF descargados como binarios, sin URL base64;
 - revelado por scroll confirmado en contenido tardio.
 
 Un arranque en frio de Streamlit Community Cloud puede tardar mas que la medicion
@@ -307,3 +330,90 @@ Comprobaciones:
 - criterios: PDF de 8 paginas, 643,896 bytes;
 - hashes SHA-256 identicos a los originales del repositorio;
 - respuesta HTTP final `200` con disposicion `attachment`.
+
+## Estado final verificado
+
+Fecha de cierre: 24 de julio de 2026.
+
+Version de aplicacion:
+
+- rama: `main`;
+- ultimo commit funcional: `7b734d6 Fix PDF downloads with release assets`;
+- aplicacion:
+  `https://observatorio-fiscalizacion-electoral-2024-luismesco.streamlit.app/`;
+- release documental: `analisis-diputaciones-2024-v1`.
+
+Peso de documentos:
+
+| Documento | Bytes | MB decimal | MiB |
+| --- | ---: | ---: | ---: |
+| Fiscalizacion | 1,127,525 | 1.13 MB | 1.08 MiB |
+| Criterios | 643,896 | 0.64 MB | 0.61 MiB |
+| Total | 1,771,421 | 1.77 MB | 1.69 MiB |
+
+Integridad:
+
+- fiscalizacion SHA-256:
+  `0d299d7d4db64319dc554fadd46fede44727997a1706ea66a7a4d4b4ee775e1b`;
+- criterios SHA-256:
+  `079f2cddc186ec89c1095ec7015c0057856ed8f874e6077fb9c0e5956cfdd6ae`.
+
+Validacion funcional final:
+
+- la version publica muestra las URL de GitHub Releases en ambos pills;
+- cada click genera un evento de descarga;
+- los dos archivos comienzan con la firma `%PDF`;
+- los nombres sugeridos coinciden con los nombres editoriales;
+- ambos documentos tienen ocho paginas;
+- los hashes SHA-256 descargados coinciden con los archivos del repositorio;
+- el viewport publico de 393 px no presenta desbordamiento horizontal;
+- el titulo de portada y el dock permanecen dentro del viewport;
+- la seccion de sistematizacion cambia de estado oculto a visible al entrar en
+  pantalla;
+- `prefers-reduced-motion` conserva una alternativa accesible sin movimiento.
+
+## Secuencia de commits de cierre
+
+- `30c3333`: corrige la paleta de partidos.
+- `b41f90a` a `0f5de4e`: refina filtros, mapa y seleccion territorial.
+- `8e749cc`: amplia metodologia y filtros de graficas.
+- `543e119` y `47bdc4a`: compacta el mapa y mejora accesibilidad y movimiento.
+- `6b81453`: separa cierre metodologico y propuesta de sistematizacion.
+- `c0fdd75`: agrega revelado por scroll compatible entre navegadores.
+- `352466a` y `3e96406`: corrige descargas visibles y adaptacion al viewport movil.
+- `62523c5`: reduce el payload y activa el movimiento de forma temprana.
+- `7b734d6`: corrige las descargas mediante activos de GitHub Releases.
+
+## Procedimiento de actualizacion
+
+1. Sustituir los PDF fuente en `exports/`.
+2. Copiar las versiones finales a `static/` con los nombres publicos actuales.
+3. Verificar firma `%PDF`, numero de paginas, peso y hash SHA-256.
+4. Actualizar los activos del release con:
+
+```bash
+gh release upload analisis-diputaciones-2024-v1 \
+  static/que_se_sanciono_diputaciones_federales_2024.pdf \
+  static/criterios_fiscalizacion_diputaciones_2024.pdf \
+  --clobber \
+  --repo luismesco/observatorio-fiscalizacion-electoral-2024
+```
+
+5. Ejecutar la app local y probar ambos pills en movil y escritorio.
+6. Confirmar que no existe `data:application/pdf;base64` ni `/app/static/` en
+   `app.py`.
+7. Hacer commit y push a `main`.
+8. Verificar la version publica, el movimiento por scroll y las dos descargas.
+
+## Criterios que no deben revertirse
+
+- mantener una sola pagina publica; no restaurar `pages/`;
+- mantener la navegacion por anclas dentro de la pagina;
+- no volver a incrustar PDF en base64;
+- no usar rutas de descarga `/app/static/` en Streamlit Community Cloud;
+- conservar Montserrat, reticula, paleta institucional y jerarquia editorial;
+- mantener filtros independientes para panel, graficas y tabla;
+- mantener una sola entidad visible al seleccionar el mapa;
+- conservar notas explicativas para montos en cero o pendientes;
+- respetar `prefers-reduced-motion`;
+- no presentar el corpus como universo exhaustivo.

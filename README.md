@@ -1,10 +1,17 @@
 # Observatorio de Fiscalizacion y Justicia Electoral 2023-2024
 
-Observatorio de trabajo para explorar asuntos vinculados con fiscalizacion electoral federal, sentencias del TEPJF y diputaciones federales electas 2024-2027. El proyecto funciona con archivos locales, datos tabulares y documentos fuente descargados previamente.
+Observatorio publico para consultar sanciones, efectos jurisdiccionales, criterios
+del TEPJF y diputaciones federales electas del proceso 2023-2024. La version final
+combina lectura editorial, filtros, graficas, mapa, tabla de expedientes y
+documentos descargables en una sola pagina.
+
+Aplicacion:
+
+`https://observatorio-fiscalizacion-electoral-2024-luismesco.streamlit.app/`
 
 ## Estado del corte
 
-- La aplicacion abre por defecto con casos reales iniciales en `data/processed/`.
+- La aplicacion abre por defecto con casos documentados en `data/processed/`.
 - Las plantillas para carga real estan en `data/templates/`.
 - La muestra real inicial se limita a sentencias localizadas sobre fiscalizacion de campana federal 2023-2024 con incidencia en diputaciones federales.
 - El universo de 500 diputaciones federales LXVI se encuentra en `data/analysis/diputados_lxvi_electos.csv`.
@@ -13,7 +20,8 @@ Observatorio de trabajo para explorar asuntos vinculados con fiscalizacion elect
 ## Ejecutar
 
 ```bash
-cd /Users/amluis/observatorio-fiscalizacion-2023-2024
+git clone https://github.com/luismesco/observatorio-fiscalizacion-electoral-2024.git
+cd observatorio-fiscalizacion-electoral-2024
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
@@ -29,21 +37,30 @@ La app esta preparada para publicarse desde GitHub en Streamlit Community Cloud.
 - Main file path: `app.py`
 - Python version: `3.12`
 
-Los PDF finales de descarga se incluyen en `exports/`:
+Los PDF fuente se incluyen en `exports/` y sus copias publicas en `static/`.
+Las descargas en produccion se sirven desde GitHub Releases para evitar que la
+envoltura autenticada de Streamlit entregue HTML con extension `.pdf`.
 
 - `exports/diputaciones_electas_reporte.pdf`
 - `exports/criterios_fiscalizacion_diputaciones_2024.pdf`
+
+Release:
+
+`https://github.com/luismesco/observatorio-fiscalizacion-electoral-2024/releases/tag/analisis-diputaciones-2024-v1`
 
 No se requieren secretos para el despliegue actual.
 
 ## Estructura
 
-- `app.py`: resumen ejecutivo.
-- `pages/`: vistas de partidos, conductas, expedientes, agravios y metodologia.
-- `src/observatorio/`: carga, metricas, validacion y exportacion.
+- `app.py`: pagina publica unica, filtros, graficas y lectura editorial.
+- `src/observatorio/`: carga, metricas, validacion, estilos y exportacion.
 - `data/templates/`: archivos CSV para capturar casos reales.
 - `docs/`: metodologia, diccionario de datos y checklist.
 - `exports/`: salidas generadas.
+- `static/`: copias versionadas de los PDF finales.
+
+No debe restaurarse `pages/`: Streamlit genera una barra lateral automatica y
+expone vistas retiradas de la version final.
 
 ## Flujo recomendado de actualizacion
 
@@ -52,16 +69,17 @@ No se requieren secretos para el despliegue actual.
 3. Registrar fuente, ruta local, fragmento y estado de revision.
 4. Validar montos, sentido, agravios y competencia.
 5. Copiar los CSV revisados a `data/processed/`.
-6. Ejecutar la app con `streamlit run app.py`.
-7. Generar Excel con `python scripts/export_excel.py`.
+6. Sustituir los PDF en `exports/` y `static/`.
+7. Actualizar los activos del release con `gh release upload --clobber`.
+8. Ejecutar la app con `streamlit run app.py`.
+9. Probar viewport movil, animaciones, filtros y ambas descargas.
+10. Generar Excel con `python scripts/export_excel.py` cuando corresponda.
 
-## Imprimir
+## Documentacion de cierre
 
-Abrir la pagina `Reporte imprimible` dentro de Streamlit y usar imprimir desde el navegador. El CSS esta optimizado para carta horizontal:
+El estado tecnico, editorial y de despliegue se encuentra en:
 
-```css
-@page { size: letter landscape; }
-```
+`docs/handoff_streamlit_final_2026-07-24.md`
 
 ## Principio rector
 
