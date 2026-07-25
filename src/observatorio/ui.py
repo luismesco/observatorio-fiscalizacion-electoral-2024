@@ -857,7 +857,19 @@ def page_setup(title: str) -> None:
           color: var(--guinda-dark) !important;
           font-size: 1rem !important;
           font-weight: 900 !important;
-          white-space: nowrap;
+          white-space: normal;
+        }
+        .money-note {
+          color: var(--muted) !important;
+          display: block;
+          font-size: .62rem !important;
+          font-weight: 850 !important;
+          line-height: 1.2;
+          margin-top: 6px;
+          max-width: 180px;
+          text-align: right;
+          text-transform: uppercase;
+          white-space: normal;
         }
         .status-pill {
           background: var(--guinda);
@@ -1736,7 +1748,12 @@ def page_setup(title: str) -> None:
           line-height: 1.35;
           margin: 8px 0 4px;
         }
-        [data-testid="stPills"] button {
+        [data-testid="stPills"] button,
+        [data-testid="stPill"] button,
+        [data-testid*="stPill"] button,
+        [data-testid*="stPill"] [role="button"],
+        [data-testid*="stPill"] [role="option"],
+        [data-testid*="stPill"] [role="checkbox"] {
           background: #fffdf8 !important;
           border: 1.5px solid rgba(107,21,49,.82) !important;
           border-radius: 999px !important;
@@ -1745,10 +1762,20 @@ def page_setup(title: str) -> None:
           text-transform: uppercase !important;
           transition: background .18s ease, color .18s ease, border-color .18s ease, transform .18s ease;
         }
-        [data-testid="stPills"] button * {
+        [data-testid="stPills"] button *,
+        [data-testid="stPill"] button *,
+        [data-testid*="stPill"] button *,
+        [data-testid*="stPill"] [role="button"] *,
+        [data-testid*="stPill"] [role="option"] *,
+        [data-testid*="stPill"] [role="checkbox"] * {
           color: inherit !important;
         }
-        [data-testid="stPills"] button:hover {
+        [data-testid="stPills"] button:hover,
+        [data-testid="stPill"] button:hover,
+        [data-testid*="stPill"] button:hover,
+        [data-testid*="stPill"] [role="button"]:hover,
+        [data-testid*="stPill"] [role="option"]:hover,
+        [data-testid*="stPill"] [role="checkbox"]:hover {
           border-color: var(--guinda) !important;
           transform: translateY(-1px);
         }
@@ -1757,7 +1784,15 @@ def page_setup(title: str) -> None:
         [data-testid="stPills"] button[aria-checked="true"],
         [data-testid="stPills"] button[data-selected="true"],
         [data-testid="stPills"] [role="option"][aria-selected="true"],
-        [data-testid="stPills"] [role="checkbox"][aria-checked="true"] {
+        [data-testid="stPills"] [role="checkbox"][aria-checked="true"],
+        [data-testid*="stPill"] button[aria-pressed="true"],
+        [data-testid*="stPill"] button[aria-selected="true"],
+        [data-testid*="stPill"] button[aria-checked="true"],
+        [data-testid*="stPill"] button[data-selected="true"],
+        [data-testid*="stPill"] [role="option"][aria-selected="true"],
+        [data-testid*="stPill"] [role="checkbox"][aria-checked="true"],
+        [data-testid*="stPill"] [aria-selected="true"],
+        [data-testid*="stPill"] [aria-checked="true"] {
           background: var(--guinda) !important;
           border-color: var(--guinda) !important;
           color: #fffdf8 !important;

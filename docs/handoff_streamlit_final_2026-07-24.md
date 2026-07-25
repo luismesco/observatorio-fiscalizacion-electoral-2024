@@ -30,6 +30,7 @@ La version final debe operar como experiencia editorial unica:
 - sujeto mas sancionado y sujeto con menor monto positivo observado;
 - tabla editorial de expedientes con enlace oficial, sujeto, conducta, sentido, monto y efecto;
 - filtros tipo pill en el cuerpo de la pagina;
+- filtros independientes para panel, graficas y tabla de expedientes;
 - cierre metodologico con relevancia, metodo y referencias antes de descargas;
 - graficas y tabla sin depender de paginas secundarias.
 
@@ -106,7 +107,7 @@ Los filtros del panel se movieron al cuerpo de la pagina como pills multiselecci
 
 `Filtros de lectura / Delimita el corte`
 
-Si no hay seleccion activa, el corte conserva el corpus completo. La seleccion de uno o mas pills acota el panel sin usar desplegables ni reactivar sidebar.
+Si no hay seleccion activa, el corte conserva el corpus completo. La seleccion de uno o mas pills acota el panel sin usar desplegables ni reactivar sidebar. Los filtros del panel general, de las graficas y de la tabla usan llaves de estado independientes para evitar que una consulta vacie otra seccion.
 
 El tema de Streamlit se fija en `.streamlit/config.toml` con `primaryColor = "#6B1531"` para evitar el rojo/coral nativo en widgets.
 
@@ -135,7 +136,9 @@ Se agregaron:
 
 Estos bloques se alimentan desde `data/analysis/diputados_lxvi_electos.csv`, `data/processed/hallazgos_portal.csv` y `data/processed/sanciones.csv`.
 
-El mapa usa estados activos enlazados a fichas de incidencia. Al seleccionar una entidad, la vista muestra solo la ficha del estado correspondiente; el enlace `Ver entidades activas` devuelve al conjunto. Cada ficha incluye expediente, tema, explicacion breve de prioridad y enlace a la sentencia oficial cuando existe URL disponible.
+El mapa se renderiza como componente HTML interactivo para permitir seleccion directa de entidades. Al seleccionar una entidad activa en el mapa o en la lista lateral, la vista muestra solo la ficha del estado correspondiente. Cada ficha incluye expediente, tema, explicacion breve de prioridad y enlace a la sentencia oficial cuando existe URL disponible.
+
+La tabla de expedientes explica los montos en cero: si no existe monto firme, si el asunto fue sobreseido o si falta nueva determinacion, la celda de monto incorpora una nota de lectura para evitar interpretar `$0` como ausencia de irregularidad.
 
 ### Estilo editorial
 

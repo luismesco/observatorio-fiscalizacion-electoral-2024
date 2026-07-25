@@ -15,6 +15,7 @@ if str(SRC) not in sys.path:
 import pandas as pd
 import plotly.express as px
 import streamlit as st
+import streamlit.components.v1 as components
 
 from observatorio.data_loader import filtered_cases, load_all
 from observatorio.metrics import count_by, kpis
@@ -163,6 +164,24 @@ def money_compact(value: float | int | str) -> str:
     return f"${amount:,.0f}"
 
 
+def amount_note(amount: float | int | str, states: str, sentido: str) -> str:
+    try:
+        numeric = float(amount)
+    except (TypeError, ValueError):
+        numeric = 0
+    state_text = str(states or "").lower()
+    sentido_text = str(sentido or "").lower()
+    if numeric > 0 and "pendiente" in state_text:
+        return "Monto original observado; el monto final puede variar por efectos pendientes."
+    if numeric > 0:
+        return ""
+    if "no aplica" in state_text or "sobresee" in sentido_text:
+        return "Sin monto determinado: no hubo estudio de fondo o cuantificación económica firme."
+    if "pendiente" in state_text or "revoca" in sentido_text:
+        return "Sin monto firme: pendiente de determinación, reposición o nueva resolución."
+    return "Sin monto determinado en el corte documentado."
+
+
 def text_label(value: str) -> str:
     replacements = {
         "documentacion soporte faltante": "documentación soporte faltante",
@@ -241,25 +260,34 @@ def subject_sanction_stats(source: pd.DataFrame) -> tuple[dict[str, str], dict[s
 def expedient_table_html(source: pd.DataFrame, sanction_source: pd.DataFrame) -> str:
     if source.empty:
         return '<div class="expedient-empty"><strong>Sin expedientes para los filtros seleccionados.</strong></div>'
-    amounts = pd.DataFrame(columns=["caso_id", "monto"])
+    amounts = pd.DataFrame(columns=["caso_id", "monto", "estados_monto"])
     if not sanction_source.empty:
         sanctions = sanction_source.copy()
         sanctions["monto_original"] = pd.to_numeric(sanctions["monto_original"], errors="coerce").fillna(0)
-        amounts = sanctions.groupby("caso_id", as_index=False)["monto_original"].sum().rename(columns={"monto_original": "monto"})
+        amounts = (
+            sanctions.groupby("caso_id", as_index=False)
+            .agg(
+                monto=("monto_original", "sum"),
+                estados_monto=("monto_final_estado", lambda values: ", ".join(sorted({str(v) for v in values if str(v) and str(v) != "nan"}))),
+            )
+        )
     rows = source.merge(amounts, on="caso_id", how="left")
     rows["monto"] = rows["monto"].fillna(0)
+    rows["estados_monto"] = rows["estados_monto"].fillna("")
     body = []
     for _, row in rows.iterrows():
         url = str(row.get("url_sentencia", "")).strip()
         expediente = html.escape(str(row.get("expediente", "")))
         expediente_html = f'<a href="{html.escape(url)}" target="_blank" rel="noopener">{expediente}</a>' if url else expediente
+        note = amount_note(row["monto"], row.get("estados_monto", ""), row.get("sentido", ""))
+        note_html = f'<span class="money-note">{html.escape(note)}</span>' if note else ""
         body.append(
             "<tr>"
             f'<td class="exp-id">{expediente_html}<span>{html.escape(str(row.get("fecha_sentencia", "")))}</span></td>'
             f'<td>{html.escape(text_label(row.get("partido_principal", "")))}</td>'
             f'<td>{html.escape(text_label(row.get("conducta_principal", "")))}</td>'
             f'<td><span class="status-pill">{html.escape(text_label(row.get("sentido", "")))}</span></td>'
-            f'<td class="money-cell">{html.escape(money_compact(row["monto"]))}<span>{html.escape(format_money(row["monto"]))}</span></td>'
+            f'<td class="money-cell">{html.escape(money_compact(row["monto"]))}<span>{html.escape(format_money(row["monto"]))}</span>{note_html}</td>'
             f'<td>{html.escape(text_label(row.get("efectos_resumen", "")))}</td>'
             "</tr>"
         )
@@ -290,23 +318,27 @@ def incidence_map_html() -> str:
     }
     shapes = []
     notes = []
+    active_slugs = []
     for state in map_asset["states"]:
         official_name = state["name"]
         display_name = official_aliases.get(official_name, official_name)
         count = active_counts.get(display_name, 0)
         slug = anchor_slug(display_name)
         class_name = "state active linked" if count else "state"
-        path = f'<path class="{class_name}" d="{state["path"]}"><title>{html.escape(display_name)}</title></path>'
+        data_attrs = f' data-slug="{html.escape(slug)}" tabindex="0"' if count else ""
+        path = f'<path class="{class_name}"{data_attrs} d="{state["path"]}"><title>{html.escape(display_name)}</title></path>'
         if count:
-            shapes.append(f'<a href="#incidencia-{html.escape(slug)}">{path}</a>')
+            active_slugs.append(slug)
+            shapes.append(path)
             notes.append(
-                '<a class="map-note" href="#incidencia-'
-                f'{html.escape(slug)}"><strong>{html.escape(display_name)}</strong>'
-                f'<span>{count} incidencia{"s" if count != 1 else ""}</span></a>'
+                f'<button class="map-note" type="button" data-slug="{html.escape(slug)}">'
+                f'<strong>{html.escape(display_name)}</strong>'
+                f'<span>{count} incidencia{"s" if count != 1 else ""}</span></button>'
             )
         else:
             shapes.append(path)
     cards = []
+    first_slug = active_slugs[0] if active_slugs else ""
     for entity, group in normalized.groupby("entidad_label", sort=True):
         slug = anchor_slug(entity)
         entries = []
@@ -322,13 +354,43 @@ def incidence_map_html() -> str:
                 '</div>'
             )
         cards.append(
-            f'<article class="incidence-card" id="incidencia-{html.escape(slug)}">'
-            '<a class="incidence-close" href="#mapa-incidencias">Ver entidades activas</a>'
+            f'<article class="incidence-card" data-card="{html.escape(slug)}">'
             f'<strong>{html.escape(entity)}</strong>'
             f'{"".join(entries)}'
             '</article>'
         )
     return (
+        """
+        <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap');
+        :root { --guinda:#6B1531; --guinda-dark:#3b0718; --dorado:#C59A3D; --verde:#1E5B4F; --black:#14100d; --muted:#665a52; --paper:#fffdf8; --pale:#fbf2e5; --line:#d7c7b2; }
+        * { box-sizing: border-box; }
+        body { margin: 0; background: transparent; color: var(--black); font-family: "Montserrat", sans-serif; overflow-x: hidden; }
+        .map-shell { display: grid; grid-template-columns: minmax(0, .95fr) minmax(300px, 1.05fr); gap: 22px; align-items: stretch; }
+        .mexico-map-wrap { position: relative; border-top: 5px solid var(--guinda); background: #fbf7ef; min-height: 430px; overflow: hidden; }
+        .map-svg { width: 100%; height: 430px; display: block; }
+        .state { fill: #e8ddcc; stroke: #fffdf8; stroke-width: 2.2; vector-effect: non-scaling-stroke; }
+        .state.active { fill: var(--guinda); stroke: #fffdf8; cursor: pointer; transition: fill .18s ease, filter .18s ease, opacity .18s ease; }
+        .state.active:hover, .state.active.selected { fill: var(--dorado); filter: drop-shadow(0 5px 8px rgba(107,21,49,.28)); opacity: .98; }
+        .map-notes { position: absolute; right: 14px; top: 14px; display: grid; gap: 8px; width: 190px; }
+        .map-note { appearance: none; background: rgba(255,253,248,.92); border: 0; border-left: 4px solid var(--guinda); color: inherit; cursor: pointer; display: block; font-family: "Montserrat", sans-serif; padding: 8px 10px; text-align: left; transition: transform .18s ease, border-color .18s ease, background .18s ease; }
+        .map-note:hover, .map-note.selected { background: #fffdf8; border-color: var(--dorado); transform: translateX(-2px); }
+        .map-note strong { display: block; color: var(--guinda-dark); font-size: .74rem; font-weight: 900; line-height: 1.08; text-transform: uppercase; }
+        .map-note span { display: block; color: var(--muted); font-size: .64rem; font-weight: 900; margin-top: 2px; text-transform: uppercase; }
+        .incidence-card-panel { border-top: 5px solid var(--guinda); background: linear-gradient(180deg, #fffdf8, #fbf2e5); min-height: 430px; overflow: hidden; }
+        .incidence-card { display: none; padding: 18px 18px 20px; animation: focusIn .28s ease both; }
+        .incidence-card.selected { display: block; }
+        .incidence-card strong { color: var(--black); display: block; font-size: clamp(1.45rem, 3vw, 2.15rem); font-weight: 900; line-height: .95; margin-bottom: 14px; text-transform: uppercase; overflow-wrap: anywhere; }
+        .incidence-card-entry { border-top: 1px solid rgba(20,16,13,.18); padding: 12px 0 13px; }
+        .incidence-card-entry b { color: var(--guinda-dark); display: block; font-size: .94rem; font-weight: 900; line-height: 1.14; text-transform: uppercase; overflow-wrap: anywhere; }
+        .incidence-card-entry span { color: var(--black); display: block; font-size: .82rem; font-weight: 900; line-height: 1.25; margin-top: 6px; overflow-wrap: anywhere; }
+        .incidence-card-entry p { color: var(--muted); font-size: .8rem; font-weight: 750; line-height: 1.34; margin: 7px 0 8px; overflow-wrap: anywhere; }
+        .incidence-card-entry a { color: var(--guinda); font-size: .72rem; font-weight: 900; text-decoration: none; text-transform: uppercase; border-bottom: 1px solid rgba(107,21,49,.36); }
+        @keyframes focusIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 760px) { .map-shell { grid-template-columns: 1fr; } .map-notes { position: static; width: auto; padding: 0 12px 12px; } .mexico-map-wrap, .incidence-card-panel { min-height: 0; } .map-svg { height: 320px; } }
+        </style>
+        """
+        f'<div class="map-shell" data-default="{html.escape(first_slug)}">'
         '<div class="mexico-map-wrap">'
         f'<svg class="map-svg" viewBox="{map_asset["viewBox"]}" role="img" aria-label="Mapa de México con incidencias de fiscalización">'
         '<rect x="0" y="0" width="520" height="330" fill="#fbf7ef"/>'
@@ -336,7 +398,27 @@ def incidence_map_html() -> str:
         '</svg>'
         f'<div class="map-notes">{"".join(notes)}</div>'
         '</div>'
-        f'<div class="incidence-card-grid">{"".join(cards)}</div>'
+        f'<div class="incidence-card-panel">{"".join(cards)}</div>'
+        '</div>'
+        """
+        <script>
+        const shell = document.querySelector('.map-shell');
+        const selectEntity = (slug) => {
+          document.querySelectorAll('[data-card]').forEach((card) => card.classList.toggle('selected', card.dataset.card === slug));
+          document.querySelectorAll('[data-slug]').forEach((item) => item.classList.toggle('selected', item.dataset.slug === slug));
+        };
+        document.querySelectorAll('[data-slug]').forEach((item) => {
+          item.addEventListener('click', () => selectEntity(item.dataset.slug));
+          item.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              selectEntity(item.dataset.slug);
+            }
+          });
+        });
+        selectEntity(shell?.dataset.default || '');
+        </script>
+        """
     )
 
 
@@ -367,34 +449,43 @@ def responsive_kpi_grid(items: list[tuple[str, str | int | float, str | None]], 
     st.markdown("".join(cards), unsafe_allow_html=True)
 
 
-def filter_controls() -> dict[str, list[str]]:
+def filter_controls(
+    *,
+    label: str = "Filtros de lectura",
+    title: str = "Delimita el corte",
+    note: str = "Sin selección activa, la consulta conserva el corpus completo.",
+    key_prefix: str = "panel",
+    include_party: bool = True,
+) -> dict[str, list[str]]:
     st.markdown(
-        """
+        f"""
         <section class="filter-band">
-          <div class="label">Filtros de lectura</div>
-          <div class="title">Delimita el corte</div>
-          <p>Sin seleccion activa, la consulta conserva el corpus completo.</p>
+          <div class="label">{html.escape(label)}</div>
+          <div class="title">{html.escape(title)}</div>
+          <p>{html.escape(note)}</p>
         </section>
         """,
         unsafe_allow_html=True,
     )
-    cols = st.columns(4)
     filters: dict[str, list[str]] = {}
-    for idx, (label, column) in enumerate(
-        [
-            ("Nivel", "nivel"),
-            ("Partido", "partido_principal"),
-            ("Conducta", "conducta_principal"),
-            ("Sentido", "sentido"),
-        ]
-    ):
+    filter_specs = [
+        ("Nivel", "nivel"),
+        ("Partido", "partido_principal"),
+        ("Conducta", "conducta_principal"),
+        ("Sentido", "sentido"),
+    ]
+    if not include_party:
+        filter_specs = [spec for spec in filter_specs if spec[1] != "partido_principal"]
+        filters["partido_principal"] = sorted([x for x in casos["partido_principal"].unique() if str(x)])
+    cols = st.columns(len(filter_specs))
+    for idx, (field_label, column) in enumerate(filter_specs):
         options = sorted([x for x in casos[column].unique() if str(x)]) if column in casos.columns else []
         selected = cols[idx].pills(
-            label,
+            field_label,
             options,
             selection_mode="multi",
             default=[],
-            key=f"pill_{column}",
+            key=f"{key_prefix}_pill_{column}",
         )
         filters[column] = list(selected or options)
     return filters
@@ -663,7 +754,12 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-filters = filter_controls()
+filters = filter_controls(
+    label="Filtros del panel",
+    title="Delimita el corte general",
+    note="Estos filtros afectan las cifras superiores, curules vinculadas al corte y lectura jurisdiccional del panel.",
+    key_prefix="panel",
+)
 casos_filtrados = filtered_cases(
     casos,
     nivel=filters["nivel"],
@@ -742,7 +838,7 @@ if not diputados.empty:
 map_html = incidence_map_html()
 if map_html:
     st.markdown(
-        f"""
+        """
         <section class="viz-section" id="mapa-incidencias">
           <div class="viz-head">
             <div>
@@ -754,15 +850,29 @@ if map_html:
               Selecciona una entidad activa para consultar la incidencia y la sentencia oficial.
             </p>
           </div>
-          {map_html}
         </section>
         """,
         unsafe_allow_html=True,
     )
+    components.html(map_html, height=740, scrolling=False)
 
 st.markdown('<div class="chart-kicker">Lectura por sujeto obligado</div>', unsafe_allow_html=True)
+party_chart_filters = filter_controls(
+    label="Filtros de gráfica",
+    title="Casos por partido",
+    note="Estos filtros afectan únicamente la gráfica de casos por partido y el resultado jurisdiccional inmediato.",
+    key_prefix="party_chart",
+    include_party=False,
+)
+casos_grafica = filtered_cases(
+    casos,
+    nivel=party_chart_filters["nivel"],
+    partido=party_chart_filters["partido_principal"],
+    conducta=party_chart_filters["conducta_principal"],
+    sentido=party_chart_filters["sentido"],
+)
 st.subheader("Casos por partido")
-chart_df = count_by(casos_filtrados, "partido_principal")
+chart_df = count_by(casos_grafica, "partido_principal")
 if not chart_df.empty:
     fig = px.bar(
         chart_df,
@@ -789,7 +899,7 @@ else:
 
 st.markdown('<div class="chart-kicker">Resultado jurisdiccional</div>', unsafe_allow_html=True)
 st.subheader("Sentido de resolucion")
-chart_df = count_by(casos_filtrados, "sentido")
+chart_df = count_by(casos_grafica, "sentido")
 if not chart_df.empty:
     fig = px.bar(chart_df, x="casos", y="sentido", orientation="h", color_discrete_sequence=["#1E5B4F"])
     fig.update_layout(
@@ -808,8 +918,23 @@ else:
     st.info("Sin datos para los filtros seleccionados.")
 
 st.markdown('<div class="section-subhead">Tabla de expedientes</div>', unsafe_allow_html=True)
-st.markdown(expedient_table_html(casos_filtrados, sanciones_filtradas), unsafe_allow_html=True)
-st.download_button("Descargar CSV filtrado", casos_filtrados.to_csv(index=False).encode("utf-8"), "casos_filtrados.csv", "text/csv")
+table_filters = filter_controls(
+    label="Filtros de tabla",
+    title="Expedientes consultables",
+    note="Estos filtros afectan únicamente la tabla y la descarga CSV de expedientes.",
+    key_prefix="table",
+)
+casos_tabla = filtered_cases(
+    casos,
+    nivel=table_filters["nivel"],
+    partido=table_filters["partido_principal"],
+    conducta=table_filters["conducta_principal"],
+    sentido=table_filters["sentido"],
+)
+table_ids = set(casos_tabla["caso_id"].astype(str)) if not casos_tabla.empty else set()
+sanciones_tabla = sanciones[sanciones["caso_id"].astype(str).isin(table_ids)] if table_ids and not sanciones.empty else sanciones.head(0)
+st.markdown(expedient_table_html(casos_tabla, sanciones_tabla), unsafe_allow_html=True)
+st.download_button("Descargar CSV filtrado", casos_tabla.to_csv(index=False).encode("utf-8"), "casos_filtrados.csv", "text/csv")
 
 st.markdown(
     """
