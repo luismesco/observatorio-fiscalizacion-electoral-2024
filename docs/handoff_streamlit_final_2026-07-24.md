@@ -289,3 +289,21 @@ Medicion local de control en viewport movil de 393 px:
 Un arranque en frio de Streamlit Community Cloud puede tardar mas que la medicion
 local, pero el lector recibe ahora la portada antes que los bloques analiticos
 posteriores.
+
+### Descarga binaria fuera de la envoltura de Streamlit
+
+Las rutas `/app/static/` funcionan en el servidor local, pero Streamlit Community
+Cloud puede interceptarlas desde su envoltura autenticada y devolver HTML con
+nombre `.pdf`. Los documentos finales se publicaron por ello como activos de la
+version GitHub `analisis-diputaciones-2024-v1`.
+
+Los pills fijos y el selector final usan las URL de GitHub Releases. La respuesta
+final incorpora `Content-Disposition: attachment`, entrega el binario completo y
+evita que Safari guarde la pagina de autenticacion de Streamlit.
+
+Comprobaciones:
+
+- fiscalizacion: PDF de 8 paginas, 1,127,525 bytes;
+- criterios: PDF de 8 paginas, 643,896 bytes;
+- hashes SHA-256 identicos a los originales del repositorio;
+- respuesta HTTP final `200` con disposicion `attachment`.

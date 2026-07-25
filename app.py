@@ -766,12 +766,20 @@ st.markdown(
 
 pdf_options = {
     "Qué se sancionó en las elecciones de diputaciones federales 2024": {
-        "static_url": "/app/static/que_se_sanciono_diputaciones_federales_2024.pdf",
+        "download_url": (
+            "https://github.com/luismesco/observatorio-fiscalizacion-electoral-2024/"
+            "releases/download/analisis-diputaciones-2024-v1/"
+            "que_se_sanciono_diputaciones_federales_2024.pdf"
+        ),
         "file_name": "que_se_sanciono_diputaciones_federales_2024.pdf",
         "note": "PDF editorial con sanciones, expedientes, montos, efectos y lectura territorial.",
     },
     "Criterios de fiscalización electoral derivados del proceso 2023-2024": {
-        "static_url": "/app/static/criterios_fiscalizacion_diputaciones_2024.pdf",
+        "download_url": (
+            "https://github.com/luismesco/observatorio-fiscalizacion-electoral-2024/"
+            "releases/download/analisis-diputaciones-2024-v1/"
+            "criterios_fiscalizacion_diputaciones_2024.pdf"
+        ),
         "file_name": "criterios_fiscalizacion_diputaciones_2024.pdf",
         "note": "PDF de criterios de Sala Superior y Sala Regional Ciudad de México, enfocado en diputaciones federales.",
     },
@@ -781,14 +789,14 @@ st.markdown(
     f"""
     <div class="download-dock" aria-label="Descargas del observatorio">
       <span class="dock-label">Documentos PDF</span>
-      <a class="pill primary" href="{pdf_options["Qué se sancionó en las elecciones de diputaciones federales 2024"]["static_url"]}"
+      <a class="pill primary" href="{pdf_options["Qué se sancionó en las elecciones de diputaciones federales 2024"]["download_url"]}"
          download="{pdf_options["Qué se sancionó en las elecciones de diputaciones federales 2024"]["file_name"]}"
          aria-label="Descargar análisis de fiscalización en PDF"
          title="Descargar análisis de fiscalización en PDF">
         <span class="download-mark" aria-hidden="true">↓</span>
         <span class="download-copy"><b>Descargar</b><small>Fiscalización</small></span>
       </a>
-      <a class="pill secondary" href="{pdf_options["Criterios de fiscalización electoral derivados del proceso 2023-2024"]["static_url"]}"
+      <a class="pill secondary" href="{pdf_options["Criterios de fiscalización electoral derivados del proceso 2023-2024"]["download_url"]}"
          download="{pdf_options["Criterios de fiscalización electoral derivados del proceso 2023-2024"]["file_name"]}"
          aria-label="Descargar análisis de criterios en PDF"
          title="Descargar análisis de criterios en PDF">
@@ -1288,7 +1296,7 @@ download_left.markdown(
 download_right.markdown(
     f"""
     <a class="analysis-download-link"
-       href="{selected_payload["static_url"]}"
+       href="{selected_payload["download_url"]}"
        download="{selected_payload["file_name"]}"
        aria-label="Descargar {html.escape(selected_pdf)} en PDF">
       <span aria-hidden="true">↓</span>
