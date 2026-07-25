@@ -540,6 +540,7 @@ st.markdown(
         <a href="#analisis-en-pagina">Análisis</a>
         <a href="#criterios-en-pagina">Criterios</a>
         <a href="#panel-datos">Datos</a>
+        <a href="#sistematizacion">Propuesta</a>
         <a href="#descargas">Descargas</a>
       </div>
     </nav>
@@ -1004,29 +1005,48 @@ st.markdown(
       </div>
       <div class="methodology-grid">
         <article>
+          <span class="methodology-index">I</span>
           <b>Relevancia del análisis</b>
           <p>Ofrece una lectura institucional de sanciones, agravios y criterios para consulta pública, archivo, seguimiento de efectos y revisión de dictámenes o resoluciones posteriores. Permite distinguir montos observados, montos firmes, asuntos pendientes y casos sin estudio de fondo.</p>
         </article>
         <article>
+          <span class="methodology-index">II</span>
           <b>Metodología</b>
           <p>Se delimitó el corte a diputaciones federales; se normalizaron expedientes, sujetos, conductas, montos, agravios y sentido de resolución; y se contrastaron registros de sanción con sentencias oficiales, fichas de criterios y bases documentales del observatorio.</p>
         </article>
         <article>
+          <span class="methodology-index">III</span>
           <b>Referencias</b>
           <p>Las referencias principales son las sentencias oficiales del TEPJF enlazadas en la tabla y el mapa, los registros de fiscalización del INE, la información pública de integración de la Cámara de Diputados y los documentos editoriales descargables.</p>
         </article>
-        <article>
-          <b>Sistematización del flujo</b>
-          <p>Para futuras actualizaciones conviene sostener una matriz única por expediente: acto de origen, sujeto obligado, conducta, monto observado, monto final, efecto jurisdiccional, criterio aplicable, entidad y enlace oficial verificable.</p>
-        </article>
       </div>
-      <div class="workflow-strip">
-        <div><b>01</b><span>Capturar expediente y fuente oficial.</span></div>
-        <div><b>02</b><span>Normalizar sujeto, conducta, monto y sentido.</span></div>
-        <div><b>03</b><span>Vincular criterio, efecto y entidad territorial.</span></div>
-        <div><b>04</b><span>Validar montos firmes, pendientes o no aplicables.</span></div>
-        <div><b>05</b><span>Publicar PDF, datos y ficha navegable.</span></div>
+    </section>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    """
+    <span class="home-panel-anchor" id="sistematizacion"></span>
+    <section class="systematization-band">
+      <div class="systematization-head">
+        <div>
+          <div class="label">Propuesta para futuras actualizaciones</div>
+          <div class="title">Sistematización del flujo</div>
+        </div>
+        <p>
+          Para futuras actualizaciones conviene sostener una matriz única por expediente:
+          acto de origen, sujeto obligado, conducta, monto observado, monto final, efecto
+          jurisdiccional, criterio aplicable, entidad y enlace oficial verificable.
+        </p>
       </div>
+      <ol class="systematization-flow" aria-label="Etapas de sistematización">
+        <li><b>01</b><span>Capturar expediente y fuente oficial.</span></li>
+        <li><b>02</b><span>Normalizar sujeto, conducta, monto y sentido.</span></li>
+        <li><b>03</b><span>Vincular criterio, efecto y entidad territorial.</span></li>
+        <li><b>04</b><span>Validar montos firmes, pendientes o no aplicables.</span></li>
+        <li><b>05</b><span>Publicar PDF, datos y ficha navegable.</span></li>
+      </ol>
     </section>
     """,
     unsafe_allow_html=True,

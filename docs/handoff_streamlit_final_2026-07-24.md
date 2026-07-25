@@ -31,7 +31,8 @@ La version final debe operar como experiencia editorial unica:
 - tabla editorial de expedientes con enlace oficial, sujeto, conducta, sentido, monto y efecto;
 - filtros tipo pill en el cuerpo de la pagina;
 - filtros independientes para panel, graficas y tabla de expedientes;
-- cierre metodologico con relevancia, metodo, referencias y sistematizacion del flujo antes de descargas;
+- cierre metodologico con relevancia, metodo y referencias antes de descargas;
+- propuesta independiente de sistematizacion del flujo, navegable desde el encabezado;
 - graficas y tabla sin depender de paginas secundarias.
 
 ## PDFs integrados
@@ -144,7 +145,7 @@ La seleccion territorial ya no se superpone al mapa: las entidades activas se pr
 
 La tabla de expedientes explica los montos en cero: si no existe monto firme, si el asunto fue sobreseido o si falta nueva determinacion, la celda de monto incorpora una nota de lectura para evitar interpretar `$0` como ausencia de irregularidad.
 
-El cierre metodologico incluye una propuesta de sistematizacion futura: capturar expediente y fuente oficial, normalizar sujeto/conducta/monto/sentido, vincular criterio y entidad, validar estados de monto y publicar PDF, datos y ficha navegable.
+El cierre metodologico se presenta como aparato academico en tres apartados: relevancia del analisis, metodologia y referencias. La propuesta de sistematizacion se separa en una seccion autonoma con ancla propia y cinco etapas: capturar expediente y fuente oficial, normalizar sujeto/conducta/monto/sentido, vincular criterio y entidad, validar estados de monto y publicar PDF, datos y ficha navegable.
 
 ### Estilo editorial
 
