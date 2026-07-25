@@ -789,7 +789,7 @@ def page_setup(title: str) -> None:
           border-collapse: collapse;
         }
         .expedient-table th {
-          background: var(--black);
+          background: var(--guinda);
           color: #fffdf8;
           font-size: .68rem;
           font-weight: 900;
@@ -971,6 +971,9 @@ def page_setup(title: str) -> None:
           fill: var(--guinda);
           stroke: #fffdf8;
         }
+        .state.linked { cursor: pointer; transition: fill .18s ease, transform .18s ease; }
+        a:hover .state.linked,
+        .state.linked:hover { fill: var(--dorado); }
         .map-notes {
           position: absolute;
           right: 18px;
@@ -982,8 +985,13 @@ def page_setup(title: str) -> None:
         .map-note {
           background: rgba(255,253,248,.9);
           border-left: 4px solid var(--guinda);
+          color: inherit;
+          display: block;
           padding: 8px 10px;
+          text-decoration: none;
+          transition: transform .18s ease, border-color .18s ease, background .18s ease;
         }
+        .map-note:hover { background: #fffdf8; border-color: var(--dorado); transform: translateX(-2px); }
         .map-note strong {
           display: block;
           color: var(--guinda-dark);
@@ -998,6 +1006,62 @@ def page_setup(title: str) -> None:
           font-weight: 900;
           text-transform: uppercase;
           margin-top: 2px;
+        }
+        .incidence-card-grid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 16px;
+          margin-top: 18px;
+        }
+        .incidence-card {
+          border-top: 5px solid var(--guinda);
+          background: linear-gradient(180deg, #fffdf8, #fbf2e5);
+          padding: 14px 0 0;
+          scroll-margin-top: 100px;
+          animation: editorialRise .5s ease both;
+        }
+        .incidence-card strong {
+          color: var(--black);
+          display: block;
+          font-size: 1.1rem;
+          font-weight: 900;
+          line-height: 1;
+          text-transform: uppercase;
+          margin-bottom: 10px;
+        }
+        .incidence-card-entry {
+          border-top: 1px solid rgba(20,16,13,.18);
+          padding: 10px 0 12px;
+        }
+        .incidence-card-entry b {
+          color: var(--guinda-dark);
+          display: block;
+          font-size: .86rem;
+          font-weight: 900;
+          text-transform: uppercase;
+        }
+        .incidence-card-entry span {
+          color: var(--black);
+          display: block;
+          font-size: .78rem;
+          font-weight: 900;
+          line-height: 1.24;
+          margin-top: 5px;
+        }
+        .incidence-card-entry p {
+          color: var(--muted);
+          font-size: .78rem;
+          font-weight: 700;
+          line-height: 1.35;
+          margin: 6px 0 8px;
+        }
+        .incidence-card-entry a {
+          color: var(--guinda);
+          font-size: .72rem;
+          font-weight: 900;
+          text-decoration: none;
+          text-transform: uppercase;
+          border-bottom: 1px solid rgba(107,21,49,.36);
         }
         .incidence-strip {
           display: grid;
@@ -1504,6 +1568,51 @@ def page_setup(title: str) -> None:
           margin: -4px 0 14px;
         }
         div[data-baseweb="select"] > div { border-radius: 0; border: 1px solid var(--line); background: #fffdf8; min-height: 46px; }
+        .filter-band {
+          border-top: 5px solid var(--guinda);
+          background: linear-gradient(180deg, #fffdf8, #fbf2e5);
+          margin: 14px 0 12px;
+          padding: 14px 0 2px;
+        }
+        .filter-band .label {
+          color: var(--guinda);
+          font-size: .72rem;
+          font-weight: 900;
+          text-transform: uppercase;
+        }
+        .filter-band .title {
+          color: var(--black);
+          font-size: clamp(1.45rem, 2.4vw, 2.4rem);
+          font-weight: 900;
+          line-height: .95;
+          text-transform: uppercase;
+          margin-top: 4px;
+        }
+        .filter-band p {
+          color: var(--muted);
+          font-size: .82rem;
+          font-weight: 750;
+          line-height: 1.35;
+          margin: 8px 0 4px;
+        }
+        [data-testid="stPills"] button {
+          background: #fffdf8 !important;
+          border: 1px solid rgba(107,21,49,.28) !important;
+          border-radius: 999px !important;
+          color: var(--guinda-dark) !important;
+          font-weight: 900 !important;
+          text-transform: uppercase !important;
+          transition: background .18s ease, color .18s ease, border-color .18s ease, transform .18s ease;
+        }
+        [data-testid="stPills"] button:hover {
+          border-color: var(--guinda) !important;
+          transform: translateY(-1px);
+        }
+        [data-testid="stPills"] button[aria-pressed="true"] {
+          background: var(--guinda) !important;
+          border-color: var(--guinda) !important;
+          color: #fffdf8 !important;
+        }
         @media (min-width: 1181px) {
           .block-container { max-width: 1280px; }
           .map-deck { grid-template-columns: .64fr 1.36fr; }
@@ -1513,7 +1622,7 @@ def page_setup(title: str) -> None:
           .site-links { justify-content: flex-start; }
           .intro-lede, .sanction-board, .plain-steps, .meeting-brief, .meeting-grid, .map-deck, .link-item, .editorial-grid, .summary-strip, .story-hero, .story-split, .criteria-reader .reader-head, .criteria-lanes, .home-hero, .home-section-head, .home-doc-grid, .data-editorial-head, .reading-rail, .analysis-head, .analysis-grid, .analysis-split, .viz-head, .sanction-extremes { grid-template-columns: 1fr; }
           .link-item a { text-align: left; }
-          .case-ribbon, .kpi-grid, .incidence-list, .criteria-map { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+          .case-ribbon, .kpi-grid, .incidence-list, .criteria-map, .incidence-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
           .masthead .headline { font-size: 2.5rem; }
           .criteria-timeline { position: static; grid-template-columns: 1fr; }
         }
@@ -1555,6 +1664,7 @@ def page_setup(title: str) -> None:
           .expedient-table th,
           .expedient-table td { padding: 11px 10px; }
           .map-notes { position: static; width: auto; padding: 10px; }
+          .incidence-card-grid { grid-template-columns: 1fr; }
           .criterion-detail summary { grid-template-columns: 48px 1fr; gap: 10px; }
           .criterion-detail summary span { grid-column: 1 / -1; text-align: left; }
           .criterion-body { padding-left: 0; }

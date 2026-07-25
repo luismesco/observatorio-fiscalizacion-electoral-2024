@@ -29,6 +29,7 @@ La version final debe operar como experiencia editorial unica:
 - composicion final de curules de la LXVI Legislatura;
 - sujeto mas sancionado y sujeto con menor monto positivo observado;
 - tabla editorial de expedientes con enlace oficial, sujeto, conducta, sentido, monto y efecto;
+- filtros tipo pill en el cuerpo de la pagina;
 - graficas y tabla sin depender de paginas secundarias.
 
 ## PDFs integrados
@@ -100,11 +101,11 @@ Se agregaron fichas expandibles con:
 
 ### Filtros fuera del sidebar
 
-Los filtros del panel se movieron a un expander dentro de la pagina:
+Los filtros del panel se movieron al cuerpo de la pagina como pills multiseleccion:
 
-`Ajustar corte de datos`
+`Filtros de lectura / Delimita el corte`
 
-Esto conserva la interactividad sin reactivar sidebar.
+Si no hay seleccion activa, el corte conserva el corpus completo. La seleccion de uno o mas pills acota el panel sin usar desplegables ni reactivar sidebar.
 
 ### Tabla editorial de expedientes
 
@@ -118,6 +119,8 @@ Se sustituyo la tabla nativa por una tabla HTML con paleta guinda, negro, dorado
 - monto observado compacto y monto exacto;
 - efecto de la resolucion.
 
+La fila de encabezados usa fondo guinda y texto blanco.
+
 ### Curules, mapa y sanciones por sujeto
 
 Se agregaron:
@@ -128,6 +131,8 @@ Se agregaron:
 - tarjeta de sujeto con menor monto positivo observado.
 
 Estos bloques se alimentan desde `data/analysis/diputados_lxvi_electos.csv`, `data/processed/hallazgos_portal.csv` y `data/processed/sanciones.csv`.
+
+El mapa usa estados activos enlazados a fichas de incidencia. Cada ficha incluye expediente, tema, explicacion breve de prioridad y enlace a la sentencia oficial cuando existe URL disponible.
 
 ### Estilo editorial
 
@@ -140,6 +145,8 @@ Se reforzo la continuidad visual con los PDF mediante:
 - jerarquia tipografica en mayusculas;
 - animaciones de entrada y hover;
 - secciones de lectura guiada.
+
+El texto visible al lector debe mantener tono institucional y academico: observatorio, consulta, analisis, corpus, criterio, expediente, sentencia y efecto. Evitar lenguaje de producto como "app", "experiencia", "primero lee, despues explora" o explicaciones internas de componentes.
 
 ## Archivos principales
 

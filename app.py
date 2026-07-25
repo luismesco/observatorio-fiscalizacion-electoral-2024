@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import base64
 import html
+import json
 import sys
 from pathlib import Path
 
@@ -16,7 +17,6 @@ import streamlit as st
 
 from observatorio.data_loader import filtered_cases, load_all
 from observatorio.metrics import count_by, kpis
-from observatorio.pdf_export import diputaciones_map_svg
 from observatorio.ui import format_money, page_setup
 
 
@@ -266,13 +266,70 @@ def expedient_table_html(source: pd.DataFrame, sanction_source: pd.DataFrame) ->
 def incidence_map_html() -> str:
     if hallazgos.empty or "entidad" not in hallazgos.columns:
         return ""
-    counts = (
-        hallazgos.assign(entidad_label=hallazgos["entidad"].replace({"Ciudad de Mexico": "Ciudad de México", "Michoacan": "Michoacán"}))
-        .groupby("entidad_label", as_index=False)
-        .size()
-        .rename(columns={"size": "incidencias"})
+    map_path = ROOT / "data" / "geo" / "mexico_states_inegi_svg_paths.json"
+    if not map_path.exists():
+        return ""
+    map_asset = json.loads(map_path.read_text(encoding="utf-8"))
+    normalized = hallazgos.copy()
+    normalized["entidad_label"] = normalized["entidad"].replace(
+        {"Ciudad de Mexico": "Ciudad de México", "Michoacan": "Michoacán"}
     )
-    return diputaciones_map_svg(counts)
+    counts = normalized.groupby("entidad_label", as_index=False).size().rename(columns={"size": "incidencias"})
+    active_counts = {str(row["entidad_label"]): int(row["incidencias"]) for _, row in counts.iterrows()}
+    official_aliases = {
+        "Coahuila de Zaragoza": "Coahuila",
+        "Michoacán de Ocampo": "Michoacán",
+        "Veracruz de Ignacio de la Llave": "Veracruz",
+    }
+    shapes = []
+    notes = []
+    for state in map_asset["states"]:
+        official_name = state["name"]
+        display_name = official_aliases.get(official_name, official_name)
+        count = active_counts.get(display_name, 0)
+        slug = display_name.lower().replace(" ", "-").replace("é", "e").replace("á", "a")
+        class_name = "state active linked" if count else "state"
+        path = f'<path class="{class_name}" d="{state["path"]}"><title>{html.escape(display_name)}</title></path>'
+        if count:
+            shapes.append(f'<a href="#incidencia-{html.escape(slug)}">{path}</a>')
+            notes.append(
+                '<a class="map-note" href="#incidencia-'
+                f'{html.escape(slug)}"><strong>{html.escape(display_name)}</strong>'
+                f'<span>{count} incidencia{"s" if count != 1 else ""}</span></a>'
+            )
+        else:
+            shapes.append(path)
+    cards = []
+    for entity, group in normalized.groupby("entidad_label", sort=True):
+        slug = entity.lower().replace(" ", "-").replace("é", "e").replace("á", "a")
+        entries = []
+        for _, row in group.iterrows():
+            url = str(row.get("url_oficial", "")).strip()
+            link = f'<a href="{html.escape(url)}" target="_blank" rel="noopener">Sentencia oficial</a>' if url else ""
+            entries.append(
+                '<div class="incidence-card-entry">'
+                f'<b>{html.escape(str(row.get("expediente", "")))}</b>'
+                f'<span>{html.escape(text_label(row.get("tema", "")))}</span>'
+                f'<p>{html.escape(text_label(row.get("razon_prioridad", "")))}</p>'
+                f'{link}'
+                '</div>'
+            )
+        cards.append(
+            f'<article class="incidence-card" id="incidencia-{html.escape(slug)}">'
+            f'<strong>{html.escape(entity)}</strong>'
+            f'{"".join(entries)}'
+            '</article>'
+        )
+    return (
+        '<div class="mexico-map-wrap">'
+        f'<svg class="map-svg" viewBox="{map_asset["viewBox"]}" role="img" aria-label="Mapa de México con incidencias de fiscalización">'
+        '<rect x="0" y="0" width="520" height="330" fill="#fbf7ef"/>'
+        f'{"".join(shapes)}'
+        '</svg>'
+        f'<div class="map-notes">{"".join(notes)}</div>'
+        '</div>'
+        f'<div class="incidence-card-grid">{"".join(cards)}</div>'
+    )
 
 
 def criterion_source_links(source: str) -> str:
@@ -303,19 +360,35 @@ def responsive_kpi_grid(items: list[tuple[str, str | int | float, str | None]], 
 
 
 def filter_controls() -> dict[str, list[str]]:
-    with st.expander("Ajustar corte de datos", expanded=False):
-        cols = st.columns(4)
-        filters: dict[str, list[str]] = {}
-        for idx, (label, column) in enumerate(
-            [
-                ("Nivel", "nivel"),
-                ("Partido", "partido_principal"),
-                ("Conducta", "conducta_principal"),
-                ("Sentido", "sentido"),
-            ]
-        ):
-            options = sorted([x for x in casos[column].unique() if str(x)]) if column in casos.columns else []
-            filters[column] = cols[idx].multiselect(label, options, default=options)
+    st.markdown(
+        """
+        <section class="filter-band">
+          <div class="label">Filtros de lectura</div>
+          <div class="title">Delimita el corte</div>
+          <p>Sin seleccion activa, la consulta conserva el corpus completo.</p>
+        </section>
+        """,
+        unsafe_allow_html=True,
+    )
+    cols = st.columns(4)
+    filters: dict[str, list[str]] = {}
+    for idx, (label, column) in enumerate(
+        [
+            ("Nivel", "nivel"),
+            ("Partido", "partido_principal"),
+            ("Conducta", "conducta_principal"),
+            ("Sentido", "sentido"),
+        ]
+    ):
+        options = sorted([x for x in casos[column].unique() if str(x)]) if column in casos.columns else []
+        selected = cols[idx].pills(
+            label,
+            options,
+            selection_mode="multi",
+            default=[],
+            key=f"pill_{column}",
+        )
+        filters[column] = list(selected or options)
     return filters
 
 
@@ -346,9 +419,9 @@ st.markdown(
       </div>
       <div>
         <div class="home-deck">
-          Una experiencia editorial e interactiva para consultar qué se sancionó en la elección
-          de diputaciones federales y qué criterios emitieron Sala Superior y Sala Regional Ciudad
-          de México en materia de fiscalización electoral del proceso 2023-2024.
+          Instrumento de consulta sobre sanciones, efectos jurisdiccionales y criterios en materia
+          de fiscalización electoral vinculados con diputaciones federales del proceso electoral
+          federal 2023-2024.
         </div>
         <div class="home-folio">
           <div><b>{base_stats["casos"]}</b><span>Expedientes base</span></div>
@@ -397,8 +470,8 @@ st.markdown(
           <div class="title">Dos puertas de lectura</div>
         </div>
         <div class="body">
-          La app combina piezas editoriales cerradas en PDF con una lectura navegable por datos,
-          criterios, expedientes y entidades. Primero lee, después explora.
+          El observatorio integra síntesis analítica, fichas de criterios, datos verificables y
+          documentos descargables para facilitar la lectura pública del proceso de fiscalización.
         </div>
       </div>
       <div class="home-doc-grid">
@@ -424,18 +497,18 @@ st.markdown(
     <section class="home-section reading-section">
       <div class="home-section-head">
         <div>
-          <div class="label">Lectura interactiva</div>
-          <div class="title">Navega sin perder contexto</div>
+          <div class="label">Método de consulta</div>
+          <div class="title">Del expediente al criterio</div>
         </div>
         <div class="body">
-          La sección de diputaciones concentra la retícula completa: descargas, criterios plegables,
-          mapa territorial, expedientes consultables y registro de curules.
+          La lectura organiza expedientes, conductas sancionadas, efectos de sentencia, criterios
+          jurisdiccionales, dimensión territorial y composición final de curules.
         </div>
       </div>
       <div class="reading-rail">
-        <div><b>01</b><span>Lee la síntesis editorial y descarga el PDF que corresponda.</span></div>
-        <div><b>02</b><span>Ajusta el corte de datos sin salir de la página.</span></div>
-        <div><b>03</b><span>Contrasta partido, sentido de resolución y tabla de expedientes.</span></div>
+        <div><b>01</b><span>Identificar la conducta observada y el sujeto obligado vinculado.</span></div>
+        <div><b>02</b><span>Revisar el sentido de la resolución y el efecto jurisdiccional.</span></div>
+        <div><b>03</b><span>Contrastar el expediente con criterios, territorio, montos y curules.</span></div>
       </div>
     </section>
     """,
@@ -447,12 +520,12 @@ st.markdown(
     <div class="home-doc-grid">
       <div class="home-doc-card">
         <b>Análisis de diputaciones y criterios</b>
-        <span>Lee la síntesis dentro de la app, abre criterios y descarga el PDF si necesitas la pieza cerrada.</span>
+        <span>Consulta la síntesis, los criterios, la tabla de expedientes y los datos derivados del corte.</span>
         <a href="#analisis-en-pagina">Leer en página</a>
       </div>
       <div class="home-doc-card">
         <b>Corpus de sentencias TEPJF</b>
-        <span>El corte de sentencias y los hallazgos se sintetizan en los PDF editoriales y en las gráficas de datos.</span>
+        <span>El corpus se presenta mediante fichas, mapa territorial, gráfica de curules y tabla de expedientes.</span>
         <a href="#panel-datos">Ir al panel</a>
       </div>
     </div>
@@ -669,8 +742,8 @@ if map_html:
               <div class="title">Mapa de incidencias</div>
             </div>
             <p>
-              Entidades con hallazgos prioritarios asociados a fiscalización, candidaturas
-              o sentencias vinculadas al corte de diputaciones federales.
+              Entidades vinculadas con expedientes o hallazgos documentados en el corte.
+              Selecciona una entidad activa para consultar la incidencia y la sentencia oficial.
             </p>
           </div>
           {map_html}
@@ -746,8 +819,8 @@ st.markdown(
           <div class="title">Conserva el análisis</div>
         </div>
         <div class="body">
-          Después de leer la página, descarga la pieza editorial completa. Los pills permanecen visibles
-          durante toda la navegación; esta sección deja el selector formal al cierre.
+          Los documentos descargables reúnen la síntesis editorial y las fichas de criterios para
+          consulta, archivo y cita posterior.
         </div>
       </div>
     </section>
