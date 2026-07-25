@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import base64
 import html
 import json
 import sys
@@ -134,22 +133,6 @@ CRITERIA = [
         "utility": "Antes: prever salidas posibles. Durante: capturar puntos resolutivos. Después: dar seguimiento a recálculos, reposiciones y montos firmes.",
     },
 ]
-
-
-@st.cache_data(show_spinner=False)
-def cached_pdf(path: str) -> bytes:
-    pdf_path = ROOT / path
-    if not pdf_path.exists():
-        return b""
-    return pdf_path.read_bytes()
-
-
-def pdf_data_uri(path: str) -> str:
-    payload = cached_pdf(path)
-    if not payload:
-        return "#"
-    encoded = base64.b64encode(payload).decode("ascii")
-    return f"data:application/pdf;base64,{encoded}"
 
 
 def money_compact(value: float | int | str) -> str:
@@ -538,32 +521,11 @@ def install_scroll_motion() -> None:
             '[data-testid="stPlotlyChart"]',
             'iframe'
           ];
-          const targets = [...new Set(
-            selectors.flatMap((selector) => [...parentDocument.querySelectorAll(selector)])
-          )].filter((element) => element !== window.frameElement);
-
           parentDocument.documentElement.classList.add('js-scroll-motion');
           const reduceMotion = parentWindow.matchMedia('(prefers-reduced-motion: reduce)').matches;
-          targets.forEach((element) => element.classList.add('scroll-reveal'));
-
-          [
-            '.responsive-kpi-grid',
-            '.methodology-grid',
-            '.systematization-flow',
-            '.home-doc-grid',
-            '.criteria-map'
-          ].forEach((selector) => {
-            parentDocument.querySelectorAll(selector).forEach((group) => {
-              [...group.children].forEach((child, index) => {
-                child.style.setProperty('--reveal-delay', `${Math.min(index, 5) * 65}ms`);
-              });
-            });
-          });
 
           let observer;
-          if (reduceMotion || !('IntersectionObserver' in parentWindow)) {
-            targets.forEach((element) => element.classList.add('is-visible'));
-          } else {
+          if (!reduceMotion && 'IntersectionObserver' in parentWindow) {
             observer = new parentWindow.IntersectionObserver((entries) => {
               entries.forEach((entry) => {
                 if (!entry.isIntersecting) return;
@@ -575,15 +537,43 @@ def install_scroll_motion() -> None:
               rootMargin: '0px 0px -9% 0px',
               threshold: 0.08
             });
-            targets.forEach((element) => observer.observe(element));
           }
 
-          const progress = parentDocument.querySelector('.reading-progress span');
+          const registeredTargets = new Set();
+          const registerTargets = () => {
+            const targets = [...new Set(
+              selectors.flatMap((selector) => [...parentDocument.querySelectorAll(selector)])
+            )].filter((element) => element !== window.frameElement);
+            targets.forEach((element) => {
+              if (registeredTargets.has(element)) return;
+              registeredTargets.add(element);
+              element.classList.add('scroll-reveal');
+              if (reduceMotion || !observer) element.classList.add('is-visible');
+              else observer.observe(element);
+            });
+
+            [
+              '.responsive-kpi-grid',
+              '.methodology-grid',
+              '.systematization-flow',
+              '.home-doc-grid',
+              '.criteria-map'
+            ].forEach((selector) => {
+              parentDocument.querySelectorAll(selector).forEach((group) => {
+                [...group.children].forEach((child, index) => {
+                  child.style.setProperty('--reveal-delay', `${Math.min(index, 5) * 65}ms`);
+                });
+              });
+            });
+          };
+
+          let progress = parentDocument.querySelector('.reading-progress span');
           const appView = parentDocument.querySelector('[data-testid="stAppViewContainer"]');
           const mainScroller = parentDocument.querySelector('[data-testid="stMain"]');
-          const navLinks = [...parentDocument.querySelectorAll('.site-links a[href^="#"]')];
+          let navLinks = [...parentDocument.querySelectorAll('.site-links a[href^="#"]')];
           const scrollSources = [parentWindow, appView, mainScroller].filter(Boolean);
           let framePending = false;
+          let refreshPending = false;
 
           const updateReadingState = () => {
             framePending = false;
@@ -626,17 +616,29 @@ def install_scroll_motion() -> None:
             framePending = true;
             parentWindow.requestAnimationFrame(updateReadingState);
           };
+          const refreshDocument = () => {
+            refreshPending = false;
+            progress = parentDocument.querySelector('.reading-progress span');
+            navLinks = [...parentDocument.querySelectorAll('.site-links a[href^="#"]')];
+            registerTargets();
+            requestUpdate();
+          };
+          const requestRefresh = () => {
+            if (refreshPending) return;
+            refreshPending = true;
+            parentWindow.requestAnimationFrame(refreshDocument);
+          };
           scrollSources.forEach((source) => source.addEventListener('scroll', requestUpdate, {passive: true}));
           parentWindow.addEventListener('resize', requestUpdate, {passive: true});
           visualViewport?.addEventListener('resize', requestUpdate, {passive: true});
-          const badgeObserver = new parentWindow.MutationObserver(requestUpdate);
-          badgeObserver.observe(parentDocument.body, {childList: true, subtree: true});
+          const domObserver = new parentWindow.MutationObserver(requestRefresh);
+          domObserver.observe(parentDocument.body, {childList: true, subtree: true});
           parentDocument.fonts?.ready.then(requestUpdate);
-          updateReadingState();
+          refreshDocument();
 
           parentWindow.__observatorioMotionCleanup = () => {
             observer?.disconnect();
-            badgeObserver.disconnect();
+            domObserver.disconnect();
             scrollSources.forEach((source) => source.removeEventListener('scroll', requestUpdate));
             parentWindow.removeEventListener('resize', requestUpdate);
             visualViewport?.removeEventListener('resize', requestUpdate);
@@ -764,12 +766,12 @@ st.markdown(
 
 pdf_options = {
     "Qué se sancionó en las elecciones de diputaciones federales 2024": {
-        "path": "exports/diputaciones_electas_reporte.pdf",
+        "static_url": "/app/static/que_se_sanciono_diputaciones_federales_2024.pdf",
         "file_name": "que_se_sanciono_diputaciones_federales_2024.pdf",
         "note": "PDF editorial con sanciones, expedientes, montos, efectos y lectura territorial.",
     },
     "Criterios de fiscalización electoral derivados del proceso 2023-2024": {
-        "path": "exports/criterios_fiscalizacion_diputaciones_2024.pdf",
+        "static_url": "/app/static/criterios_fiscalizacion_diputaciones_2024.pdf",
         "file_name": "criterios_fiscalizacion_diputaciones_2024.pdf",
         "note": "PDF de criterios de Sala Superior y Sala Regional Ciudad de México, enfocado en diputaciones federales.",
     },
@@ -779,14 +781,14 @@ st.markdown(
     f"""
     <div class="download-dock" aria-label="Descargas del observatorio">
       <span class="dock-label">Documentos PDF</span>
-      <a class="pill primary" href="{pdf_data_uri(pdf_options["Qué se sancionó en las elecciones de diputaciones federales 2024"]["path"])}"
+      <a class="pill primary" href="{pdf_options["Qué se sancionó en las elecciones de diputaciones federales 2024"]["static_url"]}"
          download="{pdf_options["Qué se sancionó en las elecciones de diputaciones federales 2024"]["file_name"]}"
          aria-label="Descargar análisis de fiscalización en PDF"
          title="Descargar análisis de fiscalización en PDF">
         <span class="download-mark" aria-hidden="true">↓</span>
         <span class="download-copy"><b>Descargar</b><small>Fiscalización</small></span>
       </a>
-      <a class="pill secondary" href="{pdf_data_uri(pdf_options["Criterios de fiscalización electoral derivados del proceso 2023-2024"]["path"])}"
+      <a class="pill secondary" href="{pdf_options["Criterios de fiscalización electoral derivados del proceso 2023-2024"]["static_url"]}"
          download="{pdf_options["Criterios de fiscalización electoral derivados del proceso 2023-2024"]["file_name"]}"
          aria-label="Descargar análisis de criterios en PDF"
          title="Descargar análisis de criterios en PDF">
@@ -797,6 +799,8 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+
+install_scroll_motion()
 
 st.markdown(
     """
@@ -1277,17 +1281,19 @@ selected_pdf = download_left.selectbox(
     key="home_pdf_analysis_download_final",
 )
 selected_payload = pdf_options[selected_pdf]
-selected_bytes = cached_pdf(selected_payload["path"])
 download_left.markdown(
     f'<div class="download-note">{html.escape(selected_payload["note"])}</div>',
     unsafe_allow_html=True,
 )
-download_right.download_button(
-    "Descarga este análisis",
-    data=selected_bytes,
-    file_name=selected_payload["file_name"],
-    mime="application/pdf",
-    disabled=not selected_bytes,
+download_right.markdown(
+    f"""
+    <a class="analysis-download-link"
+       href="{selected_payload["static_url"]}"
+       download="{selected_payload["file_name"]}"
+       aria-label="Descargar {html.escape(selected_pdf)} en PDF">
+      <span aria-hidden="true">↓</span>
+      <b>Descarga este análisis</b>
+    </a>
+    """,
+    unsafe_allow_html=True,
 )
-
-install_scroll_motion()

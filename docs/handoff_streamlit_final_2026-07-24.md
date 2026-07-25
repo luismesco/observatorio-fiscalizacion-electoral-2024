@@ -264,3 +264,28 @@ Validacion Playwright realizada en anchos de 320, 360, 375, 393 y 430 px:
 - dock visible por encima de una insignia Streamlit simulada;
 - tabla ancha confinada a su propio contenedor con desplazamiento horizontal;
 - comportamiento de movimiento reducido conservado.
+
+### Rendimiento y activacion temprana de movimiento
+
+Los PDF dejaron de codificarse como `data:` base64 en el HTML. Streamlit sirve las
+copias finales desde `static/` mediante `server.enableStaticServing`, y los enlaces
+del dock y de la seccion final apuntan a `/app/static/`. Esto elimina la lectura,
+codificacion y envio repetido de aproximadamente 1.7 MB de PDF en cada render y
+mantiene el atributo `download`.
+
+El observador de movimiento se instala inmediatamente despues de la portada y del
+dock. Un observador del DOM registra de forma incremental las secciones, graficas,
+mapa, metodologia y propuesta que Streamlit incorpora despues. De este modo las
+transiciones no dependen de esperar a que termine de renderizar toda la pagina.
+
+Medicion local de control en viewport movil de 393 px:
+
+- portada y dock visibles: aproximadamente 2.2 segundos;
+- documento completo disponible: aproximadamente 4.8 segundos;
+- ancho del documento: 393 px;
+- PDF servidos con `application/pdf`, sin URL base64;
+- revelado por scroll confirmado en contenido tardio.
+
+Un arranque en frio de Streamlit Community Cloud puede tardar mas que la medicion
+local, pero el lector recibe ahora la portada antes que los bloques analiticos
+posteriores.

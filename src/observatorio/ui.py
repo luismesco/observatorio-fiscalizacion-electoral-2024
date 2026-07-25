@@ -131,6 +131,33 @@ def page_setup(title: str) -> None:
           color: #fffdf8;
           box-shadow: 0 0 0 3px rgba(197,154,61,.22), inset 0 -4px 0 rgba(20,16,13,.16);
         }
+        .analysis-download-link {
+          align-items: center;
+          background: var(--guinda);
+          border: 1px solid var(--guinda-dark);
+          border-radius: 999px;
+          box-shadow: inset 0 -3px 0 rgba(20,16,13,.18), 0 8px 18px rgba(107,21,49,.14);
+          color: #fffdf8 !important;
+          display: inline-flex;
+          font-size: .72rem;
+          font-weight: 900;
+          gap: 8px;
+          justify-content: center;
+          min-height: 46px;
+          padding: 0 20px;
+          text-align: center;
+          text-decoration: none !important;
+          text-transform: uppercase;
+          transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+          width: 100%;
+        }
+        .analysis-download-link:hover {
+          background: var(--guinda-dark);
+          box-shadow: inset 0 -3px 0 rgba(20,16,13,.2), 0 10px 18px rgba(107,21,49,.16);
+          transform: translateY(-2px);
+        }
+        .analysis-download-link span,
+        .analysis-download-link b { color: inherit !important; }
         .download-note {
           color: var(--muted);
           font-size: .82rem;
