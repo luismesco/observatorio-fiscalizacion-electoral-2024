@@ -25,11 +25,23 @@ def page_setup(title: str) -> None:
           --dorado:#C59A3D; --dorado-soft:#ead7a6; --verde:#1E5B4F; --pan:#2B5C8A; --mc:#FF6600; --black:#14100d;
           --pale:#fbf2e5; --steel:#31363b; --white:#fffdf8;
         }
-        html { scroll-behavior: smooth; }
+        html {
+          max-width: 100%;
+          overflow-x: clip;
+          scroll-behavior: smooth;
+        }
+        body {
+          box-sizing: border-box;
+          margin: 0;
+          max-width: 100%;
+          overflow-x: clip;
+        }
         .stApp {
           background: #ffffff;
           color: var(--ink);
           font-family: "Montserrat", sans-serif !important;
+          max-width: 100%;
+          overflow-x: clip;
         }
         html, body, .stApp, [data-testid="stAppViewContainer"], [data-testid="stMarkdownContainer"],
         [data-testid="stSidebar"], [data-testid="stWidgetLabel"], button, input, textarea, select {
@@ -37,7 +49,7 @@ def page_setup(title: str) -> None:
         }
         .block-container {
           box-sizing: border-box !important;
-          max-width: 1180px;
+          max-width: min(1180px, var(--app-viewport-width, 100%));
           min-width: 0;
           overflow-x: clip;
           padding-top: 2rem;
@@ -2036,11 +2048,23 @@ def page_setup(title: str) -> None:
           .criteria-timeline { position: static; grid-template-columns: 1fr; }
         }
         @media (max-width: 640px) {
+          [data-testid="stAppViewContainer"],
+          [data-testid="stMain"],
+          .stApp {
+            box-sizing: border-box !important;
+            max-width: var(--app-viewport-width, 100vw) !important;
+            min-width: 0 !important;
+            overflow-x: clip !important;
+            width: var(--app-viewport-width, 100vw) !important;
+          }
           .block-container {
+            box-sizing: border-box !important;
+            max-width: var(--app-viewport-width, 100vw) !important;
             padding-top: 1rem;
             padding-left: .9rem;
             padding-right: .9rem;
             padding-bottom: 8rem;
+            width: var(--app-viewport-width, 100vw) !important;
           }
           .block-container:before { height: 5px; margin-bottom: 14px; }
           .site-links { gap: 12px; }
@@ -2052,6 +2076,9 @@ def page_setup(title: str) -> None:
             gap: 7px;
             justify-content: space-between;
             padding: 7px;
+          }
+          html.has-streamlit-viewer-badge .download-dock {
+            bottom: calc(max(.55rem, env(safe-area-inset-bottom)) + 4.75rem);
           }
           .download-dock .dock-label { display: none; }
           .download-dock .pill {
@@ -2071,8 +2098,11 @@ def page_setup(title: str) -> None:
           .cause-row .money { text-align: left; font-size: 1.1rem; }
           .incidence-strip, .case-ribbon, .kpi-grid, .incidence-list, .meeting-flow, .tight-grid, .criteria-map, .criterion-body, .criteria-timeline, .home-folio { grid-template-columns: 1fr; }
           .home-hero { min-height: 0; padding-top: 24px; }
-          .home-title { font-size: clamp(2.15rem, 10.5vw, 3.2rem); }
-          .home-title span { white-space: normal; }
+          .home-title { font-size: 2.35rem; }
+          .home-title span {
+            max-width: 100%;
+            white-space: normal !important;
+          }
           .responsive-kpi-grid { grid-template-columns: 1fr; }
           .responsive-kpi { min-height: 124px; padding: 16px 14px; }
           .responsive-kpi .kpi-label { font-size: .64rem; }
@@ -2103,6 +2133,16 @@ def page_setup(title: str) -> None:
             padding: 16px 0;
           }
           .systematization-flow span { margin-top: 9px; }
+        }
+        @media (max-width: 360px) {
+          .home-title { font-size: 2.05rem; }
+          .download-dock {
+            left: .5rem;
+            right: .5rem;
+          }
+          .download-dock .pill { padding: 0 5px; }
+          .download-dock .download-copy b,
+          .download-dock .download-copy small { font-size: .54rem; }
         }
         @media (prefers-reduced-motion: reduce) {
           html { scroll-behavior: auto; }

@@ -470,6 +470,53 @@ def install_scroll_motion() -> None:
           const parentDocument = parentWindow.document;
           parentWindow.__observatorioMotionCleanup?.();
 
+          const viewportMeta = parentDocument.querySelector('meta[name="viewport"]');
+          viewportMeta?.setAttribute(
+            'content',
+            'width=device-width, initial-scale=1, viewport-fit=cover'
+          );
+
+          const root = parentDocument.documentElement;
+          const visualViewport = parentWindow.visualViewport;
+          const homeTitleLines = [...parentDocument.querySelectorAll('.home-title span')];
+
+          const fitHomeTitle = () => {
+            homeTitleLines.forEach((line) => {
+              line.style.removeProperty('font-size');
+              if (line.scrollWidth <= line.clientWidth + 1) return;
+              let size = parseFloat(parentWindow.getComputedStyle(line).fontSize);
+              while (line.scrollWidth > line.clientWidth + 1 && size > 30) {
+                size -= 1;
+                line.style.fontSize = `${size}px`;
+              }
+            });
+          };
+
+          const findViewerBadge = () => {
+            const viewportHeight = visualViewport?.height || parentWindow.innerHeight;
+            return [...parentDocument.querySelectorAll('body a, body div')].find((element) => {
+              const text = (element.textContent || '').replace(/\\s+/g, ' ').trim();
+              if (!/Hosted with Streamlit/i.test(text) || text.length > 140) return false;
+              const style = parentWindow.getComputedStyle(element);
+              const rect = element.getBoundingClientRect();
+              return ['fixed', 'sticky'].includes(style.position)
+                && rect.width > 180
+                && rect.bottom > viewportHeight - 180;
+            });
+          };
+
+          const syncViewportLayout = () => {
+            const viewportWidth = Math.floor(
+              Math.min(
+                visualViewport?.width || parentWindow.innerWidth,
+                parentDocument.documentElement.clientWidth || parentWindow.innerWidth
+              )
+            );
+            root.style.setProperty('--app-viewport-width', `${viewportWidth}px`);
+            root.classList.toggle('has-streamlit-viewer-badge', Boolean(findViewerBadge()));
+            fitHomeTitle();
+          };
+
           const selectors = [
             '.home-section',
             '.analysis-reader',
@@ -540,7 +587,6 @@ def install_scroll_motion() -> None:
 
           const updateReadingState = () => {
             framePending = false;
-            const root = parentDocument.documentElement;
             const body = parentDocument.body;
             const scrollTop = Math.max(
               parentWindow.scrollY || 0,
@@ -572,6 +618,7 @@ def install_scroll_motion() -> None:
               if (active) link.setAttribute('aria-current', 'location');
               else link.removeAttribute('aria-current');
             });
+            syncViewportLayout();
           };
 
           const requestUpdate = () => {
@@ -581,12 +628,18 @@ def install_scroll_motion() -> None:
           };
           scrollSources.forEach((source) => source.addEventListener('scroll', requestUpdate, {passive: true}));
           parentWindow.addEventListener('resize', requestUpdate, {passive: true});
+          visualViewport?.addEventListener('resize', requestUpdate, {passive: true});
+          const badgeObserver = new parentWindow.MutationObserver(requestUpdate);
+          badgeObserver.observe(parentDocument.body, {childList: true, subtree: true});
+          parentDocument.fonts?.ready.then(requestUpdate);
           updateReadingState();
 
           parentWindow.__observatorioMotionCleanup = () => {
             observer?.disconnect();
+            badgeObserver.disconnect();
             scrollSources.forEach((source) => source.removeEventListener('scroll', requestUpdate));
             parentWindow.removeEventListener('resize', requestUpdate);
+            visualViewport?.removeEventListener('resize', requestUpdate);
           };
         })();
         </script>

@@ -236,3 +236,31 @@ La version final en linea debe verse sin sidebar, con dos descargas siempre visi
 Adicionalmente, el lector debe poder comprender el analisis principal sin descargar los PDF.
 
 En movil, el contenedor principal usa `border-box` para impedir recortes por padding y el titulo de portada reduce su escala para conservar palabras completas desde 320 px. Los pills fijos identifican de forma explicita la accion y el documento: `Descargar / Fiscalizacion` y `Descargar / Criterios`.
+
+### Adaptacion al viewport real de iPhone
+
+La vista movil no depende solo de `@media`. El componente de movimiento consulta
+`window.visualViewport`, publica el ancho efectivo en la variable
+`--app-viewport-width` y vuelve a calcularlo cuando cambia la orientacion, el zoom
+visual o el tamano disponible. La regla se aplica a la raiz de Streamlit, al
+contenedor principal y a la portada para impedir desbordamientos laterales
+producidos por la combinacion de `width: 100%` y padding.
+
+Despues de cargar Montserrat se verifica tambien que cada linea del titulo de
+portada quepa en su caja. Solo si una palabra excede el ancho disponible se reduce
+progresivamente ese titulo, con un limite inferior legible.
+
+La banda movil de Streamlit puede aparecer despues de renderizar la pagina y
+cubrir controles fijos. Un `MutationObserver` detecta especificamente la insignia
+`Hosted with Streamlit`; cuando esta presente, el dock de descargas se desplaza
+hacia arriba. No se oculta ni se modifica la insignia de la plataforma.
+
+Validacion Playwright realizada en anchos de 320, 360, 375, 393 y 430 px:
+
+- ancho desplazable del documento igual al ancho del viewport;
+- portada y titulo contenidos dentro del viewport;
+- pills completos, con etiqueta explicita de descarga;
+- atributos `download` y PDF base64 conservados;
+- dock visible por encima de una insignia Streamlit simulada;
+- tabla ancha confinada a su propio contenedor con desplazamiento horizontal;
+- comportamiento de movimiento reducido conservado.
